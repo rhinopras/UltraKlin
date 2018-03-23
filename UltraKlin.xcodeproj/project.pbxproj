@@ -1,0 +1,601 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		48B5CB3A4800FA0A224A0D67 /* libPods-UltraKlin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15DB5B1C8286A75A981ABC10 /* libPods-UltraKlin.a */; };
+		5F0B67FE204CE2150008AD25 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B67FD204CE2150008AD25 /* UserNotifications.framework */; };
+		5F0C90912043AAD500FDF94E /* UltraKlinCleaningDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0C90902043AAD500FDF94E /* UltraKlinCleaningDetail.swift */; };
+		5F1DCDE6203FCD1900F486AD /* UltraKlinCleaning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1DCDE5203FCD1900F486AD /* UltraKlinCleaning.swift */; };
+		5F24B6EE2054E8670080DEFC /* UltraKlinLaundry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */; };
+		5F24C2AC205F9E6300CD5067 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24C2AB205F9E6300CD5067 /* Config.swift */; };
+		5F24C2AE205FBC7B00CD5067 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24C2AD205FBC7B00CD5067 /* Reachability.swift */; };
+		5F3C3C23204401EF00F9F97D /* LocationPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8A61CE2043F9660054C51D /* LocationPicker.framework */; };
+		5F3C3C24204401EF00F9F97D /* LocationPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8A61CE2043F9660054C51D /* LocationPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5F54A4062060E78F007BEEDC /* UltraKlinLaundryDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54A4052060E78F007BEEDC /* UltraKlinLaundryDetail.swift */; };
+		5F7C46A02064D23B008D2C73 /* AppsFlyerLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C469F2064D23B008D2C73 /* AppsFlyerLib.framework */; };
+		5F7C46A22064D24F008D2C73 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C46A12064D24F008D2C73 /* AdSupport.framework */; };
+		5F7C46A42064D259008D2C73 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C46A32064D258008D2C73 /* iAd.framework */; };
+		5F9998DC2052378600AC37FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F9998DB2052378600AC37FD /* GoogleService-Info.plist */; };
+		5FAFCB00203EE1930009F97B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCAFF203EE1930009F97B /* AppDelegate.swift */; };
+		5FAFCB02203EE1930009F97B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCB01203EE1930009F97B /* ViewController.swift */; };
+		5FAFCB05203EE1930009F97B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FAFCB03203EE1930009F97B /* Main.storyboard */; };
+		5FAFCB08203EE1930009F97B /* UltraKlin.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCB06203EE1930009F97B /* UltraKlin.xcdatamodeld */; };
+		5FAFCB0A203EE1930009F97B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FAFCB09203EE1930009F97B /* Assets.xcassets */; };
+		5FAFCB0D203EE1930009F97B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FAFCB0B203EE1930009F97B /* LaunchScreen.storyboard */; };
+		5FAFCB15203EECC80009F97B /* UltraKlinHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCB14203EECC80009F97B /* UltraKlinHomeView.swift */; };
+		5FAFCB17203EED090009F97B /* UltraKlinHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCB16203EED090009F97B /* UltraKlinHistoryView.swift */; };
+		5FAFCB19203EED810009F97B /* UltraKlinAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCB18203EED810009F97B /* UltraKlinAccountView.swift */; };
+		5FB0F7302045815F007CE83C /* UltraKlinRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0F72F2045815F007CE83C /* UltraKlinRegistration.swift */; };
+		5FB0F73220458171007CE83C /* UltraKlinLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0F73120458171007CE83C /* UltraKlinLogin.swift */; };
+		5FC37C962047BD680086E500 /* UltraKlinTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5F3C3C25204401EF00F9F97D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B62462FE1B68A4DE00646DE2;
+			remoteInfo = LocationPicker;
+		};
+		5F8A61CD2043F9660054C51D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B62462FF1B68A4DE00646DE2;
+			remoteInfo = LocationPicker;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5F3C3C27204401EF00F9F97D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5F3C3C24204401EF00F9F97D /* LocationPicker.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		15DB5B1C8286A75A981ABC10 /* libPods-UltraKlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-UltraKlin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5513B6C728863E6BDBA564D4 /* Pods-UltraKlin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltraKlin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin.debug.xcconfig"; sourceTree = "<group>"; };
+		5F0B67FB204CE1DD0008AD25 /* UltraKlin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UltraKlin.entitlements; sourceTree = "<group>"; };
+		5F0B67FD204CE2150008AD25 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		5F0C90902043AAD500FDF94E /* UltraKlinCleaningDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinCleaningDetail.swift; sourceTree = "<group>"; };
+		5F1DCDE5203FCD1900F486AD /* UltraKlinCleaning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinCleaning.swift; sourceTree = "<group>"; };
+		5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLaundry.swift; sourceTree = "<group>"; };
+		5F24C2AB205F9E6300CD5067 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
+		5F24C2AD205FBC7B00CD5067 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		5F54A4052060E78F007BEEDC /* UltraKlinLaundryDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLaundryDetail.swift; sourceTree = "<group>"; };
+		5F7C469F2064D23B008D2C73 /* AppsFlyerLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyerLib.framework; sourceTree = "<group>"; };
+		5F7C46A12064D24F008D2C73 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		5F7C46A32064D258008D2C73 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LocationPicker.xcodeproj; sourceTree = "<group>"; };
+		5F9998DB2052378600AC37FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5FAFCAFC203EE1930009F97B /* UltraKlin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UltraKlin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5FAFCAFF203EE1930009F97B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		5FAFCB01203EE1930009F97B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		5FAFCB04203EE1930009F97B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		5FAFCB07203EE1930009F97B /* UltraKlin.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UltraKlin.xcdatamodel; sourceTree = "<group>"; };
+		5FAFCB09203EE1930009F97B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5FAFCB0C203EE1930009F97B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		5FAFCB0E203EE1930009F97B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5FAFCB14203EECC80009F97B /* UltraKlinHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinHomeView.swift; sourceTree = "<group>"; };
+		5FAFCB16203EED090009F97B /* UltraKlinHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinHistoryView.swift; sourceTree = "<group>"; };
+		5FAFCB18203EED810009F97B /* UltraKlinAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinAccountView.swift; sourceTree = "<group>"; };
+		5FB0F72F2045815F007CE83C /* UltraKlinRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinRegistration.swift; sourceTree = "<group>"; };
+		5FB0F73120458171007CE83C /* UltraKlinLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLogin.swift; sourceTree = "<group>"; };
+		5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinTabBarView.swift; sourceTree = "<group>"; };
+		F2A4A450F551FCCAB58DFFA2 /* Pods-UltraKlin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltraKlin.release.xcconfig"; path = "Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5FAFCAF9203EE1930009F97B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F7C46A42064D259008D2C73 /* iAd.framework in Frameworks */,
+				5F7C46A22064D24F008D2C73 /* AdSupport.framework in Frameworks */,
+				5F0B67FE204CE2150008AD25 /* UserNotifications.framework in Frameworks */,
+				5F3C3C23204401EF00F9F97D /* LocationPicker.framework in Frameworks */,
+				48B5CB3A4800FA0A224A0D67 /* libPods-UltraKlin.a in Frameworks */,
+				5F7C46A02064D23B008D2C73 /* AppsFlyerLib.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5F0B67FC204CE2150008AD25 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				5F7C46A32064D258008D2C73 /* iAd.framework */,
+				5F7C46A12064D24F008D2C73 /* AdSupport.framework */,
+				5F7C469F2064D23B008D2C73 /* AppsFlyerLib.framework */,
+				5F0B67FD204CE2150008AD25 /* UserNotifications.framework */,
+				15DB5B1C8286A75A981ABC10 /* libPods-UltraKlin.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5F8A61CA2043F9650054C51D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5F8A61CE2043F9660054C51D /* LocationPicker.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5FAFCAF3203EE1930009F97B = {
+			isa = PBXGroup;
+			children = (
+				5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */,
+				5FAFCAFE203EE1930009F97B /* UltraKlin */,
+				5FAFCAFD203EE1930009F97B /* Products */,
+				5F0B67FC204CE2150008AD25 /* Frameworks */,
+				E4BF42059B977EFF080C1A9C /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		5FAFCAFD203EE1930009F97B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5FAFCAFC203EE1930009F97B /* UltraKlin.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5FAFCAFE203EE1930009F97B /* UltraKlin */ = {
+			isa = PBXGroup;
+			children = (
+				5F0B67FB204CE1DD0008AD25 /* UltraKlin.entitlements */,
+				5FAFCAFF203EE1930009F97B /* AppDelegate.swift */,
+				5FAFCB01203EE1930009F97B /* ViewController.swift */,
+				5FB0F72F2045815F007CE83C /* UltraKlinRegistration.swift */,
+				5FB0F73120458171007CE83C /* UltraKlinLogin.swift */,
+				5FAFCB14203EECC80009F97B /* UltraKlinHomeView.swift */,
+				5FAFCB16203EED090009F97B /* UltraKlinHistoryView.swift */,
+				5FAFCB18203EED810009F97B /* UltraKlinAccountView.swift */,
+				5F1DCDE5203FCD1900F486AD /* UltraKlinCleaning.swift */,
+				5F0C90902043AAD500FDF94E /* UltraKlinCleaningDetail.swift */,
+				5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */,
+				5F54A4052060E78F007BEEDC /* UltraKlinLaundryDetail.swift */,
+				5FAFCB03203EE1930009F97B /* Main.storyboard */,
+				5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */,
+				5F24C2AD205FBC7B00CD5067 /* Reachability.swift */,
+				5F24C2AB205F9E6300CD5067 /* Config.swift */,
+				5FAFCB09203EE1930009F97B /* Assets.xcassets */,
+				5FAFCB0B203EE1930009F97B /* LaunchScreen.storyboard */,
+				5F9998DB2052378600AC37FD /* GoogleService-Info.plist */,
+				5FAFCB0E203EE1930009F97B /* Info.plist */,
+				5FAFCB06203EE1930009F97B /* UltraKlin.xcdatamodeld */,
+			);
+			path = UltraKlin;
+			sourceTree = "<group>";
+		};
+		E4BF42059B977EFF080C1A9C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5513B6C728863E6BDBA564D4 /* Pods-UltraKlin.debug.xcconfig */,
+				F2A4A450F551FCCAB58DFFA2 /* Pods-UltraKlin.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5FAFCAFB203EE1930009F97B /* UltraKlin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5FAFCB11203EE1930009F97B /* Build configuration list for PBXNativeTarget "UltraKlin" */;
+			buildPhases = (
+				41F8FFC5AB492B7B286E9F5D /* [CP] Check Pods Manifest.lock */,
+				5FAFCAF8203EE1930009F97B /* Sources */,
+				5FAFCAF9203EE1930009F97B /* Frameworks */,
+				5FAFCAFA203EE1930009F97B /* Resources */,
+				5F3C3C27204401EF00F9F97D /* Embed Frameworks */,
+				1A132C9C364CA0A155D921F4 /* [CP] Embed Pods Frameworks */,
+				5F44580771C885692BBD9A9E /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5F3C3C26204401EF00F9F97D /* PBXTargetDependency */,
+			);
+			name = UltraKlin;
+			productName = UltraKlin;
+			productReference = 5FAFCAFC203EE1930009F97B /* UltraKlin.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5FAFCAF4203EE1930009F97B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0920;
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = "PT Lintas Insan Nur Inspira";
+				TargetAttributes = {
+					5FAFCAFB203EE1930009F97B = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 0;
+							};
+							com.apple.NetworkExtensions.iOS = {
+								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 5FAFCAF7203EE1930009F97B /* Build configuration list for PBXProject "UltraKlin" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5FAFCAF3203EE1930009F97B;
+			productRefGroup = 5FAFCAFD203EE1930009F97B /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 5F8A61CA2043F9650054C51D /* Products */;
+					ProjectRef = 5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				5FAFCAFB203EE1930009F97B /* UltraKlin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		5F8A61CE2043F9660054C51D /* LocationPicker.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = LocationPicker.framework;
+			remoteRef = 5F8A61CD2043F9660054C51D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5FAFCAFA203EE1930009F97B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5FAFCB0D203EE1930009F97B /* LaunchScreen.storyboard in Resources */,
+				5F9998DC2052378600AC37FD /* GoogleService-Info.plist in Resources */,
+				5FAFCB0A203EE1930009F97B /* Assets.xcassets in Resources */,
+				5FAFCB05203EE1930009F97B /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		1A132C9C364CA0A155D921F4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		41F8FFC5AB492B7B286E9F5D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-UltraKlin-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5F44580771C885692BBD9A9E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5FAFCAF8203EE1930009F97B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5F24C2AE205FBC7B00CD5067 /* Reachability.swift in Sources */,
+				5FAFCB08203EE1930009F97B /* UltraKlin.xcdatamodeld in Sources */,
+				5FB0F7302045815F007CE83C /* UltraKlinRegistration.swift in Sources */,
+				5F24B6EE2054E8670080DEFC /* UltraKlinLaundry.swift in Sources */,
+				5FAFCB19203EED810009F97B /* UltraKlinAccountView.swift in Sources */,
+				5F0C90912043AAD500FDF94E /* UltraKlinCleaningDetail.swift in Sources */,
+				5FAFCB17203EED090009F97B /* UltraKlinHistoryView.swift in Sources */,
+				5F24C2AC205F9E6300CD5067 /* Config.swift in Sources */,
+				5FAFCB15203EECC80009F97B /* UltraKlinHomeView.swift in Sources */,
+				5FAFCB02203EE1930009F97B /* ViewController.swift in Sources */,
+				5F54A4062060E78F007BEEDC /* UltraKlinLaundryDetail.swift in Sources */,
+				5FAFCB00203EE1930009F97B /* AppDelegate.swift in Sources */,
+				5FB0F73220458171007CE83C /* UltraKlinLogin.swift in Sources */,
+				5FC37C962047BD680086E500 /* UltraKlinTabBarView.swift in Sources */,
+				5F1DCDE6203FCD1900F486AD /* UltraKlinCleaning.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5F3C3C26204401EF00F9F97D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LocationPicker;
+			targetProxy = 5F3C3C25204401EF00F9F97D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		5FAFCB03203EE1930009F97B /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5FAFCB04203EE1930009F97B /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		5FAFCB0B203EE1930009F97B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5FAFCB0C203EE1930009F97B /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		5FAFCB0F203EE1930009F97B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		5FAFCB10203EE1930009F97B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		5FAFCB12203EE1930009F97B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5513B6C728863E6BDBA564D4 /* Pods-UltraKlin.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = UltraKlin/UltraKlin.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3Y7W3L4HA8;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = UltraKlin/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lintasinsan.UltraKlin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = NO;
+			};
+			name = Debug;
+		};
+		5FAFCB13203EE1930009F97B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2A4A450F551FCCAB58DFFA2 /* Pods-UltraKlin.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = UltraKlin/UltraKlin.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3Y7W3L4HA8;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = UltraKlin/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.lintasinsan.UltraKlin;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5FAFCAF7203EE1930009F97B /* Build configuration list for PBXProject "UltraKlin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FAFCB0F203EE1930009F97B /* Debug */,
+				5FAFCB10203EE1930009F97B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5FAFCB11203EE1930009F97B /* Build configuration list for PBXNativeTarget "UltraKlin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5FAFCB12203EE1930009F97B /* Debug */,
+				5FAFCB13203EE1930009F97B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		5FAFCB06203EE1930009F97B /* UltraKlin.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				5FAFCB07203EE1930009F97B /* UltraKlin.xcdatamodel */,
+			);
+			currentVersion = 5FAFCB07203EE1930009F97B /* UltraKlin.xcdatamodel */;
+			path = UltraKlin.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 5FAFCAF4203EE1930009F97B /* Project object */;
+}
