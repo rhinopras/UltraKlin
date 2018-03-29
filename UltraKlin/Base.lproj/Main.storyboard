@@ -1468,6 +1468,7 @@
                     <navigationItem key="navigationItem" title="Detail Information" id="fCE-jm-BdT"/>
                     <size key="freeformSize" width="320" height="920"/>
                     <connections>
+                        <outlet property="buttonBookCleaning" destination="3N2-Od-ffX" id="sl4-Hi-3eO"/>
                         <outlet property="labelBookAddress" destination="kEB-ak-jce" id="6H3-Ry-2qr"/>
                         <outlet property="labelBookBathroom" destination="ImN-uY-1be" id="EOX-8F-baW"/>
                         <outlet property="labelBookBedroom" destination="Cpa-oR-aOR" id="YzI-i6-lwy"/>
@@ -1562,13 +1563,13 @@
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DRy-3S-fkP">
                                                 <rect key="frame" x="26.5" y="77" width="51" height="31"/>
                                                 <connections>
-                                                    <action selector="swicthPerPiece:" destination="pdu-pP-Izg" eventType="touchUpInside" id="BIo-05-NgN"/>
+                                                    <action selector="switchPerPieceValue:" destination="pdu-pP-Izg" eventType="valueChanged" id="MeW-zK-5OJ"/>
                                                 </connections>
                                             </switch>
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="QoQ-w2-mQg">
                                                 <rect key="frame" x="120.5" y="77" width="51" height="31"/>
                                                 <connections>
-                                                    <action selector="swicthPerKilos:" destination="pdu-pP-Izg" eventType="touchUpInside" id="h92-nI-vj2"/>
+                                                    <action selector="switchPerKilosValue:" destination="pdu-pP-Izg" eventType="valueChanged" id="229-Lt-n4C"/>
                                                 </connections>
                                             </switch>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ua8-5t-qKh">
@@ -1602,7 +1603,7 @@
                                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Choose Fragrance" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2DS-Oq-zoc" customClass="CustomUITextField" customModule="UltraKlin" customModuleProvider="target">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" text="Yes" borderStyle="roundedRect" placeholder="Choose Fragrance" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2DS-Oq-zoc" customClass="CustomUITextField" customModule="UltraKlin" customModuleProvider="target">
                                                 <rect key="frame" x="15" y="222" width="260" height="40"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -1616,7 +1617,7 @@
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="vzv-Mj-wkF">
                                                 <rect key="frame" x="218" y="77" width="51" height="31"/>
                                                 <connections>
-                                                    <action selector="swicthPerPackage:" destination="pdu-pP-Izg" eventType="touchUpInside" id="Ay0-hS-4AU"/>
+                                                    <action selector="switchPackageValue:" destination="pdu-pP-Izg" eventType="valueChanged" id="Taa-io-Ig0"/>
                                                 </connections>
                                             </switch>
                                         </subviews>
@@ -3223,6 +3224,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="XBQ-cs-A7j"/>
         <segue reference="vaL-eo-7H2"/>
-        <segue reference="T7X-nH-zSb"/>
+        <segue reference="zi3-yP-Kgn"/>
     </inferredMetricsTieBreakers>
 </document>

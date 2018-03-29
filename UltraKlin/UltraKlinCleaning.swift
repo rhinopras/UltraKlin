@@ -307,7 +307,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func buttonCleaningNext(_ sender: Any) {
-        
         self.jam         = String(totalJam)
         self.amountBath  = String(resultBath)
         self.amountBed   = String(resultBed)
@@ -351,42 +350,56 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
             timeFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale!
             timeFormatCurrent.dateFormat = "HH:mm"
             let finaltimeCurrent = timeFormatCurrent.string(from: timeCurrent as Date)
+            
             let TodayTime = timeFormatCurrent.date(from: finaltimeCurrent)
             let NewPlanTime = textMyTime.text
+            let timeOff1 = "08:00"
+            let timeOff2 = "19:00"
+            
             let timeGetTime = timeFormatCurrent.date(from: NewPlanTime!)
+            let timeGetTimeOff1 = timeFormatCurrent.date(from: timeOff1)
+            let timeGetTimeOff2 = timeFormatCurrent.date(from: timeOff2)
             
             _ = NSCalendar.Unit.minute
             
             let compnentMinute = calendar.dateComponents([.minute], from: TodayTime!, to: timeGetTime!)
+            let compnentHour1 = calendar.dateComponents([.minute],from: timeGetTime!, to: timeGetTimeOff1!)
+            let compnentHour2 = calendar.dateComponents([.minute],from: timeGetTime!, to: timeGetTimeOff2!)
             
             if (components.day! < 0 ) {
                 
                 print("Date or time too old")
-                let alert = UIAlertController (title: "Date and Time", message: "Date too old", preferredStyle: .alert)
+                let alert = UIAlertController (title: "Date", message: "Date too old.", preferredStyle: .alert)
                 alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
             } else if (components.day == 0 && compnentMinute.minute!  < 0 ) {
                 
-                let alert = UIAlertController (title: "Date and Time", message: "Time too old", preferredStyle: .alert)
+                let alert = UIAlertController (title: "Time", message: "Time too old.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                
+            } else if (compnentHour1.minute! > 0 ) {
+                
+                print("Order Time too work.")
+                let alert = UIAlertController (title: "Order Time", message: "Order only at work time 08:00 - 19:00", preferredStyle: .alert)
+                alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                
+            } else if (compnentHour2.minute! < 0 ) {
+                
+                print("Order Time too work.")
+                let alert = UIAlertController (title: "Order Time", message: "Order only at work time 08:00 - 19:00", preferredStyle: .alert)
                 alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
             } else if(total < 100000) {
                 
-                self.view.isUserInteractionEnabled = true
-                self.messageFrame.removeFromSuperview()
-                self.activityIndicator.stopAnimating()
-                self.refreshControl.endRefreshing()
                 let alert = UIAlertController (title: "Information", message: "Minimum order Rp 100.000", preferredStyle: .alert)
                 alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
             } else if(totalJam < 2.0) {
-                self.view.isUserInteractionEnabled = true
-                self.messageFrame.removeFromSuperview()
-                self.activityIndicator.stopAnimating()
-                self.refreshControl.endRefreshing()
                 let alert = UIAlertController (title: "Information", message: "Minimum order 2.0 Hours", preferredStyle: .alert)
                 alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
@@ -438,13 +451,14 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                             
                             let code      = json["promo"] as! String
                             let totalInt     = json["Total Payment"] as! Int
-                            self.promo = code
-                            self.totalFix = totalInt
-                            self.estPrice = self.totalFix
-                            self.labelEstimatedPrices.text = String(self.estPrice)
-                            defaults.set(self.totalFix, forKey: "total")
                             
                             DispatchQueue.main.async() {
+                                
+                                self.promo = code
+                                self.totalFix = totalInt
+                                self.estPrice = self.totalFix
+                                self.labelEstimatedPrices.text = String(self.estPrice)
+                                defaults.set(self.totalFix, forKey: "total")
                                 
                                 self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
                                 self.textPromoCode.textColor = UIColor.white
@@ -483,6 +497,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        buttonNextAnimation.isEnabled = true
         self.textPromoCode.delegate = self
         self.viewLayoutCleaningStyle()
         self.pickerViewPlaces()
@@ -571,18 +586,19 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                         
                     let code      = json["promo"] as! String
                     let totalInt     = json["Total Payment"] as! Int
-                    self.promo = code
-                    self.totalFix = totalInt
-                    self.estPrice = self.totalFix
-                    self.labelEstimatedPrices.text = String(self.estPrice)
-                    defaults.set(self.totalFix, forKey: "total")
-                        
+                    
                     DispatchQueue.main.async() {
-                            
+                        
+                        self.promo = code
+                        self.totalFix = totalInt
+                        self.estPrice = self.totalFix
+                        self.labelEstimatedPrices.text = String(self.estPrice)
+                        defaults.set(self.totalFix, forKey: "total")
+                        
                         self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
                         self.textPromoCode.textColor = UIColor.white
                         self.textPromoCode.isUserInteractionEnabled = false
-                            
+                        
                         self.view.isUserInteractionEnabled = true
                         self.messageFrame.removeFromSuperview()
                         self.activityIndicator.stopAnimating()
@@ -692,7 +708,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
             .calendar]
         dateComponents = Calendar.current.dateComponents(unitFlags, from: timePicker.date)
         if dateComponents.minute! > 30 {
-            dateComponents.hour = dateComponents.hour! + 1
+            dateComponents.hour! += 1
             dateComponents.minute = 00
         } else {
             dateComponents.minute = 30
@@ -704,7 +720,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         toolBar.tintColor = UIColor.black
         toolBar.sizeToFit()
         
-        // Adds the Buttons
+        // Add the Buttons
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(UltraKlinCleaning.doneTimeClick))
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolBar.setItems([spaceButton, doneButton], animated: false)

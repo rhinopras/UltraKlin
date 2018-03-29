@@ -7,17 +7,37 @@
 //
 
 import UIKit
+import Foundation
 import CoreData
 import CoreLocation
 import Firebase
 import FirebaseMessaging
 import UserNotifications
 import AppsFlyerLib
+import AppRating
+import Siren
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
+    
+    override init() {
+        // first set the appID - this must be the very first call of AppRating!
+        AppRating.appID("1303429279");
+        
+        // enable debug mode (disable this in production mode)
+        //AppRating.debugEnabled(true);
+        
+        // reset the counters (for testing only);
+        //AppRating.resetAllCounters();
+        
+        // set some of the settings (see the github readme for more information about that)
+        AppRating.daysUntilPrompt(0);
+        AppRating.usesUntilPrompt(9);
+        AppRating.secondsBeforePromptIsShown(3);
+        AppRating.significantEventsUntilPrompt(0); // set this to zero if you dont't want to use this feature
+    }
     
     @available(iOS 10.0, *)
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -92,15 +112,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         application.registerForRemoteNotifications()
         FirebaseApp.configure()
+        
+        // Cek Session
         UltraKlinRegistration.updateRootVC()
         
         // AppsFlyer ====================================
         AppsFlyerTracker.shared().appsFlyerDevKey = "ayfSQek7FFtQtiT3FqJBjg"
         AppsFlyerTracker.shared().appleAppID = "1303429279"
+        
         // For Develop
         //AppsFlyerTracker.shared().isDebug = true
         
+        // Checking Version App For Update
+        window?.makeKeyAndVisible()
+        setupSiren()
+        
         return true
+    }
+    
+    func setupSiren() {
+        let siren = Siren.shared
+        
+        // Optional
+        siren.delegate = self
+        
+        // Optional
+        //siren.debugEnabled = true
+        
+        // Optional - Change the name of your app. Useful if you have a long app name and want to display a shortened version in the update dialog (e.g., the UIAlertController).
+        siren.appName = "UltraKlin"
+        
+        // Optional - Change the various UIAlertController and UIAlertAction messaging. One or more values can be changes. If only a subset of values are changed, the defaults with which Siren comes with will be used.
+        siren.alertMessaging = SirenAlertMessaging(updateTitle: "Update Available",
+                                                   updateMessage: "A new version of UltraKlin is available. Please update to version now.",
+                                                   updateButtonMessage: "Update Now",
+                                                   nextTimeButtonMessage: "Next Time",
+                                                   skipVersionButtonMessage: "Skip")
+        
+        // Optional - Defaults to .Option
+        siren.alertType = .force // or .force, .skip, .none
+        
+        // Optional - Can set differentiated Alerts for Major, Minor, Patch, and Revision Updates (Must be called AFTER siren.alertType, if you are using siren.alertType)
+        siren.majorUpdateAlertType = .force
+        siren.minorUpdateAlertType = .force
+        siren.patchUpdateAlertType = .force
+        siren.revisionUpdateAlertType = .force
+        
+        // Optional - Sets all messages to appear in Russian. Siren supports many other languages, not just English and Russian.
+        siren.forceLanguageLocalization = .english
+        
+        // Optional - Set this variable if your app is not available in the U.S. App Store. List of codes: https://developer.apple.com/library/content/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/AppStoreTerritories.html
+        //        siren.countryCode = ""
+        
+        // Optional - Set this variable if you would only like to show an alert if your app has been available on the store for a few days.
+        // This default value is set to 1 to avoid this issue: https://github.com/ArtSabintsev/Siren#words-of-caution
+        // To show the update immediately after Apple has updated their JSON, set this value to 0. Not recommended due to aforementioned reason in https://github.com/ArtSabintsev/Siren#words-of-caution.
+        siren.showAlertAfterCurrentVersionHasBeenReleasedForDays = 0
+        
+        // Optional (Only do this if you don't call checkVersion in didBecomeActive)
+        siren.checkVersion(checkType: .immediately)
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -116,10 +186,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        
+        // For checking last version for update
+        Siren.shared.checkVersion(checkType: .immediately)
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+        // For checking last version for update
+        Siren.shared.checkVersion(checkType: .daily)
+        
+        // Appflyer
         AppsFlyerTracker.shared().trackAppLaunch()
         AppsFlyerTracker.shared().shouldCollectDeviceName = true
     }
@@ -131,3 +209,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 }
 
+extension AppDelegate: SirenDelegate {
+    func sirenDidShowUpdateDialog(alertType: Siren.AlertType) {
+        print(#function, alertType)
+    }
+    
+    func sirenUserDidCancel() {
+        print(#function)
+    }
+    
+    func sirenUserDidSkipVersion() {
+        print(#function)
+    }
+    
+    func sirenUserDidLaunchAppStore() {
+        print(#function)
+    }
+    
+    func sirenDidFailVersionCheck(error: Error) {
+        print(#function, error)
+    }
+    
+    func sirenLatestVersionInstalled() {
+        print(#function, "Latest version of app is installed")
+    }
+    
+    // This delegate method is only hit when alertType is initialized to .none
+    func sirenDidDetectNewVersionWithoutAlert(message: String, updateType: UpdateType) {
+        print(#function, "\(message).\nRelease type: \(updateType.rawValue.capitalized)")
+    }
+}

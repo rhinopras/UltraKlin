@@ -148,20 +148,24 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
                 let alert = UIAlertController (title: "Information", message: dataJsonE, preferredStyle: .alert)
                 alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
-                // Stop Refresh =================
-                self.view.isUserInteractionEnabled = true
-                self.messageFrame.removeFromSuperview()
-                self.activityIndicator.stopAnimating()
-                self.refreshControl.endRefreshing()
+                DispatchQueue.main.async {
+                    // Stop Refresh =================
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                }
             } else if ((json["success"] as? String) != nil)  {
                 let alert = UIAlertController (title: "THANK YOU", message: "\n Your order has been processed \n Our Customer Service will get in touch with you.", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default)
                 {
                     (action) -> Void in
+                    
                     rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate
                     appDelegate.window?.rootViewController = rootVC
-                    // Stop Refresh =================
+                    
+                    // Stop Refresh ===============================
                     self.view.isUserInteractionEnabled = true
                     self.messageFrame.removeFromSuperview()
                     self.activityIndicator.stopAnimating()
@@ -180,14 +184,14 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
         if labelPerPiece.text == "Yes" {
             if labelPerKilos.text == "Yes" {
                 AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
-                    AFEventPurchase : "Laundry Pieces dan Kilos"
+                    "Laundry Pieces dan Kilos" : "Laundry Pieces dan Kilos"
                     ]);
                 // Parameter ON PIECES AND KILOS =============================
                 itemParam.removeAll()
                 for i in 0..<listChoose.count{
                     var valitem = ""
                     let kutip = "\""
-                    valitem = "{" + kutip + "satuan_nama" + kutip + ":" + kutip + "\(self.listChoose[i].satuan_name)" + kutip + "," + kutip + "satuan_value" + kutip + ":" + "\(self.listChoose[i].satuan_value)" + "," + kutip + "satuan_price" + kutip + ":" + "\(self.listChoose[i].satuan_price)" + "}"
+                    valitem = "{" + kutip + "satuan_name" + kutip + ":" + kutip + "\(self.listChoose[i].satuan_name)" + kutip + "," + kutip + "satuan_value" + kutip + ":" + "\(self.listChoose[i].satuan_value)" + "," + kutip + "satuan_price" + kutip + ":" + "\(self.listChoose[i].satuan_price)" + "}"
                     print(i+1)
                     itemParam.append(valitem as AnyObject)
                     print(itemParam)
@@ -195,17 +199,16 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
                 }
                 let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))
                 paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry PiecesKilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&estimateWeight=" + labelHowManyKilos.text! +  "&listKiloan=" + labelHowManyCloth.text! + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
-                print(paramOrderDetail)
             } else {
                 AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
-                    AFEventPurchase : "Laundry Pieces"
+                    "Laundry Pieces" : "Laundry Pieces"
                     ]);
                 // Parameter ON PIECES =======================================
                 itemParam.removeAll()
                 for i in 0..<listChoose.count{
                     var valitem = ""
                     let kutip = "\""
-                    valitem = "{" + kutip + "satuan_nama" + kutip + ":" + kutip + "\(self.listChoose[i].satuan_name)" + kutip + "," + kutip + "satuan_value" + kutip + ":" + "\(self.listChoose[i].satuan_value)" + "," + kutip + "satuan_price" + kutip + ":" + "\(self.listChoose[i].satuan_price)" + "}"
+                    valitem = "{" + kutip + "satuan_name" + kutip + ":" + kutip + "\(self.listChoose[i].satuan_name)" + kutip + "," + kutip + "satuan_value" + kutip + ":" + "\(self.listChoose[i].satuan_value)" + "," + kutip + "satuan_price" + kutip + ":" + "\(self.listChoose[i].satuan_price)" + "}"
                     print(i+1)
                     itemParam.append(valitem as AnyObject)
                     print(itemParam)
@@ -216,7 +219,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
             }
         } else {
             AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
-                AFEventPurchase : "Laundry Kilos"
+                "Laundry Kilos" : "Laundry Kilos"
                 ]);
             // Parameter ON KILOS =========================================
             let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))

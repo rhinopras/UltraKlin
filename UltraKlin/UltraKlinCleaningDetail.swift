@@ -7,13 +7,16 @@
 //
 
 import UIKit
+import Foundation
 import AppsFlyerLib
 
 class UltraKlinCleaningDetail: UIViewController {
     
     var paramOrder = ""
-    var datePicker = UIDatePicker()
-    var timePicker = UIDatePicker()
+    
+    // for rate apps
+    let defaults = UserDefaults.standard
+    let appId = "id1303429279"
     
     // Refresh
     let messageFrame = UIView()
@@ -34,11 +37,13 @@ class UltraKlinCleaningDetail: UIViewController {
     @IBOutlet weak var labelBookPromo: UILabel!
     @IBOutlet weak var labelBookEstPrice: UILabel!
     @IBOutlet weak var labelBookTotal: UILabel!
+    @IBOutlet weak var buttonBookCleaning: UIButton!
     
     @IBOutlet weak var viewDetailBg: UIView!
     @IBOutlet weak var viewButtonBook: UIView!
-    
+
     @IBAction func buttonBook(_ sender: Any) {
+        buttonBookCleaning.isEnabled = false
         let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
         
         let okAction = UIAlertAction(title: "Order", style: .default) {
@@ -49,6 +54,7 @@ class UltraKlinCleaningDetail: UIViewController {
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
             UIAlertAction in
+            self.buttonBookCleaning.isEnabled = true
             NSLog("Cancel Pressed")
         }
         alert.addAction(cancelAction)
@@ -81,27 +87,33 @@ class UltraKlinCleaningDetail: UIViewController {
                 let alert = UIAlertController (title: "Information", message: dataJsonE, preferredStyle: .alert)
                 alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
-                // Stop Refresh =================
-                self.view.isUserInteractionEnabled = true
-                self.messageFrame.removeFromSuperview()
-                self.activityIndicator.stopAnimating()
-                self.refreshControl.endRefreshing()
-            } else if ((json["success"] as? String) != nil) {
-                AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
-                    AFEventPurchase : "Cleaning Service"
-                    ]);
-                let alert = UIAlertController (title: "THANK YOU", message: "\n Your order has been processed \n Our Customer Service will get in touch with you.", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "OK", style: .default)
-                {
-                    (action) -> Void in
-                    rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    appDelegate.window?.rootViewController = rootVC
+                DispatchQueue.main.async {
                     // Stop Refresh =================
                     self.view.isUserInteractionEnabled = true
                     self.messageFrame.removeFromSuperview()
                     self.activityIndicator.stopAnimating()
                     self.refreshControl.endRefreshing()
+                    self.buttonBookCleaning.isEnabled = true
+                }
+            } else if ((json["success"] as? String) != nil) {
+                AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
+                    "Cleaning Service" : "Cleaning Service"
+                    ]);
+                let alert = UIAlertController (title: "THANK YOU", message: "\n Your order has been processed \n Our Customer Service will get in touch with you.", preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "OK", style: .default)
+                {
+                    (action) -> Void in
+                    
+                    rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.window?.rootViewController = rootVC
+                    
+                    // Stop Refresh =========================
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                    self.buttonBookCleaning.isEnabled = true
                 }
                 alert.addAction(okAction)
                 self.present(alert, animated: true, completion: nil)
@@ -111,7 +123,7 @@ class UltraKlinCleaningDetail: UIViewController {
         task.resume()
     }
     
-    func  loadingData() {
+    func loadingData() {
         messageFrame.frame = CGRect(x: 90, y: 150 , width: 50, height: 50)
         
         activityIndicator.color = UIColor.white
@@ -132,14 +144,15 @@ class UltraKlinCleaningDetail: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        buttonBookCleaning.isEnabled = true
         self.viewLayoutCleaningDetailStyle()
         
         let total       = (UserDefaults.standard.string(forKey: "total"))
         let amountBath  = (UserDefaults.standard.string(forKey: "amount_bath"))
         let amountBed   = (UserDefaults.standard.string(forKey: "amount_bed"))
         let amountOther = (UserDefaults.standard.string(forKey: "amount_other"))
-        var pDate       = (UserDefaults.standard.string(forKey: "date"))
-        var pTime       = (UserDefaults.standard.string(forKey: "time"))
+        let pDate       = (UserDefaults.standard.string(forKey: "date"))
+        let pTime       = (UserDefaults.standard.string(forKey: "time"))
         let promo       = (UserDefaults.standard.string(forKey: "code"))
         let building    = (UserDefaults.standard.string(forKey: "building"))
         let address     = (UserDefaults.standard.string(forKey: "address"))
@@ -163,18 +176,9 @@ class UltraKlinCleaningDetail: UIViewController {
         labelBookOtherroom.text     = amountOther!
         labelQtyCSO.text           = qtycso
         labelBookTime.text         = pTime
-        let timeformatter = DateFormatter()
-        timeformatter.timeStyle = .short
-        timeformatter.dateFormat = "HH:mm"
-        pTime = timeformatter.string(from: timePicker.date)
         labelBookDate.text     = pDate
-        let dateFormatter     = DateFormatter()
-        dateFormatter.dateStyle = .long
-        dateFormatter.dateFormat = "dd-MM-yyyy"
-        pDate = dateFormatter.string(from: datePicker.date)
         
-        paramOrder = "&apiKey=" + apiKey! + "&note=tidak ada" + "&address=" + address! + "&amount_bath=" + amountBath! + "&amount_bed=" + amountBed! + "&amount_other=" + amountOther! + "&typeGedung=" + building! + "&promo=" + promo! + "&gender=" + gender! + "&pet=" + pet! + "&date=" + pDate! + "&time=" + pTime! + "&total_cso=" + qtycso! + "&name=Cleaning Service" + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
-        print(paramOrder)
+        paramOrder = "&apiKey=" + apiKey! + "&note=tidak ada" + "&address=" + labelBookAddress.text! + "&amount_bath=" + labelBookBathroom.text! + "&amount_bed=" + labelBookBedroom.text! + "&amount_other=" + labelBookOtherroom.text! + "&typeGedung=" + labelBookBuilding.text! + "&promo=" + labelBookPromo.text! + "&gender=" + labelBookCSOGender.text! + "&pet=" + labelBookPet.text! + "&date=" + labelBookDate.text! + "&time=" + labelBookTime.text! + "&total_cso=" + labelQtyCSO.text! + "&name=Cleaning Service" + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -200,4 +204,5 @@ class UltraKlinCleaningDetail: UIViewController {
         viewButtonBook.layer.shadowOpacity = 1.0
         viewButtonBook.layer.shadowRadius = 3
     }
+
 }

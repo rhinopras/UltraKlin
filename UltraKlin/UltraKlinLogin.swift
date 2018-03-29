@@ -86,36 +86,35 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
                     DispatchQueue.main.async {
                         
                         AppsFlyerTracker.shared().trackEvent(AFEventLogin, withValues: [
-                            "email" : email,
-                            "nama" : name!,
+                            AFEventLogin : email,
                             ]);
-                        AppsFlyerTracker.shared().setUserEmails([email], with: EmailCryptTypeSHA1)
-                        AppsFlyerTracker.shared().customerUserID = name
+                        
+                        rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.window?.rootViewController = rootVC
                         
                         self.textLoginPassword.text = ""
                         self.view.isUserInteractionEnabled = true
                         self.messageFrame.removeFromSuperview()
                         self.activityIndicator.stopAnimating()
-                        if self.refreshControl.isRefreshing {
-                            self.refreshControl.endRefreshing()
-                        }
-                        rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        appDelegate.window?.rootViewController = rootVC
+                        self.refreshControl.endRefreshing()
                     }
                     
                 } else {
                     
                     DispatchQueue.main.async {
-                    self.view.isUserInteractionEnabled = true
-                    self.messageFrame.removeFromSuperview()
-                    self.activityIndicator.stopAnimating()
-                    self.refreshControl.endRefreshing()
                         
-                    let alert = UIAlertController (title: "INFORMATION", message: "\n Login Failed.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                        
+                        let alert = UIAlertController (title: "INFORMATION", message: "\n Login Failed.", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                        
                     }
+                    
                 }
                 
             }
@@ -209,15 +208,14 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
     
     func viewLayoutAccountStyle() {
         // Style Button Logout
-        buttonLogin.layer.cornerRadius = 5
+        buttonLogin.layer.cornerRadius = 8
         buttonLogin.layer.borderWidth = 1
         buttonLogin.layer.borderColor = UIColor.lightGray.cgColor
         buttonLogin.layer.shadowColor = UIColor.lightGray.cgColor
-        buttonLogin.layer.shadowOffset = CGSize(width: -3, height: 3)
+        buttonLogin.layer.shadowOffset = CGSize(width: 0, height: 0)
         buttonLogin.layer.shadowOpacity = 1.0
-        buttonLogin.layer.shadowRadius = 2.0
+        buttonLogin.layer.shadowRadius = 5.0
         buttonLogin.layer.masksToBounds = false
-        buttonLogin.layer.cornerRadius = 5
         // Style TextField Username
         self.textLoginUsername.layer.borderColor = UIColor.lightGray.cgColor
         self.textLoginUsername.layer.borderWidth = CGFloat(Float(1.0))

@@ -57,7 +57,7 @@ class UltraKlinAccountView: UIViewController {
         buttonLogoutStyle.layer.cornerRadius = 8
         buttonLogoutStyle.layer.borderWidth = 0
         buttonLogoutStyle.layer.borderColor = UIColor.lightGray.cgColor
-        buttonLogoutStyle.layer.shadowColor = UIColor.darkGray.cgColor
+        buttonLogoutStyle.layer.shadowColor = UIColor.lightGray.cgColor
         buttonLogoutStyle.layer.shadowOffset = CGSize(width: 0, height: 0)
         buttonLogoutStyle.layer.shadowOpacity = 1.0
         buttonLogoutStyle.layer.shadowRadius = 5.0

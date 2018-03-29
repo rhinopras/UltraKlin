@@ -7,6 +7,8 @@
 //
 import UIKit
 import ImageIO
+import Foundation
+import AppRating
 
 class CustomUITextField: UITextField {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -30,10 +32,13 @@ extension Bundle {
 
 class UltraKlinHomeView: UIViewController, UIScrollViewDelegate {
     
+    let defaults = UserDefaults.standard
+    var appId : String = ""
+    
     var datePicker = UIDatePicker()
     
     var loadImage = "Load"
-    var imageList : [UIImage] = []
+    var imageList : [UIImage] = [#imageLiteral(resourceName: "ImageLoading"),#imageLiteral(resourceName: "ImageLoading"),#imageLiteral(resourceName: "ImageLoading"),#imageLiteral(resourceName: "ImageLoading"),#imageLiteral(resourceName: "ImageLoading")]
     
     var index = 0
     let animationDuration: TimeInterval = 0.25
@@ -72,13 +77,14 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate {
             print("Internet Connection Available!")
             if loadImage == "Load" {
                 for i in 0..<5{
-                    let url = URL(string:"http://ultraklin.com/assets/image/slideIOS\((i+1)).png")
-                    let data = try? Data(contentsOf: url!)
-                    if data != nil {
-                        self.imageList.append(UIImage(data: data!)!)
-                    } else {
-                        print("Internet connection error.")
-                        self.imageList.append(#imageLiteral(resourceName: "slideError"))
+                    if let url = URL(string: "http://ultraklin.com/assets/image/slideIOS\((i+1)).png") {
+                        do {
+                            let data = try Data(contentsOf: url)
+                            self.imageList.append(UIImage(data: data)!)
+                        } catch let err {
+                            print("error : \(err.localizedDescription)")
+                            self.imageList.append(#imageLiteral(resourceName: "slideError"))
+                        }
                     }
                 }
                 loadImage = "Done"
@@ -95,9 +101,71 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    // Load image ========================
+    func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            completion(data, response, error)
+            if error != nil {
+                print(error!)
+            }
+        }.resume()
+    }
+    
+    // Load image ========================
+    func downloadImage(url: URL) {
+        print("Download Started")
+        getDataFromUrl(url: url) { data, response, error in
+            guard let data = data, error == nil else {
+                self.imageList.removeFirst()
+                self.imageList.append(#imageLiteral(resourceName: "slideError"))
+                print("Image download error: \(String(describing: error))")
+                return
+            }
+            guard error == nil else {
+                print("error: \(String(describing: error))")
+                return
+            }
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode > 200 {
+                    let errorMsg = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
+                    self.imageList.removeFirst()
+                    self.imageList.append(#imageLiteral(resourceName: "slideError"))
+                    print("Image download error: \(errorMsg!)")
+                    return
+                }
+            }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            DispatchQueue.main.async() {
+                
+                self.imageList.removeFirst()
+                self.imageList.append(UIImage(data: data)!)
+                
+                if self.loadImage == "Done" {
+                    self.animateImageView()
+                }
+                self.loadImage = ""
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.slideBannerOnline()
+        
+        // Load image ========================
+        if loadImage == "Load" {
+            // Load images
+            for i in 0..<5{
+                print("Begin of code")
+                if let url = URL(string: "http://ultraklin.com/assets/image/slideIOS\(i+1).png") {
+                    imageSlide.contentMode = .scaleToFill
+                    downloadImage(url: url)
+                }
+                print("End of code. The image will continue downloading in the background and it will be loaded when it ends.")
+            }
+            loadImage = "Done"
+        }
+        
         self.buttonDesign()
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(UltraKlinHomeView.swipedRight))

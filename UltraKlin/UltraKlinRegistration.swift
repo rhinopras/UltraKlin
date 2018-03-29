@@ -98,6 +98,8 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
     }
     
     func  registerLoadData() {
+        
+        var rootVC : UIViewController?
         self.loadingData()
         print(paramString)
         let url = NSURL(string: Config().URL_Register)!
@@ -131,20 +133,17 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
                 DispatchQueue.main.async() {
                     
                     AppsFlyerTracker.shared().trackEvent(AFEventParamRegistrationMethod, withValues: [
-                        "email" : email,
-                        "nama" : name!,
+                        AFEventParamRegistrationMethod : email,
                         ]);
                     
-                    AppsFlyerTracker.shared().setUserEmails([email], with: EmailCryptTypeSHA1)
-                    AppsFlyerTracker.shared().customerUserID = name
+                    rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.window?.rootViewController = rootVC
                     
                     self.view.isUserInteractionEnabled = true
                     self.messageFrame.removeFromSuperview()
                     self.activityIndicator.stopAnimating()
-                    if self.refreshControl.isRefreshing {
-                        self.refreshControl.endRefreshing()
-                    }
-                    self.performSegue(withIdentifier: "registerSuccess", sender: self)
+                    self.refreshControl.endRefreshing()
                 }
                 
             } else {
@@ -152,9 +151,8 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
                     self.view.isUserInteractionEnabled = true
                     self.messageFrame.removeFromSuperview()
                     self.activityIndicator.stopAnimating()
-                    if self.refreshControl.isRefreshing {
-                        self.refreshControl.endRefreshing()
-                    }
+                    self.refreshControl.endRefreshing()
+                    
                     let alert = UIAlertController (title: "Information", message: "\n" + (json["response"] as? String)!, preferredStyle: .alert)
                     alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
                     self.present(alert, animated: true, completion: nil)
@@ -307,15 +305,14 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
     
     func viewLayoutAccountStyle() {
         // Style Button Logout
-        buttonRegister.layer.cornerRadius = 5
+        buttonRegister.layer.cornerRadius = 8
         buttonRegister.layer.borderWidth = 1
         buttonRegister.layer.borderColor = UIColor.lightGray.cgColor
         buttonRegister.layer.shadowColor = UIColor.lightGray.cgColor
-        buttonRegister.layer.shadowOffset = CGSize(width: -3, height: 3)
+        buttonRegister.layer.shadowOffset = CGSize(width: 0, height: 0)
         buttonRegister.layer.shadowOpacity = 1.0
-        buttonRegister.layer.shadowRadius = 2.0
+        buttonRegister.layer.shadowRadius = 5.0
         buttonRegister.layer.masksToBounds = false
-        buttonRegister.layer.cornerRadius = 5
         // Style TextField Name
         self.textRegisName.layer.borderColor = UIColor.lightGray.cgColor
         self.textRegisName.layer.borderWidth = CGFloat(Float(1.0))

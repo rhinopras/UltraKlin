@@ -144,6 +144,109 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     @IBOutlet weak var switchPerKilosAct: UISwitch!
     @IBOutlet weak var switchPackageAct: UISwitch!
     
+    @IBAction func switchPerPieceValue(_ sender: Any) {
+        if switchPerPieceAct.isOn {
+            if switchPerKilosAct.isOn {
+                if textManyKilos.text == "" {
+                    totalKilos = 0
+                } else {
+                    totalKilos = Int(textManyKilos.text!)! * dinamisPricePerKilos
+                }
+                totalAll = totalKilos + totalPiece
+                labelTotal.text = String(totalAll)
+                constrainPerPiece.constant = 234
+                constrainCenter.constant = CGFloat(499 + constrainAdditem)
+            } else {
+                totalAll = 0 + totalPiece
+                labelTotal.text = String(totalAll)
+                constrainPerPiece.constant = 8
+                constrainCenter.constant = CGFloat(273 + constrainAdditem)
+            }
+            textChooseItem.isHidden = false
+            tebleLaundryItem.isHidden = false
+            buttonAdditems.isHidden = false
+            labelChoose.isHidden = false
+            labelPerPiece.isHidden = false
+        } else {
+            if switchPerKilosAct.isOn {
+                if textManyKilos.text == "" {
+                    totalKilos = 0
+                } else {
+                    totalKilos = Int(textManyKilos.text!)! * dinamisPricePerKilos
+                }
+                totalAll = totalKilos + 0
+                labelTotal.text = String(totalAll)
+                constrainCenter.constant = 234
+            } else {
+                totalAll = 0
+                labelTotal.text = String(totalAll)
+                constrainCenter.constant = 40
+            }
+            textChooseItem.isHidden = true
+            tebleLaundryItem.isHidden = true
+            buttonAdditems.isHidden = true
+            labelChoose.isHidden = true
+            labelPerPiece.isHidden = true
+        }
+    }
+    
+    @IBAction func switchPerKilosValue(_ sender: Any) {
+        if switchPerKilosAct.isOn {
+            if switchPerPieceAct.isOn {
+                if textManyKilos.text == "" {
+                    totalKilos = 0
+                } else {
+                    totalKilos = Int(textManyKilos.text!)! * dinamisPricePerKilos
+                }
+                totalAll = totalKilos + totalPiece
+                labelTotal.text = String(totalAll)
+                constrainPerPiece.constant = 234
+                constrainCenter.constant = CGFloat(499 + constrainAdditem)
+            } else {
+                if textManyKilos.text == "" {
+                    totalKilos = 0
+                } else {
+                    totalKilos = Int(textManyKilos.text!)! * dinamisPricePerKilos
+                }
+                totalAll = totalKilos + 0
+                labelTotal.text = String(totalAll)
+                constrainCenter.constant = 234
+            }
+            labelPerKilos.isHidden = false
+            labelHowMany.isHidden = false
+            textManyKilos.isHidden = false
+            labelMininumOrder.isHidden = false
+            labelHowManyCloth.isHidden = false
+            textManyKilosCloth.isHidden = false
+        } else {
+            if switchPerPieceAct.isOn {
+                totalAll = 0 + totalPiece
+                labelTotal.text = String(totalAll)
+                constrainPerPiece.constant = 8
+                constrainCenter.constant = CGFloat(273 + constrainAdditem)
+            } else {
+                totalAll = 0
+                labelTotal.text = String(totalAll)
+                constrainCenter.constant = 40
+            }
+            labelPerKilos.isHidden = true
+            labelHowMany.isHidden = true
+            textManyKilos.isHidden = true
+            labelMininumOrder.isHidden = true
+            labelHowManyCloth.isHidden = true
+            textManyKilosCloth.isHidden = true
+        }
+    }
+    
+    @IBAction func switchPackageValue(_ sender: Any) {
+        if switchPackageAct.isOn {
+            let alert = UIAlertController (title: "Information", message: "Coming Soon", preferredStyle: .alert)
+            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            switchPackageAct.isOn = false
+        }
+    }
+    
     @IBAction func buttonPromoCodeAct(_ sender: Any) {
         if switchPerKilosAct.isOn {
             if switchPerPieceAct.isOn {
@@ -164,10 +267,6 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
         if (!switchPerPieceAct.isOn && !switchPerKilosAct.isOn) {
             // Checking Swicth Per Piece and Kilos
             let alert = UIAlertController (title: "Service We Provide", message: "Please choose one Per Piece or Per Kilos.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        } else if (textServiceWePro.text == "" || textFragranceWePro.text == "") {
-            let alert = UIAlertController (title: "Service We Provide", message: "Service and Fragrance are required.", preferredStyle: .alert)
             alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         } else {
@@ -268,14 +367,20 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
         
         let getTimePickup = textTimePickup.text
         let getTimeDeliver = textTimeDeliver.text
+        let timeOff1 = "08:00"
+        let timeOff2 = "19:00"
         
         let timeGetTimeP = timeFormatCurrent.date(from: getTimePickup!)
         let timeGetTimeD = timeFormatCurrent.date(from: getTimeDeliver!)
+        let timeGetTimeOff1 = timeFormatCurrent.date(from: timeOff1)
+        let timeGetTimeOff2 = timeFormatCurrent.date(from: timeOff2)
         
         _ = NSCalendar.Unit.minute
         
         let componentMinutePickup = calendar.dateComponents([.minute], from: TodayTime!, to: timeGetTimeP!)
         let componentMinuteDeliver = calendar.dateComponents([.minute], from: timeGetTimeP!, to: timeGetTimeD!)
+        let compnentHour1 = calendar.dateComponents([.minute],from: timeGetTimeP!, to: timeGetTimeOff1!)
+        let compnentHour2 = calendar.dateComponents([.minute],from: timeGetTimeP!, to: timeGetTimeOff2!)
         
         if (components.day! < 0 ) {
 // Checking Date ============================================
@@ -287,10 +392,23 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
             let alert = UIAlertController (title: "Date and Time", message: "Time Pickup too old.", preferredStyle: .alert)
             alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
+        } else if (compnentHour1.minute! > 0 ) {
+// Checking Time < 08:00 =====================================
+            print("Order Time too work.")
+            let alert = UIAlertController (title: "Time Pickup", message: "Order only at work time 08:00 - 19:00", preferredStyle: .alert)
+            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        } else if (compnentHour2.minute! < 0 ) {
+// Checking Time > 19:00 =====================================
+            print("Order Time too work.")
+            let alert = UIAlertController (title: "Time Pickup", message: "Order only at work time 08:00 - 19:00", preferredStyle: .alert)
+            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
+        
         if (componentMinuteDeliver.minute!  < 0 ) {
 // Checking Time Deliver ====================================
-            let alert = UIAlertController (title: "Date and Time", message: "Time Deliver too early with Time Pickup.", preferredStyle: .alert)
+            let alert = UIAlertController (title: "Time Deliver", message: "Time Deliver too early with Time Pickup.", preferredStyle: .alert)
             alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         } else if labelSelectLocation.text == "No location selected" {
@@ -352,16 +470,17 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                                 
                                 let subTotal = json["sub Total"] as! Int
                                 let totalPay = json["Total Payment"] as! Int
-                                self.totalKilos = subTotal
-                                self.totalAll = totalPay
-                                self.totalPromo = totalPay
-                                self.labelTotal.text = String(self.totalAll)
-                                self.validPromo = "valid"
-                                self.textPromoCode.isUserInteractionEnabled = false
                                 
                                 DispatchQueue.main.async() {
                                     
                                     self.OrderKilos()
+                                    
+                                    self.totalKilos = subTotal
+                                    self.totalAll = totalPay
+                                    self.totalPromo = totalPay
+                                    self.labelTotal.text = String(self.totalAll)
+                                    self.validPromo = "valid"
+                                    self.textPromoCode.isUserInteractionEnabled = false
                                     
                                     self.textPromoCode.isUserInteractionEnabled = false
                                     self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
@@ -458,109 +577,6 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
         }
     }
     
-    @IBAction func swicthPerPiece(_ sender: Any) {
-        if switchPerPieceAct.isOn {
-            if switchPerKilosAct.isOn {
-                if textManyKilos.text == "" {
-                    totalKilos = 0
-                } else {
-                    totalKilos = Int(textManyKilos.text!)! * dinamisPricePerKilos
-                }
-                totalAll = totalKilos + totalPiece
-                labelTotal.text = String(totalAll)
-                constrainPerPiece.constant = 234
-                constrainCenter.constant = CGFloat(499 + constrainAdditem)
-            } else {
-                totalAll = 0 + totalPiece
-                labelTotal.text = String(totalAll)
-                constrainPerPiece.constant = 8
-                constrainCenter.constant = CGFloat(273 + constrainAdditem)
-            }
-            textChooseItem.isHidden = false
-            tebleLaundryItem.isHidden = false
-            buttonAdditems.isHidden = false
-            labelChoose.isHidden = false
-            labelPerPiece.isHidden = false
-        } else {
-            if switchPerKilosAct.isOn {
-                if textManyKilos.text == "" {
-                    totalKilos = 0
-                } else {
-                    totalKilos = Int(textManyKilos.text!)! * dinamisPricePerKilos
-                }
-                totalAll = totalKilos + 0
-                labelTotal.text = String(totalAll)
-               constrainCenter.constant = 234
-            } else {
-                totalAll = 0
-                labelTotal.text = String(totalAll)
-                constrainCenter.constant = 40
-            }
-            textChooseItem.isHidden = true
-            tebleLaundryItem.isHidden = true
-            buttonAdditems.isHidden = true
-            labelChoose.isHidden = true
-            labelPerPiece.isHidden = true
-        }
-    }
-    
-    @IBAction func swicthPerKilos(_ sender: Any) {
-        if switchPerKilosAct.isOn {
-            if switchPerPieceAct.isOn {
-                if textManyKilos.text == "" {
-                    totalKilos = 0
-                } else {
-                    totalKilos = Int(textManyKilos.text!)! * dinamisPricePerKilos
-                }
-                totalAll = totalKilos + totalPiece
-                labelTotal.text = String(totalAll)
-                constrainPerPiece.constant = 234
-                constrainCenter.constant = CGFloat(499 + constrainAdditem)
-            } else {
-                if textManyKilos.text == "" {
-                    totalKilos = 0
-                } else {
-                    totalKilos = Int(textManyKilos.text!)! * dinamisPricePerKilos
-                }
-                totalAll = totalKilos + 0
-                labelTotal.text = String(totalAll)
-                constrainCenter.constant = 234
-            }
-            labelPerKilos.isHidden = false
-            labelHowMany.isHidden = false
-            textManyKilos.isHidden = false
-            labelMininumOrder.isHidden = false
-            labelHowManyCloth.isHidden = false
-            textManyKilosCloth.isHidden = false
-        } else {
-            if switchPerPieceAct.isOn {
-                totalAll = 0 + totalPiece
-                labelTotal.text = String(totalAll)
-                constrainPerPiece.constant = 8
-                constrainCenter.constant = CGFloat(273 + constrainAdditem)
-            } else {
-                totalAll = 0
-                labelTotal.text = String(totalAll)
-                constrainCenter.constant = 40
-            }
-            labelPerKilos.isHidden = true
-            labelHowMany.isHidden = true
-            textManyKilos.isHidden = true
-            labelMininumOrder.isHidden = true
-            labelHowManyCloth.isHidden = true
-            textManyKilosCloth.isHidden = true
-        }
-    }
-    
-    @IBAction func swicthPerPackage(_ sender: Any) {
-        if switchPackageAct.isOn {
-            let alert = UIAlertController (title: "Information", message: "Coming Soon", preferredStyle: .alert)
-            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-            switchPackageAct.isOn = false
-        }
-    }
-    
     @objc func dimisKeyboard() {
         view.endEditing(true)
     }
@@ -621,8 +637,10 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.dataDinamisRequest()
         self.dataRequestListItemPicker()
+        
         self.createDatePickerPickup()
         self.viewLayoutLaundryStyle()
         self.location = nil
@@ -945,19 +963,12 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
         
         // Toolbar keyboard Service
         let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(UltraKlinLaundry.doneClickSevice))
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(UltraKlinLaundry.dimisKeyboard))
         toolBarItem.setItems([spaceButton, doneButton], animated: false)
         toolBarItem.isUserInteractionEnabled = true
         
         textServiceWePro.inputView = selectServicePicker
         textServiceWePro.inputAccessoryView = toolBarItem
-    }
-    
-    @objc func doneClickSevice() {
-        if textServiceWePro.text == "" {
-            textServiceWePro.text = servicePick[0]
-        }
-        view.endEditing(true)
     }
     
     func pickerViewFragranceLaundry() {
@@ -1083,9 +1094,9 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                             let kilosPrice = json["perKilo"] as! String
                             
                             self.servicePick.append(String("Reguler (\(kilosMinimal) Days)"))
+                            self.textServiceWePro.text = "Reguler (\(kilosMinimal) Days)"
                             self.dinamisDateReguler = Int(kilosMinimal)!
                             self.dinamisPricePerKilos = Int(kilosPrice)!
-                            
                         }
                     }
                 }
