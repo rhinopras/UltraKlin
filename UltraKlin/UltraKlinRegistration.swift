@@ -9,8 +9,15 @@
 import UIKit
 import Foundation
 import AppsFlyerLib
+import FBSDKLoginKit
 
 class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
+    
+    var rootVC : UIViewController?
+    let defaults = UserDefaults.standard
+    
+    var skipRegis = ""
+    var hiddenActRegis = false
     
     var param  = String()
     var name   = ""
@@ -30,13 +37,24 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var textRegisPass: UITextField!
     @IBOutlet weak var textRegisPassConfirm: UITextField!
     @IBOutlet weak var buttonRegister: UIButton!
+    @IBOutlet weak var labelTextLogin: UILabel!
+    @IBOutlet weak var buttonLoginAct: UIButton!
     
+    @IBOutlet weak var buttonSkipAct: UIButton!
     // Constain Animation
+    
+    
     @IBOutlet weak var constrainNameCenter: NSLayoutConstraint!
     @IBOutlet weak var constrainPhoneCenter: NSLayoutConstraint!
     @IBOutlet weak var constainEmailCenter: NSLayoutConstraint!
     @IBOutlet weak var constainPassCenter: NSLayoutConstraint!
     @IBOutlet weak var constrainPassConfirmCenter: NSLayoutConstraint!
+    
+    @IBAction func buttonSkipRegis(_ sender: Any) {
+        rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window?.rootViewController = rootVC
+    }
     
     @IBAction func buttonRegisClick(_ sender: Any) {
         view.endEditing(true)
@@ -98,8 +116,6 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
     }
     
     func  registerLoadData() {
-        
-        var rootVC : UIViewController?
         self.loadingData()
         print(paramString)
         let url = NSURL(string: Config().URL_Register)!
@@ -112,7 +128,7 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
         
         let task = session.dataTask(with: request as URLRequest) {
             data, response, error in
-            //data, response, error in
+            
             if error != nil{
                 print("error\(error!)")
                 return
@@ -121,24 +137,32 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
             print("******* response register = \(String(describing: response))")
             
             let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
+            
             if (json["success"] as? String) != nil {
+                
                 let keyJson  = json["uk_token"] as? String
                 let name     = json["name"] as? String
-                let email     = self.textRegisEmail.text!
-                let defaults = UserDefaults.standard
-                let apiKey = keyJson
-                defaults.set(apiKey, forKey: "SavedApiKey")
-                defaults.set(name, forKey: "name")
-                defaults.synchronize()
+                
                 DispatchQueue.main.async() {
+                    
+                    let email     = self.textRegisEmail.text!
+                    let apiKey = keyJson
+                    self.defaults.set(apiKey, forKey: "SavedApiKey")
+                    self.defaults.set(name, forKey: "name")
+                    self.defaults.synchronize()
                     
                     AppsFlyerTracker.shared().trackEvent(AFEventParamRegistrationMethod, withValues: [
                         AFEventParamRegistrationMethod : email,
                         ]);
                     
-                    rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    appDelegate.window?.rootViewController = rootVC
+                    if self.skipRegis == "Regis" {
+                        self.skipRegis = ""
+                        self.navigationController?.popViewController(animated: true)
+                    } else {
+                        self.rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.window?.rootViewController = self.rootVC
+                    }
                     
                     self.view.isUserInteractionEnabled = true
                     self.messageFrame.removeFromSuperview()
@@ -147,7 +171,9 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
                 }
                 
             } else {
+                
                 DispatchQueue.main.async() {
+                    
                     self.view.isUserInteractionEnabled = true
                     self.messageFrame.removeFromSuperview()
                     self.activityIndicator.stopAnimating()
@@ -168,8 +194,17 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
         var rootVC : UIViewController?
         let defaults = UserDefaults.standard
         defaults.synchronize()
+        
         print("sesi cek",defaults.object(forKey: "SavedApiKey") as Any)
+        print("sesi Sosmed cek",defaults.object(forKey: "SessionSosmes") as Any)
+        
         if defaults.object(forKey: "SavedApiKey") != nil {
+            // Check Session Account
+            rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.window?.rootViewController = rootVC
+        } else if defaults.object(forKey: "SessionSosmes") != nil {
+            // Check Session Sosmed
             rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window?.rootViewController = rootVC
@@ -182,6 +217,11 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        buttonSkipAct.isHidden = hiddenActRegis
+        labelTextLogin.isHidden = hiddenActRegis
+        buttonLoginAct.isHidden = hiddenActRegis
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UltraKlinRegistration.dimisKeyboard))
         view.addGestureRecognizer(tap)
         self.toolbarPhone()
@@ -238,12 +278,12 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ TextField: UITextField) {
         self.animateTextField(TextField: TextField, up: true,
-                              withOffset: TextField.frame.origin.y / 2)
+                              withOffset: TextField.frame.origin.y / 5)
     }
     
     func textFieldDidEndEditing(_ TextField: UITextField) {
         self.animateTextField(TextField: TextField, up: false,
-                              withOffset: TextField.frame.origin.y / 2)
+                              withOffset: TextField.frame.origin.y / 5)
     }
     
     func textFieldShouldReturn(_ TextField: UITextField) -> Bool {
@@ -284,7 +324,7 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
         self.textRegisEmail.becomeFirstResponder()
     }
     
-    func  loadingData() {
+    func loadingData() {
         messageFrame.frame = CGRect(x: 90, y: 150 , width: 50, height: 50)
         
         activityIndicator.color = UIColor.white

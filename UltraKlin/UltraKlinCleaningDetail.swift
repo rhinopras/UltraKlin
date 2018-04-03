@@ -12,11 +12,8 @@ import AppsFlyerLib
 
 class UltraKlinCleaningDetail: UIViewController {
     
-    var paramOrder = ""
-    
-    // for rate apps
     let defaults = UserDefaults.standard
-    let appId = "id1303429279"
+    var paramOrder = ""
     
     // Refresh
     let messageFrame = UIView()
@@ -43,23 +40,58 @@ class UltraKlinCleaningDetail: UIViewController {
     @IBOutlet weak var viewButtonBook: UIView!
 
     @IBAction func buttonBook(_ sender: Any) {
-        buttonBookCleaning.isEnabled = false
-        let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
+        let defaults = UserDefaults.standard
+        defaults.synchronize()
         
-        let okAction = UIAlertAction(title: "Order", style: .default) {
-            (action) -> Void in
-            // READY FOR BOOKING ==========
-            self.loadingData()
-            self.booking_Cleaning_Ready()
+        print("sesi cek",defaults.object(forKey: "SavedApiKey") as Any)
+        print("sesi Sosmed cek",defaults.object(forKey: "SessionSosmes") as Any)
+        
+        if defaults.object(forKey: "SavedApiKey") == nil && defaults.object(forKey: "SessionSosmes") == nil {
+            // User not yet login ======================
+            let alert = UIAlertController(title: "Login", message: "You must login first.", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "Login", style: .default) {
+                (action) -> Void in
+                // Login
+                let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin
+                myVC.skipLogin = "Login"
+                myVC.hiddenActLogin = true
+                self.navigationController?.pushViewController(myVC, animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "Register", style: .default) {
+                UIAlertAction in
+                // Register
+                let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinRegistration") as! UltraKlinRegistration
+                myVC.skipRegis = "Regis"
+                myVC.hiddenActRegis = true
+                self.navigationController?.pushViewController(myVC, animated: true)
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            // User login done ============================
+            let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))
+            paramOrder = "&apiKey=" + apiKey! + "&note=tidak ada" + "&address=" + labelBookAddress.text! + "&amount_bath=" + labelBookBathroom.text! + "&amount_bed=" + labelBookBedroom.text! + "&amount_other=" + labelBookOtherroom.text! + "&typeGedung=" + labelBookBuilding.text! + "&promo=" + labelBookPromo.text! + "&gender=" + labelBookCSOGender.text! + "&pet=" + labelBookPet.text! + "&date=" + labelBookDate.text! + "&time=" + labelBookTime.text! + "&total_cso=" + labelQtyCSO.text! + "&name=Cleaning Service" + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
+            
+            buttonBookCleaning.isEnabled = false
+            let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "Order", style: .default) {
+                (action) -> Void in
+                // READY FOR BOOKING ==========
+                self.loadingData()
+                self.booking_Cleaning_Ready()
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
+                UIAlertAction in
+                self.buttonBookCleaning.isEnabled = true
+                NSLog("Cancel Pressed")
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
-            UIAlertAction in
-            self.buttonBookCleaning.isEnabled = true
-            NSLog("Cancel Pressed")
-        }
-        alert.addAction(cancelAction)
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: nil)
     }
     
     func booking_Cleaning_Ready() {
@@ -96,9 +128,11 @@ class UltraKlinCleaningDetail: UIViewController {
                     self.buttonBookCleaning.isEnabled = true
                 }
             } else if ((json["success"] as? String) != nil) {
+                
                 AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
                     "Cleaning Service" : "Cleaning Service"
                     ]);
+                
                 let alert = UIAlertController (title: "THANK YOU", message: "\n Your order has been processed \n Our Customer Service will get in touch with you.", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default)
                 {
@@ -121,6 +155,17 @@ class UltraKlinCleaningDetail: UIViewController {
             
         }
         task.resume()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print(segue.identifier as Any)
+        if segue.identifier == "segueNotLogin" {
+            let notLogin = segue.destination as! UltraKlinLogin;
+            notLogin.skipLogin = "Login"
+        } else if segue.identifier == "segueNotRegis" {
+            let notRegis = segue.destination as! UltraKlinRegistration;
+            notRegis.skipRegis = "Regis"
+        }
     }
     
     func loadingData() {
@@ -159,7 +204,6 @@ class UltraKlinCleaningDetail: UIViewController {
         let gender      = (UserDefaults.standard.string(forKey: "gender"))
         let qtycso      = (UserDefaults.standard.string(forKey: "qtyCSO"))
         let pet         = (UserDefaults.standard.string(forKey: "pet"))
-        let apiKey      = (UserDefaults.standard.string(forKey: "SavedApiKey"))
         let jam         = (UserDefaults.standard.string(forKey: "estimated"))
         let estPrice    = (UserDefaults.standard.string(forKey: "estimatedPrice"))
         
@@ -178,7 +222,8 @@ class UltraKlinCleaningDetail: UIViewController {
         labelBookTime.text         = pTime
         labelBookDate.text     = pDate
         
-        paramOrder = "&apiKey=" + apiKey! + "&note=tidak ada" + "&address=" + labelBookAddress.text! + "&amount_bath=" + labelBookBathroom.text! + "&amount_bed=" + labelBookBedroom.text! + "&amount_other=" + labelBookOtherroom.text! + "&typeGedung=" + labelBookBuilding.text! + "&promo=" + labelBookPromo.text! + "&gender=" + labelBookCSOGender.text! + "&pet=" + labelBookPet.text! + "&date=" + labelBookDate.text! + "&time=" + labelBookTime.text! + "&total_cso=" + labelQtyCSO.text! + "&name=Cleaning Service" + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
+        
+        //paramOrder = "&apiKey=" + apiKey! + "&note=tidak ada" + "&address=" + labelBookAddress.text! + "&amount_bath=" + labelBookBathroom.text! + "&amount_bed=" + labelBookBedroom.text! + "&amount_other=" + labelBookOtherroom.text! + "&typeGedung=" + labelBookBuilding.text! + "&promo=" + labelBookPromo.text! + "&gender=" + labelBookCSOGender.text! + "&pet=" + labelBookPet.text! + "&date=" + labelBookDate.text! + "&time=" + labelBookTime.text! + "&total_cso=" + labelQtyCSO.text! + "&name=Cleaning Service" + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		48B5CB3A4800FA0A224A0D67 /* libPods-UltraKlin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 15DB5B1C8286A75A981ABC10 /* libPods-UltraKlin.a */; };
 		5F09E216206B738900927CDD /* Siren.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09E215206B731500927CDD /* Siren.framework */; };
 		5F09E217206B738900927CDD /* Siren.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09E215206B731500927CDD /* Siren.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5F0B67FE204CE2150008AD25 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B67FD204CE2150008AD25 /* UserNotifications.framework */; };
@@ -25,6 +24,9 @@
 		5F7C46A22064D24F008D2C73 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C46A12064D24F008D2C73 /* AdSupport.framework */; };
 		5F7C46A42064D259008D2C73 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C46A32064D258008D2C73 /* iAd.framework */; };
 		5F9998DC2052378600AC37FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F9998DB2052378600AC37FD /* GoogleService-Info.plist */; };
+		5FAF4CD9207391AF00D804F5 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FAF4CD4207391AE00D804F5 /* FBSDKCoreKit.framework */; };
+		5FAF4CDB207391C600D804F5 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FAF4CDA207391C500D804F5 /* FBSDKLoginKit.framework */; };
+		5FAF4CDD207391CD00D804F5 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FAF4CDC207391CD00D804F5 /* Bolts.framework */; };
 		5FAFCB00203EE1930009F97B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCAFF203EE1930009F97B /* AppDelegate.swift */; };
 		5FAFCB02203EE1930009F97B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCB01203EE1930009F97B /* ViewController.swift */; };
 		5FAFCB05203EE1930009F97B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5FAFCB03203EE1930009F97B /* Main.storyboard */; };
@@ -39,6 +41,7 @@
 		5FB6DA86206AB3A100E25B1B /* AppRating.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FB6DA83206AB3A100E25B1B /* AppRating.bundle */; };
 		5FB6DA89206AB44F00E25B1B /* AppRatingLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5FB6DA87206AB44F00E25B1B /* AppRatingLocalizable.strings */; };
 		5FC37C962047BD680086E500 /* UltraKlinTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */; };
+		AD930BC15515B81C1FC32B44 /* Pods_UltraKlin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C85970E1A313D7EE0DD35094 /* Pods_UltraKlin.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,7 +141,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		15DB5B1C8286A75A981ABC10 /* libPods-UltraKlin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-UltraKlin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5513B6C728863E6BDBA564D4 /* Pods-UltraKlin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltraKlin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin.debug.xcconfig"; sourceTree = "<group>"; };
 		5F09E208206B731500927CDD /* SirenExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SirenExample.xcodeproj; path = SirenExample/SirenExample.xcodeproj; sourceTree = "<group>"; };
 		5F0B67FB204CE1DD0008AD25 /* UltraKlin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UltraKlin.entitlements; sourceTree = "<group>"; };
@@ -155,6 +157,9 @@
 		5F7C46A32064D258008D2C73 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LocationPicker.xcodeproj; sourceTree = "<group>"; };
 		5F9998DB2052378600AC37FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5FAF4CD4207391AE00D804F5 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		5FAF4CDA207391C500D804F5 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		5FAF4CDC207391CD00D804F5 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		5FAFCAFC203EE1930009F97B /* UltraKlin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UltraKlin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FAFCAFF203EE1930009F97B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5FAFCB01203EE1930009F97B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -171,6 +176,7 @@
 		5FB6DA83206AB3A100E25B1B /* AppRating.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = AppRating.bundle; path = "AppRating-master/AppRating.bundle"; sourceTree = "<group>"; };
 		5FB6DA88206AB44F00E25B1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "AppRating-master/Localization/en.lproj/AppRatingLocalizable.strings"; sourceTree = "<group>"; };
 		5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinTabBarView.swift; sourceTree = "<group>"; };
+		C85970E1A313D7EE0DD35094 /* Pods_UltraKlin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UltraKlin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2A4A450F551FCCAB58DFFA2 /* Pods-UltraKlin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltraKlin.release.xcconfig"; path = "Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -181,12 +187,15 @@
 			files = (
 				5F7C46A42064D259008D2C73 /* iAd.framework in Frameworks */,
 				5F7C46A22064D24F008D2C73 /* AdSupport.framework in Frameworks */,
+				5FAF4CDB207391C600D804F5 /* FBSDKLoginKit.framework in Frameworks */,
 				5F0B67FE204CE2150008AD25 /* UserNotifications.framework in Frameworks */,
 				5F3C3C23204401EF00F9F97D /* LocationPicker.framework in Frameworks */,
 				5F09E216206B738900927CDD /* Siren.framework in Frameworks */,
-				48B5CB3A4800FA0A224A0D67 /* libPods-UltraKlin.a in Frameworks */,
 				5F61FA69206AB15A000EA4FA /* AppRating.framework in Frameworks */,
 				5F7C46A02064D23B008D2C73 /* AppsFlyerLib.framework in Frameworks */,
+				5FAF4CDD207391CD00D804F5 /* Bolts.framework in Frameworks */,
+				5FAF4CD9207391AF00D804F5 /* FBSDKCoreKit.framework in Frameworks */,
+				AD930BC15515B81C1FC32B44 /* Pods_UltraKlin.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,11 +215,14 @@
 		5F0B67FC204CE2150008AD25 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5FAF4CDC207391CD00D804F5 /* Bolts.framework */,
+				5FAF4CDA207391C500D804F5 /* FBSDKLoginKit.framework */,
+				5FAF4CD4207391AE00D804F5 /* FBSDKCoreKit.framework */,
 				5F7C46A32064D258008D2C73 /* iAd.framework */,
 				5F7C46A12064D24F008D2C73 /* AdSupport.framework */,
 				5F7C469F2064D23B008D2C73 /* AppsFlyerLib.framework */,
 				5F0B67FD204CE2150008AD25 /* UserNotifications.framework */,
-				15DB5B1C8286A75A981ABC10 /* libPods-UltraKlin.a */,
+				C85970E1A313D7EE0DD35094 /* Pods_UltraKlin.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -458,9 +470,18 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
+				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -701,10 +722,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FacebookSDKs-iOS-4",
 				);
 				INFOPLIST_FILE = UltraKlin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lintasinsan.UltraKlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -728,10 +751,12 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/FacebookSDKs-iOS-4",
 				);
 				INFOPLIST_FILE = UltraKlin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MACH_O_TYPE = mh_execute;
 				PRODUCT_BUNDLE_IDENTIFIER = com.lintasinsan.UltraKlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

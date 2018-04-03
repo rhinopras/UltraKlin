@@ -16,6 +16,7 @@ import UserNotifications
 import AppsFlyerLib
 import AppRating
 import Siren
+import FBSDKCoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -86,47 +87,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     // Reports app open from deep link for iOS 10 or later
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        // AppFlyer
         AppsFlyerTracker.shared().handleOpen(url, options: options)
+        
+        // Login Facebook
+        FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
         return true
     }
     // Reports app open from a Universal Link for iOS 9 or later
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         AppsFlyerTracker.shared().continue(userActivity, restorationHandler: restorationHandler)
-        return true
-    }
-    
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        // iOS 10 support
-        if #available(iOS 10, *) {
-            UNUserNotificationCenter.current().delegate = self
-            let authOption : UNAuthorizationOptions = [.alert, .badge, .sound]
-            UNUserNotificationCenter.current().requestAuthorization(
-            options: authOption,
-            completionHandler: {_, _ in })
-        }
-        // iOS 9 support
-        else {
-            let settings : UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-            application.registerUserNotificationSettings(settings)
-        }
-        application.registerForRemoteNotifications()
-        FirebaseApp.configure()
-        
-        // Cek Session
-        UltraKlinRegistration.updateRootVC()
-        
-        // AppsFlyer ====================================
-        AppsFlyerTracker.shared().appsFlyerDevKey = "ayfSQek7FFtQtiT3FqJBjg"
-        AppsFlyerTracker.shared().appleAppID = "1303429279"
-        
-        // For Develop
-        //AppsFlyerTracker.shared().isDebug = true
-        
-        // Checking Version App For Update
-        window?.makeKeyAndVisible()
-        setupSiren()
-        
         return true
     }
     
@@ -173,6 +143,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         siren.checkVersion(checkType: .immediately)
     }
     
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
+        // iOS 10 support
+        if #available(iOS 10, *) {
+            UNUserNotificationCenter.current().delegate = self
+            let authOption : UNAuthorizationOptions = [.alert, .badge, .sound]
+            UNUserNotificationCenter.current().requestAuthorization(
+            options: authOption,
+            completionHandler: {_, _ in })
+        }
+        // iOS 9 support
+        else {
+            let settings : UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+            application.registerUserNotificationSettings(settings)
+        }
+        application.registerForRemoteNotifications()
+        FirebaseApp.configure()
+        
+        // Cek Session
+        UltraKlinRegistration.updateRootVC()
+        
+        // AppsFlyer ====================================
+        AppsFlyerTracker.shared().appsFlyerDevKey = "ayfSQek7FFtQtiT3FqJBjg"
+        AppsFlyerTracker.shared().appleAppID = "1303429279"
+        
+        // For Develop
+        //AppsFlyerTracker.shared().isDebug = true
+        
+        // Checking Version App For Update
+        window?.makeKeyAndVisible()
+        setupSiren()
+        
+        // Login Facebook
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        return true
+    }
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -200,6 +208,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Appflyer
         AppsFlyerTracker.shared().trackAppLaunch()
         AppsFlyerTracker.shared().shouldCollectDeviceName = true
+        
+        // Login Facebook
+        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

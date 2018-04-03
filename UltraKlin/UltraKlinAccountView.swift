@@ -7,12 +7,16 @@
 //
 import UIKit
 import Foundation
+import Firebase
+import FBSDKLoginKit
 
 class UltraKlinAccountView: UIViewController {
     
     @IBOutlet weak var buttonLogoutStyle: UIButton!
     
     @IBAction func buttonLogout(_ sender: Any) {
+        
+        
         var rootVC : UIViewController?
         
         let alert = UIAlertController(title: "Confirmation", message: "Logout from this app ?", preferredStyle: .alert)
@@ -21,6 +25,17 @@ class UltraKlinAccountView: UIViewController {
             (action) -> Void in
             
             let defaults = UserDefaults.standard
+            
+            // Facebook Sigout
+            FBSDKAccessToken.current()
+            let loginManager = FBSDKLoginManager()
+            loginManager.logOut()
+            FBSDKAccessToken.setCurrent(nil)
+            defaults.removeObject(forKey: "emailUser")
+            defaults.removeObject(forKey: "nameUser")
+            defaults.removeObject(forKey: "SessionSosmes")
+            
+            // Account Sigout
             defaults.removeObject(forKey: "SavedApiKey")
             defaults.removeObject(forKey: "name")
             rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin

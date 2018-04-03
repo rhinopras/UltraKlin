@@ -9,8 +9,16 @@
 import UIKit
 import Foundation
 import AppsFlyerLib
+import Firebase
+import FBSDKLoginKit
 
 class UltraKlinLogin: UIViewController, UITextFieldDelegate {
+    
+    let defaults = UserDefaults.standard
+    var rootVC : UIViewController?
+    var keyToken = ""
+    var skipLogin = ""
+    var hiddenActLogin = false
     
     var param = String()
     var email   = ""
@@ -24,17 +32,91 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var textLoginUsername: UITextField!
     @IBOutlet weak var textLoginPassword: UITextField!
     @IBOutlet weak var buttonLogin: UIButton!
+    @IBOutlet weak var buttonSkipFunc: UIButton!
+    @IBOutlet weak var buttonLoginFBAct: UIButton!
+    @IBOutlet weak var labelTextRegis: UILabel!
+    @IBOutlet weak var buttonRegisAct: UIButton!
     
     @IBOutlet weak var constainUsernameLogin: NSLayoutConstraint!
     @IBOutlet weak var constainPassLogin: NSLayoutConstraint!
     
+    @IBAction func buttonSkipLogin(_ sender: Any) {
+        self.rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.window?.rootViewController = self.rootVC
+    }
+    
+    @IBAction func buttonFacebook(_ sender: Any) {
+        loadingData()
+        let fbLoginManager = FBSDKLoginManager()
+        fbLoginManager.logIn(withReadPermissions: ["public_profile", "email"], from: self) { (result, error) in
+            if let error = error {
+                print("Failed to login: \(error.localizedDescription)")
+                self.view.isUserInteractionEnabled = true
+                self.messageFrame.removeFromSuperview()
+                self.activityIndicator.stopAnimating()
+                self.refreshControl.endRefreshing()
+                return
+            }
+            
+            guard let accessToken = FBSDKAccessToken.current() else {
+                print("Failed to get access token")
+                self.view.isUserInteractionEnabled = true
+                self.messageFrame.removeFromSuperview()
+                self.activityIndicator.stopAnimating()
+                self.refreshControl.endRefreshing()
+                return
+            }
+            
+            let credential = FacebookAuthProvider.credential(withAccessToken: accessToken.tokenString)
+            // Perform login by calling Firebase APIs
+            Auth.auth().signIn(with: credential, completion: { (user, error) in
+                print(user as Any)
+                if let error = error {
+                    print("Login error: \(error.localizedDescription)")
+                    let alertController = UIAlertController(title: "Login Error", message: error.localizedDescription, preferredStyle: .alert)
+                    let okayAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+                    alertController.addAction(okayAction)
+                    self.present(alertController, animated: true, completion: nil)
+                    
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                    return
+                }
+                
+                if let currentUser = Auth.auth().currentUser {
+                    self.defaults.set(currentUser.email, forKey: "emailUser")
+                    self.defaults.set(currentUser.displayName, forKey: "nameUser")
+                    self.defaults.set(currentUser.phoneNumber, forKey: "phoneUser")
+                    self.defaults.set(currentUser.email, forKey: "SessionSosmes")
+                    print(currentUser.email! + " " + currentUser.displayName!)
+                }
+                
+                if self.skipLogin == "Login" {
+                    self.skipLogin = ""
+                    self.navigationController?.popViewController(animated: true)
+                } else {
+                    // Present the main view
+                    self.rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.window?.rootViewController = self.rootVC
+                }
+                
+                self.view.isUserInteractionEnabled = true
+                self.messageFrame.removeFromSuperview()
+                self.activityIndicator.stopAnimating()
+                self.refreshControl.endRefreshing()
+            })
+            
+        }
+        
+    }
+    
     @IBAction func buttonLoginClick(_ sender: Any) {
         view.endEditing(true)
-        var rootVC : UIViewController?
-        self.buttonLogin.alpha = 0
-        UIView.animate(withDuration: 0.3, delay: 0.0, options: UIViewAnimationOptions.curveEaseOut, animations: {
-            self.buttonLogin.alpha = 1
-        }, completion: nil)
+        
         let auth = (UserDefaults.standard.string(forKey: "SavedApiKey"))
         print(auth as Any)
         
@@ -73,25 +155,33 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
                 }
                 print("******* response register = \(String(describing: response))")
                 let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
+                
                 if (json["success"] as? String) != nil{
+                    
                     let keyJson = json["uk_token"] as? String
                     let name    = json["name"] as? String
-                    let email    = self.textLoginUsername.text!
-                    let defaults = UserDefaults.standard
-                    let apiKey = keyJson
-                    defaults.set(apiKey, forKey: "SavedApiKey")
-                    defaults.set(name, forKey: "name")
-                    defaults.synchronize()
                     
                     DispatchQueue.main.async {
+                        
+                        let email    = self.textLoginUsername.text!
+                        let apiKey = keyJson
+                        self.keyToken = keyJson!
+                        self.defaults.set(apiKey, forKey: "SavedApiKey")
+                        self.defaults.set(name, forKey: "name")
+                        self.defaults.synchronize()
                         
                         AppsFlyerTracker.shared().trackEvent(AFEventLogin, withValues: [
                             AFEventLogin : email,
                             ]);
                         
-                        rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        appDelegate.window?.rootViewController = rootVC
+                        if self.skipLogin == "Login" {
+                            self.skipLogin = ""
+                            self.navigationController?.popViewController(animated: true)
+                        } else {
+                            self.rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            appDelegate.window?.rootViewController = self.rootVC
+                        }
                         
                         self.textLoginPassword.text = ""
                         self.view.isUserInteractionEnabled = true
@@ -109,7 +199,7 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
                         self.activityIndicator.stopAnimating()
                         self.refreshControl.endRefreshing()
                         
-                        let alert = UIAlertController (title: "INFORMATION", message: "\n Login Failed.", preferredStyle: .alert)
+                        let alert = UIAlertController (title: "Information", message: "Login Failed.", preferredStyle: .alert)
                         alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
                         self.present(alert, animated: true, completion: nil)
                         
@@ -144,6 +234,12 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(skipLogin)
+        
+        buttonSkipFunc.isHidden = hiddenActLogin
+        labelTextRegis.isHidden = hiddenActLogin
+        buttonRegisAct.isHidden = hiddenActLogin
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UltraKlinLogin.dimisKeyboard))
         view.addGestureRecognizer(tap)
         self.viewLayoutAccountStyle()
@@ -188,12 +284,12 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ TextField: UITextField) {
         self.animateTextField(TextField: TextField, up: true,
-                              withOffset: TextField.frame.origin.y / 3)
+                              withOffset: TextField.frame.origin.y / 15)
     }
     
     func textFieldDidEndEditing(_ TextField: UITextField) {
         self.animateTextField(TextField: TextField, up: false,
-                              withOffset: TextField.frame.origin.y / 3)
+                              withOffset: TextField.frame.origin.y / 15)
     }
     
     func textFieldShouldReturn(_ TextField: UITextField) -> Bool {

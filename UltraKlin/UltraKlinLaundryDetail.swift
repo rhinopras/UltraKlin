@@ -16,6 +16,8 @@ class UltraKlinLaundryDetailTableCell : UITableViewCell {
 
 class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    let defaults = UserDefaults.standard
+    
     var listChoose = [MyChoose]()
     var paramOrderDetail = ""
     var nameType = ""
@@ -66,21 +68,47 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var labelTotalFix: UILabel!
     
     @IBAction func buttonBookLaundry(_ sender: Any) {
-        let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
-        
-        let okAction = UIAlertAction(title: "Order", style: .default) {
-            (action) -> Void in
-            // READY FOR BOOKING ==========
-            self.loadingData()
-            self.booking_Laundry_Ready()
+        if defaults.object(forKey: "SavedApiKey") == nil && defaults.object(forKey: "SessionSosmes") == nil {
+            // User not yet login ======================
+            let alert = UIAlertController(title: "Login", message: "You must login first.", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "Login", style: .default) {
+                (action) -> Void in
+                // Login
+                let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin
+                myVC.skipLogin = "Login"
+                myVC.hiddenActLogin = true
+                self.navigationController?.pushViewController(myVC, animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "Register", style: .default) {
+                UIAlertAction in
+                // Register
+                let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinRegistration") as! UltraKlinRegistration
+                myVC.skipRegis = "Regis"
+                myVC.hiddenActRegis = true
+                self.navigationController?.pushViewController(myVC, animated: true)
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "Order", style: .default) {
+                (action) -> Void in
+                // READY FOR BOOKING ==========
+                self.loadingData()
+                self.paramOrderLaundry()
+                self.booking_Laundry_Ready()
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
+                UIAlertAction in
+                NSLog("Cancel Pressed")
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
-            UIAlertAction in
-            NSLog("Cancel Pressed")
-        }
-        alert.addAction(cancelAction)
-        alert.addAction(okAction)
-        self.present(alert, animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -119,7 +147,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
         labelTotalPerKilos.text = String(dTotalKilos!)
         labelTotalFix.text = String(dTotalAll!)
         
-        paramOrderLaundry()
+        
     }
     
     func booking_Laundry_Ready() {
