@@ -12,7 +12,7 @@ import AppsFlyerLib
 import Firebase
 import FBSDKLoginKit
 
-class UltraKlinLogin: UIViewController, UITextFieldDelegate {
+class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate {
     
     let defaults = UserDefaults.standard
     var rootVC : UIViewController?
@@ -36,9 +36,19 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var buttonLoginFBAct: UIButton!
     @IBOutlet weak var labelTextRegis: UILabel!
     @IBOutlet weak var buttonRegisAct: UIButton!
+    @IBOutlet weak var buttonGoogleAct: UIButton!
     
     @IBOutlet weak var constainUsernameLogin: NSLayoutConstraint!
     @IBOutlet weak var constainPassLogin: NSLayoutConstraint!
+    
+    @IBAction func buttonGoogleSignIn(_ sender: Any) {
+        loadingData()
+        GIDSignIn.sharedInstance().signIn()
+        self.view.isUserInteractionEnabled = true
+        self.messageFrame.removeFromSuperview()
+        self.activityIndicator.stopAnimating()
+        self.refreshControl.endRefreshing()
+    }
     
     @IBAction func buttonSkipLogin(_ sender: Any) {
         self.rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
@@ -97,7 +107,9 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
                 if self.skipLogin == "Login" {
                     self.skipLogin = ""
                     self.navigationController?.popViewController(animated: true)
+                    
                 } else {
+                    
                     // Present the main view
                     self.rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -149,14 +161,17 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
             
             let task = session.dataTask(with: request as URLRequest) {
                 data, response, error in
+                
                 if error != nil {
                     print("error\(String(describing: error))")
                     return
                 }
+                
                 print("******* response register = \(String(describing: response))")
+                
                 let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
                 
-                if (json["success"] as? String) != nil{
+                if (json["success"] as? String) != nil {
                     
                     let keyJson = json["uk_token"] as? String
                     let name    = json["name"] as? String
@@ -177,7 +192,9 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
                         if self.skipLogin == "Login" {
                             self.skipLogin = ""
                             self.navigationController?.popViewController(animated: true)
+                            
                         } else {
+                            
                             self.rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
                             let appDelegate = UIApplication.shared.delegate as! AppDelegate
                             appDelegate.window?.rootViewController = self.rootVC
@@ -213,6 +230,22 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
         
     }
     
+    func sign(inWillDispatch signIn: GIDSignIn!, error: Error!) {
+        refreshControl.endRefreshing()
+        activityIndicator.removeFromSuperview()
+        
+    }
+    
+    // Present a view that prompts the user to sign in with Google
+    func sign(_ signIn: GIDSignIn!, present viewController: UIViewController!) {
+        present(viewController, animated: true, completion: nil)
+    }
+    
+    // Dismiss the "Sign in with Google" view
+    func sign(_ signIn: GIDSignIn!, dismiss viewController: UIViewController!) {
+        viewController.dismiss(animated: true, completion: nil)
+    }
+    
     func  loadingData() {
         messageFrame.frame = CGRect(x: 90, y: 150 , width: 50, height: 50)
         
@@ -235,6 +268,9 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         print(skipLogin)
+        
+        // Google Sign In
+        GIDSignIn.sharedInstance().uiDelegate = self
         
         buttonSkipFunc.isHidden = hiddenActLogin
         labelTextRegis.isHidden = hiddenActLogin
@@ -320,5 +356,7 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate {
         self.textLoginPassword.layer.borderColor = UIColor.lightGray.cgColor
         self.textLoginPassword.layer.borderWidth = CGFloat(Float(1.0))
         self.textLoginPassword.layer.cornerRadius = CGFloat(Float(5.0))
+        // Button Login Sosmed
+        buttonLoginFBAct.layer.cornerRadius = 8
     }
 }

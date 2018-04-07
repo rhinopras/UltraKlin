@@ -19,7 +19,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
     let defaults = UserDefaults.standard
     
     var listChoose = [MyChoose]()
-    var paramOrderDetail = ""
+    var paramOrderDetail : String?
     var nameType = ""
     var itemParam = [AnyObject]()
     
@@ -160,7 +160,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
         
         request.httpMethod = "POST"
         
-        request.httpBody = paramOrderDetail.data(using: String.Encoding.utf8)
+        request.httpBody = paramOrderDetail?.data(using: String.Encoding.utf8)
         
         let task = session.dataTask(with: request as URLRequest) {
             data, response, error in
@@ -226,7 +226,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
                     valitem.removeAll()
                 }
                 let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))
-                paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry PiecesKilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&estimateWeight=" + labelHowManyKilos.text! +  "&listKiloan=" + labelHowManyCloth.text! + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
+                paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry Pieces & Kilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&estimateWeight=" + labelHowManyKilos.text! +  "&listKiloan=" + labelHowManyCloth.text! + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
             } else {
                 AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
                     "Laundry Pieces" : "Laundry Pieces"
@@ -244,6 +244,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
                 }
                 let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))
                 paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry Pieces" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
+                
             }
         } else {
             AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [

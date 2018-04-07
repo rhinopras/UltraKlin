@@ -61,6 +61,12 @@ extension UIView {
 
 class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     
+    // Time Picker
+    var timePickerView = UIPickerView()
+    var timeVal : [String] = ["08:00","08:30","09:00","09:30","10:00","10.30","11:00","11:30",
+                              "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
+                              "16:00","16:30","17:00","17:30","18:00","18:30","19:00"]
+    
     // Variable Type Room
     var typePlaceSelect = ["Home","Apartement","Office"]
     
@@ -328,7 +334,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
             
             let dateCurrent = NSDate()
             let dateFormatCurrent = DateFormatter()
-            dateFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale!
+            dateFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale
             dateFormatCurrent.dateFormat = "dd-MM-yyyy"
             let finalDateCurrent = dateFormatCurrent.string(from: dateCurrent as Date)
             let TodayDay = dateFormatCurrent.date(from: finalDateCurrent)
@@ -347,7 +353,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
             
             let timeCurrent = NSDate()
             let timeFormatCurrent = DateFormatter()
-            timeFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale!
+            timeFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale
             timeFormatCurrent.dateFormat = "HH:mm"
             let finaltimeCurrent = timeFormatCurrent.string(from: timeCurrent as Date)
             
@@ -693,27 +699,33 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     
     func createTimePicker() {
         
+        // Set Time
+        timePickerView.delegate = self
+        timePickerView.tintColor = UIColor.white
+        timePickerView.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
+        
         // Setting TimePicker
-        timePicker.datePickerMode = .time
-        timePicker.locale = NSLocale(localeIdentifier: "en_GB") as Locale
-        timePicker.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
-        timePicker.minuteInterval = 30
-        timePicker.setValue(UIColor.white, forKey: "textColor")
-        timePicker.setValue(false, forKey: "highlightsToday")
-        var dateComponents = DateComponents()
-        dateComponents.calendar = Calendar.current
-        let unitFlags:Set<Calendar.Component> = [
-            .hour, .day, .month,
-            .year,.minute,.hour,.second,
-            .calendar]
-        dateComponents = Calendar.current.dateComponents(unitFlags, from: timePicker.date)
-        if dateComponents.minute! > 30 {
-            dateComponents.hour! += 1
-            dateComponents.minute = 00
-        } else {
-            dateComponents.minute = 30
-        }
-        timePicker.date = dateComponents.date!
+//        timePicker.datePickerMode = .time
+//        timePicker.locale = NSLocale(localeIdentifier: "en_GB") as Locale
+//        timePicker.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
+//        timePicker.minuteInterval = 30
+//        timePicker.setValue(UIColor.white, forKey: "textColor")
+//        timePicker.setValue(false, forKey: "highlightsToday")
+//        var dateComponents = DateComponents()
+//        dateComponents.calendar = Calendar.current
+//        let unitFlags:Set<Calendar.Component> = [
+//            .hour, .day, .month,
+//            .year,.minute,.hour,.second,
+//            .calendar]
+//        dateComponents = Calendar.current.dateComponents(unitFlags, from: timePicker.date)
+//        if dateComponents.minute! > 30 {
+//            dateComponents.hour! += 1
+//            dateComponents.minute = 00
+//        } else {
+//            dateComponents.minute = 30
+//        }
+//        timePicker.date = dateComponents.date!
+        
         // Setting toolbar
         let toolBar = UIToolbar()
         toolBar.isTranslucent = true
@@ -726,15 +738,15 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         toolBar.setItems([spaceButton, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         
-        textMyTime.inputView = timePicker
+        textMyTime.inputView = timePickerView
         textMyTime.inputAccessoryView = toolBar
     }
     
     @objc func doneTimeClick() {
-        let timeformatter = DateFormatter()
-        timeformatter.timeStyle = .short
-        timeformatter.dateFormat = "HH:mm"
-        textMyTime.text = timeformatter.string(from: timePicker.date)
+//        let timeformatter = DateFormatter()
+//        timeformatter.timeStyle = .short
+//        timeformatter.dateFormat = "HH:mm"
+//        textMyTime.text = timeformatter.string(from: timePicker.date)
         view.endEditing(true)
     }
     
@@ -828,22 +840,42 @@ extension UltraKlinCleaning: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return typePlaceSelect.count
+        if pickerView == timePickerView {
+            return timeVal.count
+        } else if pickerView == selectedPickerPlace {
+            return typePlaceSelect.count
+        }
+        return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return typePlaceSelect[row]
+        if pickerView == timePickerView {
+            return timeVal[row]
+        } else if pickerView == selectedPickerPlace {
+            return typePlaceSelect[row]
+        }
+        return ""
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectPlaces = typePlaceSelect[row]
-        textTypePlace.text = selectPlaces
+        if pickerView == timePickerView {
+            textMyTime.text = timeVal[row]
+        } else if pickerView == selectedPickerPlace {
+            selectPlaces = typePlaceSelect[row]
+            textTypePlace.text = selectPlaces
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
         var myPlaces = NSAttributedString()
-        let titleData = typePlaceSelect[row]
-        myPlaces = NSAttributedString(string: titleData, attributes: [NSAttributedStringKey.font: UIFont(name: "Arial", size: 12.0)!,NSAttributedStringKey.foregroundColor:UIColor.white])
+        
+        if pickerView == timePickerView {
+            let titleDataTime = timeVal[row]
+            myPlaces = NSAttributedString(string: titleDataTime, attributes: [NSAttributedStringKey.font: UIFont(name: "Arial", size: 12.0)!,NSAttributedStringKey.foregroundColor:UIColor.white])
+        } else if pickerView == selectedPickerPlace {
+            let titleDataPlace = typePlaceSelect[row]
+            myPlaces = NSAttributedString(string: titleDataPlace, attributes: [NSAttributedStringKey.font: UIFont(name: "Arial", size: 12.0)!,NSAttributedStringKey.foregroundColor:UIColor.white])
+        }
         return myPlaces
     }
 }

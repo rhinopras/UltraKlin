@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KQW-BG-PSz">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="KQW-BG-PSz">
     <device id="retina3_5" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="HelveticaNeue.ttc">
-            <string>HelveticaNeue-BoldItalic</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--Account-->
         <scene sceneID="lHv-XK-1g9">
@@ -3131,7 +3126,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="9jX-HE-7W8">
-                                <rect key="frame" x="31" y="80" width="258" height="40"/>
+                                <rect key="frame" x="31" y="90" width="258" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="crd-uo-gPo"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="258" id="rIA-2y-Huo"/>
@@ -3193,15 +3188,15 @@
                                     <segue destination="KQW-BG-PSz" kind="presentation" id="OZB-qT-0kJ"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rf6-fL-aFF">
-                                <rect key="frame" x="31" y="372" width="258" height="43"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rf6-fL-aFF">
+                                <rect key="frame" x="31" y="375" width="258" height="40"/>
                                 <color key="backgroundColor" red="0.23338985443115234" green="0.35096284747123718" blue="0.59996175765991211" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="258" id="7fF-sH-Ecb"/>
-                                    <constraint firstAttribute="height" constant="43" id="gDw-s6-dG9"/>
+                                    <constraint firstAttribute="height" constant="40" id="gDw-s6-dG9"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <state key="normal" title="Login with Facebook"/>
+                                <state key="normal" title="Sign in with Facebook"/>
                                 <connections>
                                     <action selector="buttonFacebook:" destination="C9A-fR-Rtl" eventType="touchUpInside" id="dmS-6F-c9O"/>
                                 </connections>
@@ -3216,16 +3211,33 @@
                                     <action selector="buttonSkipLogin:" destination="C9A-fR-Rtl" eventType="touchUpInside" id="Cjf-yG-5eF"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Uh-Yt-pdR">
+                                <rect key="frame" x="31" y="327" width="258" height="40"/>
+                                <color key="backgroundColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="258" id="Anh-bQ-ATk"/>
+                                    <constraint firstAttribute="height" constant="40" id="dxr-tm-Ehh"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <state key="normal" title="Sign in with Google">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonGoogleSignIn:" destination="C9A-fR-Rtl" eventType="touchUpInside" id="Mdn-Uc-ysz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="w8r-hS-06f" firstAttribute="leading" secondItem="XXW-FU-ifk" secondAttribute="trailing" id="Fcz-NG-iNP"/>
+                            <constraint firstItem="7Uh-Yt-pdR" firstAttribute="centerX" secondItem="Rf6-fL-aFF" secondAttribute="centerX" id="GaO-bA-LxT"/>
                             <constraint firstItem="WNV-XS-T8h" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="w8r-hS-06f" secondAttribute="trailing" constant="31" id="Jow-GR-hae"/>
+                            <constraint firstItem="Rf6-fL-aFF" firstAttribute="top" secondItem="7Uh-Yt-pdR" secondAttribute="bottom" constant="8" id="KkT-FO-qae"/>
                             <constraint firstItem="XXW-FU-ifk" firstAttribute="leading" relation="lessThanOrEqual" secondItem="WNV-XS-T8h" secondAttribute="leading" constant="31" id="Ld0-1W-JCm"/>
                             <constraint firstItem="GAd-G6-UG2" firstAttribute="centerY" secondItem="WNV-XS-T8h" secondAttribute="centerY" id="N2k-Aa-h54"/>
                             <constraint firstItem="XXW-FU-ifk" firstAttribute="top" secondItem="Rf6-fL-aFF" secondAttribute="bottom" constant="24" id="OJG-Ut-nMg"/>
                             <constraint firstItem="Rf6-fL-aFF" firstAttribute="centerX" secondItem="WNV-XS-T8h" secondAttribute="centerX" id="P90-m4-0vh"/>
-                            <constraint firstItem="jwd-1v-f8x" firstAttribute="top" secondItem="9jX-HE-7W8" secondAttribute="bottom" constant="30" id="XUL-i6-BmV"/>
+                            <constraint firstItem="jwd-1v-f8x" firstAttribute="top" secondItem="9jX-HE-7W8" secondAttribute="bottom" constant="20" id="XUL-i6-BmV"/>
                             <constraint firstItem="71E-lh-QRW" firstAttribute="top" secondItem="GAd-G6-UG2" secondAttribute="bottom" constant="8" id="Z4k-i0-Pgw"/>
                             <constraint firstItem="GAd-G6-UG2" firstAttribute="top" secondItem="jwd-1v-f8x" secondAttribute="bottom" constant="35" id="oLh-Xl-WIU"/>
                             <constraint firstItem="71E-lh-QRW" firstAttribute="centerX" secondItem="GAd-G6-UG2" secondAttribute="centerX" id="q7X-pY-fIV"/>
@@ -3238,6 +3250,7 @@
                         <viewLayoutGuide key="safeArea" id="WNV-XS-T8h"/>
                     </view>
                     <connections>
+                        <outlet property="buttonGoogleAct" destination="7Uh-Yt-pdR" id="lb5-F7-uT3"/>
                         <outlet property="buttonLogin" destination="GAd-G6-UG2" id="TlZ-27-clK"/>
                         <outlet property="buttonLoginFBAct" destination="Rf6-fL-aFF" id="our-7q-qwo"/>
                         <outlet property="buttonRegisAct" destination="w8r-hS-06f" id="Wfb-gT-trh"/>

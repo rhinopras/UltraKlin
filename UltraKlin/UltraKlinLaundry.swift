@@ -335,7 +335,7 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
         // Filter Date Pickup
         let dateCurrent = Date()
         let dateFormatCurrent = DateFormatter()
-        dateFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale!
+        dateFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale
         dateFormatCurrent.dateFormat = "dd-MM-yyyy"
         
         let finalDateCurrent = dateFormatCurrent.string(from: dateCurrent)
@@ -358,7 +358,7 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
         // Filter Time Pickup
         let timeCurrent = Date()
         let timeFormatCurrent = DateFormatter()
-        timeFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale!
+        timeFormatCurrent.locale = NSLocale(localeIdentifier: "en_GB") as Locale
         timeFormatCurrent.dateFormat = "HH:mm"
         
         let finaltimeCurrent = timeFormatCurrent.string(from: timeCurrent)
@@ -468,14 +468,14 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                                 
                             } else {
                                 
-                                let subTotal = json["sub Total"] as! Int
+                                //let subTotal = json["discount"] as! Int
                                 let totalPay = json["Total Payment"] as! Int
                                 
                                 DispatchQueue.main.async() {
                                     
                                     self.OrderKilos()
                                     
-                                    self.totalKilos = subTotal
+                                    //self.totalKilos = subTotal
                                     self.totalAll = totalPay
                                     self.totalPromo = totalPay
                                     self.labelTotal.text = String(self.totalAll)
@@ -735,12 +735,12 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                         
                 } else {
                     
-                    let subTotal = json["sub Total"] as! Int
+                    //let subTotal = json["discount"] as! Int
                     let totalPay = json["Total Payment"] as! Int
                     
                     DispatchQueue.main.async() {
                         
-                        self.totalKilos = subTotal
+                        //self.totalKilos = subTotal
                         self.totalAll = totalPay
                         self.totalPromo = totalPay
                         self.labelTotal.text = String(self.totalAll)
@@ -1088,15 +1088,14 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                 do {
                     if let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [String:Any] {
                         
+                        let kilosMinimal = json["minimal"] as! Int
+                        let kilosPrice = json["perKilo"] as! Int
+                        
                         DispatchQueue.main.async {
-                            
-                            let kilosMinimal = json["minimal"] as! String
-                            let kilosPrice = json["perKilo"] as! String
-                            
                             self.servicePick.append(String("Reguler (\(kilosMinimal) Days)"))
                             self.textServiceWePro.text = "Reguler (\(kilosMinimal) Days)"
-                            self.dinamisDateReguler = Int(kilosMinimal)!
-                            self.dinamisPricePerKilos = Int(kilosPrice)!
+                            self.dinamisDateReguler = Int(kilosMinimal)
+                            self.dinamisPricePerKilos = Int(kilosPrice)
                         }
                     }
                 }

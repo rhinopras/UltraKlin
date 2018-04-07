@@ -9,13 +9,13 @@ import UIKit
 import Foundation
 import Firebase
 import FBSDKLoginKit
+import GoogleSignIn
 
 class UltraKlinAccountView: UIViewController {
     
     @IBOutlet weak var buttonLogoutStyle: UIButton!
     
     @IBAction func buttonLogout(_ sender: Any) {
-        
         
         var rootVC : UIViewController?
         
@@ -26,7 +26,10 @@ class UltraKlinAccountView: UIViewController {
             
             let defaults = UserDefaults.standard
             
-            // Facebook Sigout
+            // Google Sign Out
+            GIDSignIn.sharedInstance().signOut()
+            
+            // Facebook Sign Out
             FBSDKAccessToken.current()
             let loginManager = FBSDKLoginManager()
             loginManager.logOut()

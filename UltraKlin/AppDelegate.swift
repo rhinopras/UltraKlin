@@ -1,3 +1,4 @@
+
 //
 //  AppDelegate.swift
 //  UltraKlin
@@ -19,7 +20,7 @@ import Siren
 import FBSDKCoreKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, GIDSignInDelegate {
     
     var window: UIWindow?
     
@@ -85,15 +86,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("APNs registration failed: \(error)")
     }
     
-    // Reports app open from deep link for iOS 10 or later
+    func application(_ app: UIApplication,
+                     open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        return GIDSignIn.sharedInstance().handle(url,
+                                                 sourceApplication: sourceApplication,
+                                                 annotation: annotation)
+    }
+    
+    func application(_ application: UIApplication,
+                     open url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        return GIDSignIn.sharedInstance().handle(url as URL?,sourceApplication: sourceApplication, annotation: annotation)
+    }
+
+    // Reports app open from deep link for iOS 9 or later
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         // AppFlyer
         AppsFlyerTracker.shared().handleOpen(url, options: options)
         
-        // Login Facebook
+        // Facebook Sign
         FBSDKApplicationDelegate.sharedInstance().application(app, open: url, options: options)
+        
+        // Google Sign
+        GIDSignIn.sharedInstance().handle(url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+        
         return true
     }
+    
     // Reports app open from a Universal Link for iOS 9 or later
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
         AppsFlyerTracker.shared().continue(userActivity, restorationHandler: restorationHandler)
@@ -143,8 +161,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         siren.checkVersion(checkType: .immediately)
     }
     
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        
+        if (error == nil) {
+            // Perform any operations on signed in user here.
+            let userId = user.userID // For client-side use only!
+            let idToken = user.authentication.idToken //Safe to send to the server
+            let name = user.profile.name
+            let email = user.profile.email
+            let userImageURL = user.profile.imageURL(withDimension: 200)
+            
+            // [START_EXCLUDE]
+            NotificationCenter.default.post(
+                name: Notification.Name(rawValue: "ToggleAuthUINotification"),
+                object: nil,
+                userInfo: ["statusText": "Signed in user:\n\(String(describing: name))"])
+            
+            let mainStoryBoard: UIStoryboard = UIStoryboard(name:"Main", bundle:nil)
+            let protectedPage = mainStoryBoard.instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
+            let appDelegate = UIApplication.shared.delegate
+            appDelegate?.window??.rootViewController = protectedPage
+            // [END_EXCLUDE]
+        }
+        else {
+            print("\(error.localizedDescription)")
+        }
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
         // iOS 10 support
         if #available(iOS 10, *) {
             UNUserNotificationCenter.current().delegate = self
@@ -153,11 +199,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             options: authOption,
             completionHandler: {_, _ in })
         }
+            
         // iOS 9 support
         else {
             let settings : UIUserNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
             application.registerUserNotificationSettings(settings)
         }
+        
         application.registerForRemoteNotifications()
         FirebaseApp.configure()
         
@@ -175,8 +223,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         window?.makeKeyAndVisible()
         setupSiren()
         
-        // Login Facebook
+        // Facebook Sign
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
+        // Google Sign
+        GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
+        print(FirebaseApp.app()?.options.clientID as Any)
+        GIDSignIn.sharedInstance().delegate = self
         
         return true
     }

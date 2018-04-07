@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5F09E216206B738900927CDD /* Siren.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09E215206B731500927CDD /* Siren.framework */; };
-		5F09E217206B738900927CDD /* Siren.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F09E215206B731500927CDD /* Siren.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5F0B67FE204CE2150008AD25 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F0B67FD204CE2150008AD25 /* UserNotifications.framework */; };
 		5F0C90912043AAD500FDF94E /* UltraKlinCleaningDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F0C90902043AAD500FDF94E /* UltraKlinCleaningDetail.swift */; };
+		5F17CB25207712CD0074B422 /* GoogleSignIn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17CB1E207712CC0074B422 /* GoogleSignIn.framework */; };
+		5F17CB27207712CD0074B422 /* GoogleSignIn.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5F17CB24207712CD0074B422 /* GoogleSignIn.bundle */; };
+		5F17CB292077187B0074B422 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17CB282077187B0074B422 /* AddressBook.framework */; };
+		5F17CB2B207718840074B422 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17CB2A207718840074B422 /* SystemConfiguration.framework */; };
+		5F17CB2D2077188E0074B422 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17CB2C2077188E0074B422 /* StoreKit.framework */; };
 		5F1DCDE6203FCD1900F486AD /* UltraKlinCleaning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1DCDE5203FCD1900F486AD /* UltraKlinCleaning.swift */; };
 		5F24B6EE2054E8670080DEFC /* UltraKlinLaundry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */; };
 		5F24C2AC205F9E6300CD5067 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24C2AB205F9E6300CD5067 /* Config.swift */; };
 		5F24C2AE205FBC7B00CD5067 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24C2AD205FBC7B00CD5067 /* Reachability.swift */; };
-		5F3C3C23204401EF00F9F97D /* LocationPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8A61CE2043F9660054C51D /* LocationPicker.framework */; };
-		5F3C3C24204401EF00F9F97D /* LocationPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F8A61CE2043F9660054C51D /* LocationPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5F54A4062060E78F007BEEDC /* UltraKlinLaundryDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F54A4052060E78F007BEEDC /* UltraKlinLaundryDetail.swift */; };
-		5F61FA69206AB15A000EA4FA /* AppRating.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F61FA59206AAC66000EA4FA /* AppRating.framework */; };
-		5F61FA6A206AB15A000EA4FA /* AppRating.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5F61FA59206AAC66000EA4FA /* AppRating.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5F5828ED2077929E0030F2E1 /* GoogleSignInDependencies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F5828EC2077929E0030F2E1 /* GoogleSignInDependencies.framework */; };
 		5F7C46A02064D23B008D2C73 /* AppsFlyerLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C469F2064D23B008D2C73 /* AppsFlyerLib.framework */; };
 		5F7C46A22064D24F008D2C73 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C46A12064D24F008D2C73 /* AdSupport.framework */; };
 		5F7C46A42064D259008D2C73 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C46A32064D258008D2C73 /* iAd.framework */; };
@@ -38,89 +38,89 @@
 		5FAFCB19203EED810009F97B /* UltraKlinAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCB18203EED810009F97B /* UltraKlinAccountView.swift */; };
 		5FB0F7302045815F007CE83C /* UltraKlinRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0F72F2045815F007CE83C /* UltraKlinRegistration.swift */; };
 		5FB0F73220458171007CE83C /* UltraKlinLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0F73120458171007CE83C /* UltraKlinLogin.swift */; };
-		5FB6DA86206AB3A100E25B1B /* AppRating.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FB6DA83206AB3A100E25B1B /* AppRating.bundle */; };
 		5FB6DA89206AB44F00E25B1B /* AppRatingLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5FB6DA87206AB44F00E25B1B /* AppRatingLocalizable.strings */; };
 		5FC37C962047BD680086E500 /* UltraKlinTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */; };
+		5FEF535A2074FAF100E926D7 /* LocationPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53412074FA3400E926D7 /* LocationPicker.framework */; };
+		5FEF535B2074FAF100E926D7 /* LocationPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53412074FA3400E926D7 /* LocationPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5FEF535E2074FAF600E926D7 /* AppRating.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53492074FA3E00E926D7 /* AppRating.framework */; };
+		5FEF535F2074FAF600E926D7 /* AppRating.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53492074FA3E00E926D7 /* AppRating.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5FEF53622074FAFD00E926D7 /* Siren.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53592074FA4D00E926D7 /* Siren.framework */; };
+		5FEF53632074FAFD00E926D7 /* Siren.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53592074FA4D00E926D7 /* Siren.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5FF104D82077482900AEA895 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FF104D32077482900AEA895 /* SafariServices.framework */; };
+		5FFB5A652074A9E0008BC25E /* AppRating.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FFB5A642074A9E0008BC25E /* AppRating.bundle */; };
 		AD930BC15515B81C1FC32B44 /* Pods_UltraKlin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C85970E1A313D7EE0DD35094 /* Pods_UltraKlin.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		5F09E210206B731500927CDD /* PBXContainerItemProxy */ = {
+		5FEF53402074FA3400E926D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5F09E208206B731500927CDD /* SirenExample.xcodeproj */;
+			containerPortal = 5FEF533C2074FA3400E926D7 /* LocationPicker.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 8EC391811A58B465001C121E;
-			remoteInfo = SirenExample;
-		};
-		5F09E212206B731500927CDD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5F09E208206B731500927CDD /* SirenExample.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8E3A6C041D07CB6F00A8B7CF;
-			remoteInfo = SirenExampleTests;
-		};
-		5F09E214206B731500927CDD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5F09E208206B731500927CDD /* SirenExample.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 55EC36471E6BB98A00726F13;
-			remoteInfo = Siren;
-		};
-		5F09E218206B738900927CDD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5F09E208206B731500927CDD /* SirenExample.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 55EC36461E6BB98A00726F13;
-			remoteInfo = Siren;
-		};
-		5F3C3C25204401EF00F9F97D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = B62462FE1B68A4DE00646DE2;
+			remoteGlobalIDString = B62462FF1B68A4DE00646DE2;
 			remoteInfo = LocationPicker;
 		};
-		5F61FA58206AAC66000EA4FA /* PBXContainerItemProxy */ = {
+		5FEF53482074FA3E00E926D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5F61FA52206AAC66000EA4FA /* AppRating.xcodeproj */;
+			containerPortal = 5FEF53422074FA3E00E926D7 /* AppRating.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 78DA88641E3F97EC00F6FAB3;
 			remoteInfo = AppRating;
 		};
-		5F61FA5A206AAC66000EA4FA /* PBXContainerItemProxy */ = {
+		5FEF534A2074FA3E00E926D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5F61FA52206AAC66000EA4FA /* AppRating.xcodeproj */;
+			containerPortal = 5FEF53422074FA3E00E926D7 /* AppRating.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 78DA886D1E3F97ED00F6FAB3;
 			remoteInfo = AppRatingTests;
 		};
-		5F61FA5C206AAC66000EA4FA /* PBXContainerItemProxy */ = {
+		5FEF534C2074FA3E00E926D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5F61FA52206AAC66000EA4FA /* AppRating.xcodeproj */;
+			containerPortal = 5FEF53422074FA3E00E926D7 /* AppRating.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 78FF83DF1E40C10200C9DAAB;
 			remoteInfo = Example;
 		};
-		5F61FA67206AAEE2000EA4FA /* PBXContainerItemProxy */ = {
+		5FEF53542074FA4D00E926D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 5F61FA52206AAC66000EA4FA /* AppRating.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 78DA88631E3F97EC00F6FAB3;
-			remoteInfo = AppRating;
-		};
-		5F61FA6B206AB15A000EA4FA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5F61FA52206AAC66000EA4FA /* AppRating.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 78DA88631E3F97EC00F6FAB3;
-			remoteInfo = AppRating;
-		};
-		5F8A61CD2043F9660054C51D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */;
+			containerPortal = 5FEF534E2074FA4C00E926D7 /* SirenExample.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = B62462FF1B68A4DE00646DE2;
+			remoteGlobalIDString = 8EC391811A58B465001C121E;
+			remoteInfo = SirenExample;
+		};
+		5FEF53562074FA4D00E926D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FEF534E2074FA4C00E926D7 /* SirenExample.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8E3A6C041D07CB6F00A8B7CF;
+			remoteInfo = SirenExampleTests;
+		};
+		5FEF53582074FA4D00E926D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FEF534E2074FA4C00E926D7 /* SirenExample.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 55EC36471E6BB98A00726F13;
+			remoteInfo = Siren;
+		};
+		5FEF535C2074FAF200E926D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FEF533C2074FA3400E926D7 /* LocationPicker.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = B62462FE1B68A4DE00646DE2;
 			remoteInfo = LocationPicker;
+		};
+		5FEF53602074FAF600E926D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FEF53422074FA3E00E926D7 /* AppRating.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 78DA88631E3F97EC00F6FAB3;
+			remoteInfo = AppRating;
+		};
+		5FEF53642074FAFD00E926D7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5FEF534E2074FA4C00E926D7 /* SirenExample.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 55EC36461E6BB98A00726F13;
+			remoteInfo = Siren;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -131,9 +131,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				5F09E217206B738900927CDD /* Siren.framework in Embed Frameworks */,
-				5F3C3C24204401EF00F9F97D /* LocationPicker.framework in Embed Frameworks */,
-				5F61FA6A206AB15A000EA4FA /* AppRating.framework in Embed Frameworks */,
+				5FEF53632074FAFD00E926D7 /* Siren.framework in Embed Frameworks */,
+				5FEF535B2074FAF100E926D7 /* LocationPicker.framework in Embed Frameworks */,
+				5FEF535F2074FAF600E926D7 /* AppRating.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,20 +142,24 @@
 
 /* Begin PBXFileReference section */
 		5513B6C728863E6BDBA564D4 /* Pods-UltraKlin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltraKlin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin.debug.xcconfig"; sourceTree = "<group>"; };
-		5F09E208206B731500927CDD /* SirenExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SirenExample.xcodeproj; path = SirenExample/SirenExample.xcodeproj; sourceTree = "<group>"; };
 		5F0B67FB204CE1DD0008AD25 /* UltraKlin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UltraKlin.entitlements; sourceTree = "<group>"; };
 		5F0B67FD204CE2150008AD25 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		5F0C90902043AAD500FDF94E /* UltraKlinCleaningDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinCleaningDetail.swift; sourceTree = "<group>"; };
+		5F17CB1E207712CC0074B422 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignIn.framework; sourceTree = "<group>"; };
+		5F17CB24207712CD0074B422 /* GoogleSignIn.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = GoogleSignIn.bundle; sourceTree = "<group>"; };
+		5F17CB282077187B0074B422 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		5F17CB2A207718840074B422 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		5F17CB2C2077188E0074B422 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		5F17CB2E20771AC10074B422 /* UltraKlin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UltraKlin-Bridging-Header.h"; sourceTree = "<group>"; };
 		5F1DCDE5203FCD1900F486AD /* UltraKlinCleaning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinCleaning.swift; sourceTree = "<group>"; };
 		5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLaundry.swift; sourceTree = "<group>"; };
 		5F24C2AB205F9E6300CD5067 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		5F24C2AD205FBC7B00CD5067 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		5F54A4052060E78F007BEEDC /* UltraKlinLaundryDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLaundryDetail.swift; sourceTree = "<group>"; };
-		5F61FA52206AAC66000EA4FA /* AppRating.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppRating.xcodeproj; path = "AppRating-master/AppRating.xcodeproj"; sourceTree = "<group>"; };
+		5F5828EC2077929E0030F2E1 /* GoogleSignInDependencies.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignInDependencies.framework; sourceTree = "<group>"; };
 		5F7C469F2064D23B008D2C73 /* AppsFlyerLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppsFlyerLib.framework; sourceTree = "<group>"; };
 		5F7C46A12064D24F008D2C73 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		5F7C46A32064D258008D2C73 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
-		5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LocationPicker.xcodeproj; sourceTree = "<group>"; };
 		5F9998DB2052378600AC37FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5FAF4CD4207391AE00D804F5 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		5FAF4CDA207391C500D804F5 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
@@ -173,9 +177,13 @@
 		5FAFCB18203EED810009F97B /* UltraKlinAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinAccountView.swift; sourceTree = "<group>"; };
 		5FB0F72F2045815F007CE83C /* UltraKlinRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinRegistration.swift; sourceTree = "<group>"; };
 		5FB0F73120458171007CE83C /* UltraKlinLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLogin.swift; sourceTree = "<group>"; };
-		5FB6DA83206AB3A100E25B1B /* AppRating.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = AppRating.bundle; path = "AppRating-master/AppRating.bundle"; sourceTree = "<group>"; };
 		5FB6DA88206AB44F00E25B1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "AppRating-master/Localization/en.lproj/AppRatingLocalizable.strings"; sourceTree = "<group>"; };
 		5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinTabBarView.swift; sourceTree = "<group>"; };
+		5FEF533C2074FA3400E926D7 /* LocationPicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LocationPicker.xcodeproj; sourceTree = "<group>"; };
+		5FEF53422074FA3E00E926D7 /* AppRating.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppRating.xcodeproj; path = "AppRating-master/AppRating.xcodeproj"; sourceTree = "<group>"; };
+		5FEF534E2074FA4C00E926D7 /* SirenExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SirenExample.xcodeproj; path = SirenExample/SirenExample.xcodeproj; sourceTree = "<group>"; };
+		5FF104D32077482900AEA895 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
+		5FFB5A642074A9E0008BC25E /* AppRating.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AppRating.bundle; sourceTree = "<group>"; };
 		C85970E1A313D7EE0DD35094 /* Pods_UltraKlin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UltraKlin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2A4A450F551FCCAB58DFFA2 /* Pods-UltraKlin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltraKlin.release.xcconfig"; path = "Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,36 +193,39 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5F5828ED2077929E0030F2E1 /* GoogleSignInDependencies.framework in Frameworks */,
+				5FF104D82077482900AEA895 /* SafariServices.framework in Frameworks */,
+				5F17CB2D2077188E0074B422 /* StoreKit.framework in Frameworks */,
+				5F17CB2B207718840074B422 /* SystemConfiguration.framework in Frameworks */,
+				5F17CB292077187B0074B422 /* AddressBook.framework in Frameworks */,
 				5F7C46A42064D259008D2C73 /* iAd.framework in Frameworks */,
+				5FEF535E2074FAF600E926D7 /* AppRating.framework in Frameworks */,
 				5F7C46A22064D24F008D2C73 /* AdSupport.framework in Frameworks */,
+				5FEF53622074FAFD00E926D7 /* Siren.framework in Frameworks */,
 				5FAF4CDB207391C600D804F5 /* FBSDKLoginKit.framework in Frameworks */,
 				5F0B67FE204CE2150008AD25 /* UserNotifications.framework in Frameworks */,
-				5F3C3C23204401EF00F9F97D /* LocationPicker.framework in Frameworks */,
-				5F09E216206B738900927CDD /* Siren.framework in Frameworks */,
-				5F61FA69206AB15A000EA4FA /* AppRating.framework in Frameworks */,
 				5F7C46A02064D23B008D2C73 /* AppsFlyerLib.framework in Frameworks */,
+				5F17CB25207712CD0074B422 /* GoogleSignIn.framework in Frameworks */,
 				5FAF4CDD207391CD00D804F5 /* Bolts.framework in Frameworks */,
 				5FAF4CD9207391AF00D804F5 /* FBSDKCoreKit.framework in Frameworks */,
 				AD930BC15515B81C1FC32B44 /* Pods_UltraKlin.framework in Frameworks */,
+				5FEF535A2074FAF100E926D7 /* LocationPicker.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5F09E209206B731500927CDD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5F09E211206B731500927CDD /* SirenExample.app */,
-				5F09E213206B731500927CDD /* SirenExampleTests.xctest */,
-				5F09E215206B731500927CDD /* Siren.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		5F0B67FC204CE2150008AD25 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5F5828EC2077929E0030F2E1 /* GoogleSignInDependencies.framework */,
+				5FF104D32077482900AEA895 /* SafariServices.framework */,
+				5F17CB2C2077188E0074B422 /* StoreKit.framework */,
+				5F17CB2A207718840074B422 /* SystemConfiguration.framework */,
+				5F17CB282077187B0074B422 /* AddressBook.framework */,
+				5F17CB24207712CD0074B422 /* GoogleSignIn.bundle */,
+				5F17CB1E207712CC0074B422 /* GoogleSignIn.framework */,
 				5FAF4CDC207391CD00D804F5 /* Bolts.framework */,
 				5FAF4CDA207391C500D804F5 /* FBSDKLoginKit.framework */,
 				5FAF4CD4207391AE00D804F5 /* FBSDKCoreKit.framework */,
@@ -227,32 +238,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		5F61FA53206AAC66000EA4FA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5F61FA59206AAC66000EA4FA /* AppRating.framework */,
-				5F61FA5B206AAC66000EA4FA /* AppRatingTests.xctest */,
-				5F61FA5D206AAC66000EA4FA /* Example.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		5F8A61CA2043F9650054C51D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				5F8A61CE2043F9660054C51D /* LocationPicker.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		5FAFCAF3203EE1930009F97B = {
 			isa = PBXGroup;
 			children = (
-				5F09E208206B731500927CDD /* SirenExample.xcodeproj */,
+				5FEF534E2074FA4C00E926D7 /* SirenExample.xcodeproj */,
+				5FEF53422074FA3E00E926D7 /* AppRating.xcodeproj */,
+				5FEF533C2074FA3400E926D7 /* LocationPicker.xcodeproj */,
+				5FFB5A642074A9E0008BC25E /* AppRating.bundle */,
 				5FB6DA87206AB44F00E25B1B /* AppRatingLocalizable.strings */,
-				5FB6DA83206AB3A100E25B1B /* AppRating.bundle */,
-				5F61FA52206AAC66000EA4FA /* AppRating.xcodeproj */,
-				5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */,
 				5FAFCAFE203EE1930009F97B /* UltraKlin */,
 				5FAFCAFD203EE1930009F97B /* Products */,
 				5F0B67FC204CE2150008AD25 /* Frameworks */,
@@ -292,8 +285,37 @@
 				5F9998DB2052378600AC37FD /* GoogleService-Info.plist */,
 				5FAFCB0E203EE1930009F97B /* Info.plist */,
 				5FAFCB06203EE1930009F97B /* UltraKlin.xcdatamodeld */,
+				5F17CB2E20771AC10074B422 /* UltraKlin-Bridging-Header.h */,
 			);
 			path = UltraKlin;
+			sourceTree = "<group>";
+		};
+		5FEF533D2074FA3400E926D7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5FEF53412074FA3400E926D7 /* LocationPicker.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5FEF53432074FA3E00E926D7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5FEF53492074FA3E00E926D7 /* AppRating.framework */,
+				5FEF534B2074FA3E00E926D7 /* AppRatingTests.xctest */,
+				5FEF534D2074FA3E00E926D7 /* Example.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5FEF534F2074FA4C00E926D7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5FEF53552074FA4D00E926D7 /* SirenExample.app */,
+				5FEF53572074FA4D00E926D7 /* SirenExampleTests.xctest */,
+				5FEF53592074FA4D00E926D7 /* Siren.framework */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		E4BF42059B977EFF080C1A9C /* Pods */ = {
@@ -323,10 +345,9 @@
 			buildRules = (
 			);
 			dependencies = (
-				5F3C3C26204401EF00F9F97D /* PBXTargetDependency */,
-				5F61FA68206AAEE2000EA4FA /* PBXTargetDependency */,
-				5F61FA6C206AB15A000EA4FA /* PBXTargetDependency */,
-				5F09E219206B738900927CDD /* PBXTargetDependency */,
+				5FEF535D2074FAF200E926D7 /* PBXTargetDependency */,
+				5FEF53612074FAF600E926D7 /* PBXTargetDependency */,
+				5FEF53652074FAFD00E926D7 /* PBXTargetDependency */,
 			);
 			name = UltraKlin;
 			productName = UltraKlin;
@@ -340,11 +361,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0920;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = "PT Lintas Insan Nur Inspira";
 				TargetAttributes = {
 					5FAFCAFB203EE1930009F97B = {
 						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -376,16 +398,16 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 5F61FA53206AAC66000EA4FA /* Products */;
-					ProjectRef = 5F61FA52206AAC66000EA4FA /* AppRating.xcodeproj */;
+					ProductGroup = 5FEF53432074FA3E00E926D7 /* Products */;
+					ProjectRef = 5FEF53422074FA3E00E926D7 /* AppRating.xcodeproj */;
 				},
 				{
-					ProductGroup = 5F8A61CA2043F9650054C51D /* Products */;
-					ProjectRef = 5F8A61C92043F9650054C51D /* LocationPicker.xcodeproj */;
+					ProductGroup = 5FEF533D2074FA3400E926D7 /* Products */;
+					ProjectRef = 5FEF533C2074FA3400E926D7 /* LocationPicker.xcodeproj */;
 				},
 				{
-					ProductGroup = 5F09E209206B731500927CDD /* Products */;
-					ProjectRef = 5F09E208206B731500927CDD /* SirenExample.xcodeproj */;
+					ProductGroup = 5FEF534F2074FA4C00E926D7 /* Products */;
+					ProjectRef = 5FEF534E2074FA4C00E926D7 /* SirenExample.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -396,53 +418,53 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		5F09E211206B731500927CDD /* SirenExample.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = SirenExample.app;
-			remoteRef = 5F09E210206B731500927CDD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5F09E213206B731500927CDD /* SirenExampleTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = SirenExampleTests.xctest;
-			remoteRef = 5F09E212206B731500927CDD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5F09E215206B731500927CDD /* Siren.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = Siren.framework;
-			remoteRef = 5F09E214206B731500927CDD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5F61FA59206AAC66000EA4FA /* AppRating.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = AppRating.framework;
-			remoteRef = 5F61FA58206AAC66000EA4FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5F61FA5B206AAC66000EA4FA /* AppRatingTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = AppRatingTests.xctest;
-			remoteRef = 5F61FA5A206AAC66000EA4FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5F61FA5D206AAC66000EA4FA /* Example.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = Example.app;
-			remoteRef = 5F61FA5C206AAC66000EA4FA /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		5F8A61CE2043F9660054C51D /* LocationPicker.framework */ = {
+		5FEF53412074FA3400E926D7 /* LocationPicker.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = LocationPicker.framework;
-			remoteRef = 5F8A61CD2043F9660054C51D /* PBXContainerItemProxy */;
+			remoteRef = 5FEF53402074FA3400E926D7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5FEF53492074FA3E00E926D7 /* AppRating.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = AppRating.framework;
+			remoteRef = 5FEF53482074FA3E00E926D7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5FEF534B2074FA3E00E926D7 /* AppRatingTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = AppRatingTests.xctest;
+			remoteRef = 5FEF534A2074FA3E00E926D7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5FEF534D2074FA3E00E926D7 /* Example.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = Example.app;
+			remoteRef = 5FEF534C2074FA3E00E926D7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5FEF53552074FA4D00E926D7 /* SirenExample.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = SirenExample.app;
+			remoteRef = 5FEF53542074FA4D00E926D7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5FEF53572074FA4D00E926D7 /* SirenExampleTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = SirenExampleTests.xctest;
+			remoteRef = 5FEF53562074FA4D00E926D7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		5FEF53592074FA4D00E926D7 /* Siren.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Siren.framework;
+			remoteRef = 5FEF53582074FA4D00E926D7 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -452,11 +474,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5FFB5A652074A9E0008BC25E /* AppRating.bundle in Resources */,
 				5FB6DA89206AB44F00E25B1B /* AppRatingLocalizable.strings in Resources */,
-				5FB6DA86206AB3A100E25B1B /* AppRating.bundle in Resources */,
 				5FAFCB0D203EE1930009F97B /* LaunchScreen.storyboard in Resources */,
 				5F9998DC2052378600AC37FD /* GoogleService-Info.plist in Resources */,
 				5FAFCB0A203EE1930009F97B /* Assets.xcassets in Resources */,
+				5F17CB27207712CD0074B422 /* GoogleSignIn.bundle in Resources */,
 				5FAFCB05203EE1930009F97B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -549,25 +572,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5F09E219206B738900927CDD /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Siren;
-			targetProxy = 5F09E218206B738900927CDD /* PBXContainerItemProxy */;
-		};
-		5F3C3C26204401EF00F9F97D /* PBXTargetDependency */ = {
+		5FEF535D2074FAF200E926D7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = LocationPicker;
-			targetProxy = 5F3C3C25204401EF00F9F97D /* PBXContainerItemProxy */;
+			targetProxy = 5FEF535C2074FAF200E926D7 /* PBXContainerItemProxy */;
 		};
-		5F61FA68206AAEE2000EA4FA /* PBXTargetDependency */ = {
+		5FEF53612074FAF600E926D7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = AppRating;
-			targetProxy = 5F61FA67206AAEE2000EA4FA /* PBXContainerItemProxy */;
+			targetProxy = 5FEF53602074FAF600E926D7 /* PBXContainerItemProxy */;
 		};
-		5F61FA6C206AB15A000EA4FA /* PBXTargetDependency */ = {
+		5FEF53652074FAFD00E926D7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = AppRating;
-			targetProxy = 5F61FA6B206AB15A000EA4FA /* PBXContainerItemProxy */;
+			name = Siren;
+			targetProxy = 5FEF53642074FAFD00E926D7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -613,6 +631,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -620,6 +639,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -671,6 +691,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -678,6 +699,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -714,6 +736,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = UltraKlin/UltraKlin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -722,15 +745,59 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/FacebookSDKs-iOS-4",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = UltraKlin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseAuth\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseCoreDiagnostics\"",
+					"-framework",
+					"\"FirebaseInstanceID\"",
+					"-framework",
+					"\"FirebaseMessaging\"",
+					"-framework",
+					"\"FirebaseNanoPB\"",
+					"-framework",
+					"\"GTMSessionFetcher\"",
+					"-framework",
+					"\"GoogleToolboxForMac\"",
+					"-framework",
+					"\"Protobuf\"",
+					"-framework",
+					"\"SafariServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"nanopb\"",
+					"$(OTHER_LDFLAGS)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lintasinsan.UltraKlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "UltraKlin/UltraKlin-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
@@ -743,6 +810,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = UltraKlin/UltraKlin.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -751,15 +819,58 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"$(PROJECT_DIR)/FacebookSDKs-iOS-4",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = UltraKlin/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACH_O_TYPE = mh_execute;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"c++\"",
+					"-l\"sqlite3\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AddressBook\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"FirebaseAnalytics\"",
+					"-framework",
+					"\"FirebaseAuth\"",
+					"-framework",
+					"\"FirebaseCore\"",
+					"-framework",
+					"\"FirebaseCoreDiagnostics\"",
+					"-framework",
+					"\"FirebaseInstanceID\"",
+					"-framework",
+					"\"FirebaseMessaging\"",
+					"-framework",
+					"\"FirebaseNanoPB\"",
+					"-framework",
+					"\"GTMSessionFetcher\"",
+					"-framework",
+					"\"GoogleToolboxForMac\"",
+					"-framework",
+					"\"Protobuf\"",
+					"-framework",
+					"\"SafariServices\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"StoreKit\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"nanopb\"",
+					"$(OTHER_LDFLAGS)",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.lintasinsan.UltraKlin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "UltraKlin/UltraKlin-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
