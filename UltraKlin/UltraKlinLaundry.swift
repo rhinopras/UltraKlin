@@ -219,6 +219,10 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
             labelHowManyCloth.isHidden = false
             textManyKilosCloth.isHidden = false
         } else {
+            textPromoCode.text = ""
+            textPromoCode.isUserInteractionEnabled = true
+            textPromoCode.backgroundColor = UIColor.white
+            textPromoCode.textColor = UIColor.black
             if switchPerPieceAct.isOn {
                 totalAll = 0 + totalPiece
                 labelTotal.text = String(totalAll)
@@ -250,14 +254,13 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     @IBAction func buttonPromoCodeAct(_ sender: Any) {
         if switchPerKilosAct.isOn {
             if switchPerPieceAct.isOn {
-                let alert = UIAlertController (title: "Information", message: "Promo only Per Kilos.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+                self.promoCondition()
             } else {
                 self.promoCondition()
             }
         } else {
-            let alert = UIAlertController (title: "Information", message: "Promo only Per Kilos.", preferredStyle: .alert)
+            textPromoCode.text = ""
+            let alert = UIAlertController (title: "Information", message: "Choose service Per Kilos", preferredStyle: .alert)
             alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
@@ -420,13 +423,13 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                 OrderKilos()
                 self.performSegue(withIdentifier: "infoComplete", sender: self)
             } else {
-                if switchPerKilosAct.isOn {
-                    if switchPerPieceAct.isOn {
-                        let alert = UIAlertController (title: "Promo Code", message: "Promo only Per Kilos.", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    } else {
-                        
+//                if switchPerKilosAct.isOn {
+//                    if switchPerPieceAct.isOn {
+//                        let alert = UIAlertController (title: "Promo Code", message: "Promo only Per Kilos.", preferredStyle: .alert)
+//                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+//                        self.present(alert, animated: true, completion: nil)
+//                    } else {
+
                         self.loadingData()
                         
                         print("ada promo")
@@ -468,23 +471,47 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                                 
                             } else {
                                 
-                                //let subTotal = json["discount"] as! Int
+                                let subTotal = json["sub Total"] as! Int
                                 let totalPay = json["Total Payment"] as! Int
                                 
                                 DispatchQueue.main.async() {
                                     
+                                    if self.switchPerPieceAct.isOn {
+                                        if self.switchPerKilosAct.isOn {
+                                            self.totalPromo = totalPay
+                                            self.totalAll = self.totalPromo + self.totalPiece
+                                            self.labelTotal.text = String(self.totalAll)
+                                            
+                                            self.validPromo = "valid"
+                                            self.textPromoCode.isUserInteractionEnabled = false
+                                            self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
+                                            self.textPromoCode.textColor = UIColor.white
+                                        } else {
+                                            self.textPromoCode.text = ""
+                                            self.textPromoCode.isUserInteractionEnabled = true
+                                            self.textPromoCode.backgroundColor = UIColor.white
+                                            self.textPromoCode.textColor = UIColor.black
+                                            self.totalAll = self.totalPiece
+                                            self.labelTotal.text = String(self.totalAll)
+                                        }
+                                    } else {
+                                        if self.switchPerKilosAct.isOn {
+                                            self.totalKilos = subTotal
+                                            self.totalPromo = totalPay
+                                            self.totalAll = self.totalPromo
+                                            self.labelTotal.text = String(self.totalAll)
+                                            
+                                            self.validPromo = "valid"
+                                            self.textPromoCode.isUserInteractionEnabled = false
+                                            self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
+                                            self.textPromoCode.textColor = UIColor.white
+                                        } else {
+                                            self.totalAll = 0
+                                            self.labelTotal.text = String(self.totalAll)
+                                        }
+                                    }
+                                    
                                     self.OrderKilos()
-                                    
-                                    //self.totalKilos = subTotal
-                                    self.totalAll = totalPay
-                                    self.totalPromo = totalPay
-                                    self.labelTotal.text = String(self.totalAll)
-                                    self.validPromo = "valid"
-                                    self.textPromoCode.isUserInteractionEnabled = false
-                                    
-                                    self.textPromoCode.isUserInteractionEnabled = false
-                                    self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
-                                    self.textPromoCode.textColor = UIColor.white
                                     
                                     self.view.isUserInteractionEnabled = true
                                     self.messageFrame.removeFromSuperview()
@@ -500,12 +527,12 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                         task.resume()
                     }
                     
-                } else {
-                    let alert = UIAlertController (title: "Information", message: "Promo only Per Kilos.", preferredStyle: .alert)
-                    alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                }
-            }
+//                } else {
+//                    let alert = UIAlertController (title: "Information", message: "Promo only Per Kilos.", preferredStyle: .alert)
+//                    alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+//                    self.present(alert, animated: true, completion: nil)
+//                }
+//            }
         }
     }
     
@@ -601,14 +628,26 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
             let DIL = segue.destination as! UltraKlinLaundryDetail
             if switchPerPieceAct.isOn {
                 if switchPerKilosAct.isOn {
-                    DIL.manyKilos = textManyKilos.text!
-                    DIL.manyKilosCloth = textManyKilosCloth.text!
-                    totalAll = totalKilos + totalPiece
-                    DIL.dTotalPiece = totalPiece
-                    DIL.dTotalKilos = totalKilos
-                    DIL.dTotalAll = totalAll
-                    DIL.listChoose = itemChoose
-                    DIL.dPromoCode = textPromoCode.text!
+                    if validPromo == "valid" {
+                        DIL.manyKilos = textManyKilos.text!
+                        DIL.manyKilosCloth = textManyKilosCloth.text!
+                        totalAll = totalPromo + totalPiece
+                        DIL.dTotalPiece = totalPiece
+                        DIL.dTotalKilos = totalKilos
+                        DIL.dTotalAll = totalAll
+                        DIL.listChoose = itemChoose
+                        DIL.dPromoCode = textPromoCode.text!
+                    } else {
+                        DIL.manyKilos = textManyKilos.text!
+                        DIL.manyKilosCloth = textManyKilosCloth.text!
+                        totalAll = totalKilos + totalPiece
+                        DIL.dTotalPiece = totalPiece
+                        DIL.dTotalKilos = totalKilos
+                        DIL.dTotalAll = totalAll
+                        DIL.listChoose = itemChoose
+                        DIL.dPromoCode = textPromoCode.text!
+                    }
+                    
                 } else {
                     DIL.manyKilos = ""
                     DIL.manyKilosCloth = ""
@@ -638,8 +677,17 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.dataDinamisRequest()
+        self.loadingData()
+        
+        // Item Laundry Piece
         self.dataRequestListItemPicker()
+        // Price Laundry Kilos
+        self.dataDinamisRequest()
+        
+        self.view.isUserInteractionEnabled = true
+        self.messageFrame.removeFromSuperview()
+        self.activityIndicator.stopAnimating()
+        self.refreshControl.endRefreshing()
         
         self.createDatePickerPickup()
         self.viewLayoutLaundryStyle()
@@ -735,20 +783,48 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                         
                 } else {
                     
-                    //let subTotal = json["discount"] as! Int
+                    let subTotal = json["sub Total"] as! Int
                     let totalPay = json["Total Payment"] as! Int
                     
                     DispatchQueue.main.async() {
                         
-                        //self.totalKilos = subTotal
-                        self.totalAll = totalPay
-                        self.totalPromo = totalPay
-                        self.labelTotal.text = String(self.totalAll)
-                        self.validPromo = "valid"
-                        self.textPromoCode.isUserInteractionEnabled = false
-                        
-                        self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
-                        self.textPromoCode.textColor = UIColor.white
+                        if self.switchPerPieceAct.isOn {
+                            if self.switchPerKilosAct.isOn {
+                                self.totalPromo = totalPay
+                                self.totalAll = self.totalPromo + self.totalPiece
+                                self.labelTotal.text = String(self.totalAll)
+                                
+                                self.validPromo = "valid"
+                                self.textPromoCode.isUserInteractionEnabled = false
+                                self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
+                                self.textPromoCode.textColor = UIColor.white
+                            } else {
+                                self.textPromoCode.text = ""
+                                self.totalAll = self.totalPiece
+                                self.labelTotal.text = String(self.totalAll)
+                                self.textPromoCode.backgroundColor = UIColor.white
+                                self.textPromoCode.textColor = UIColor.black
+                                self.textPromoCode.isUserInteractionEnabled = true
+                                let alert = UIAlertController (title: "Information", message: "Choose service Per Kilos", preferredStyle: .alert)
+                                alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                                self.present(alert, animated: true, completion: nil)
+                            }
+                        } else {
+                            if self.switchPerKilosAct.isOn {
+                                self.totalKilos = subTotal
+                                self.totalPromo = totalPay
+                                self.totalAll = self.totalPromo
+                                self.labelTotal.text = String(self.totalAll)
+                                
+                                self.validPromo = "valid"
+                                self.textPromoCode.isUserInteractionEnabled = false
+                                self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
+                                self.textPromoCode.textColor = UIColor.white
+                            } else {
+                                self.totalAll = 0
+                                self.labelTotal.text = String(self.totalAll)
+                            }
+                        }
                         
                         self.view.isUserInteractionEnabled = true
                         self.messageFrame.removeFromSuperview()
@@ -1023,6 +1099,7 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     }
     
     func dataRequestListItemPicker() {
+        loadingData()
 // ======================== Dinamis List Item Laundry =========================
         if Reachability.isConnectedToNetwork() {
             print("Internet Connection Available!")
@@ -1062,10 +1139,14 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
             task.resume()
         }
         else {
+            self.view.isUserInteractionEnabled = true
+            self.messageFrame.removeFromSuperview()
+            self.activityIndicator.stopAnimating()
+            self.refreshControl.endRefreshing()
             print("Internet Connection not Available!")
         }
-        
     }
+    
     func dataDinamisRequest() {
 // ======================= Date Reguler and Price Per Kilos =======================
         if Reachability.isConnectedToNetwork() {
@@ -1097,11 +1178,19 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                             self.dinamisDateReguler = Int(kilosMinimal)
                             self.dinamisPricePerKilos = Int(kilosPrice)
                         }
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
                     }
                 }
             }
             task.resume()
         } else {
+            self.view.isUserInteractionEnabled = true
+            self.messageFrame.removeFromSuperview()
+            self.activityIndicator.stopAnimating()
+            self.refreshControl.endRefreshing()
             print("Internet Connection not Available!")
         }
     }
@@ -1270,6 +1359,34 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
         textPromoCode.layer.borderWidth = CGFloat(Float(1.5))
         textPromoCode.layer.cornerRadius = CGFloat(Float(5.0))
     }
+    
+    func animateTextField(TextField: UITextField, up: Bool, withOffset offset:CGFloat) {
+        let movementDistance : Int = -Int(offset)
+        let movementDuration : Double = 0.25
+        let movement : Int = (up ? movementDistance : -movementDistance)
+        UIView.beginAnimations("animateTextField", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration)
+        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: CGFloat(movement))
+        UIView.commitAnimations()
+    }
+    
+    func textFieldDidBeginEditing(_ TextField: UITextField) {
+        self.animateTextField(TextField: TextField, up: true,
+                              withOffset: TextField.frame.origin.y / 0.37)
+    }
+    
+    func textFieldDidEndEditing(_ TextField: UITextField) {
+        self.animateTextField(TextField: TextField, up: false,
+                              withOffset: TextField.frame.origin.y / 0.37)
+    }
+    
+    func textFieldShouldReturn(_ TextField: UITextField) -> Bool {
+        if TextField == self.textPromoCode {
+            self.textPromoCode.resignFirstResponder()
+        }
+        return true
+    }
 }
 
 extension UltraKlinLaundry: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -1340,33 +1457,4 @@ extension UltraKlinLaundry: UIPickerViewDataSource, UIPickerViewDelegate {
         }
         return myTitle
     }
-    
-    func animateTextField(TextField: UITextField, up: Bool, withOffset offset:CGFloat) {
-        let movementDistance : Int = -Int(offset)
-        let movementDuration : Double = 0.25
-        let movement : Int = (up ? movementDistance : -movementDistance)
-        UIView.beginAnimations("animateTextField", context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.setAnimationDuration(movementDuration)
-        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: CGFloat(movement))
-        UIView.commitAnimations()
-    }
-    
-    func textFieldDidBeginEditing(_ TextField: UITextField) {
-        self.animateTextField(TextField: TextField, up: true,
-                              withOffset: TextField.frame.origin.y / 0.37)
-    }
-    
-    func textFieldDidEndEditing(_ TextField: UITextField) {
-        self.animateTextField(TextField: TextField, up: false,
-                              withOffset: TextField.frame.origin.y / 0.37)
-    }
-    
-    func textFieldShouldReturn(_ TextField: UITextField) -> Bool {
-        if TextField == self.textPromoCode {
-            self.textPromoCode.resignFirstResponder()
-        }
-        return true
-    }
-    
 }

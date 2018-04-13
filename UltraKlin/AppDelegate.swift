@@ -24,6 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     
+    let defaults = UserDefaults.standard
+    
     override init() {
         // first set the appID - this must be the very first call of AppRating!
         AppRating.appID("1303429279");
@@ -165,17 +167,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if (error == nil) {
             // Perform any operations on signed in user here.
-            let userId = user.userID // For client-side use only!
-            let idToken = user.authentication.idToken //Safe to send to the server
-            let name = user.profile.name
+            //let userId = user.userID                  // For client-side use only!
+            let idToken = user.authentication.idToken // Safe to send to the server
+            let fullName = user.profile.name
+            //let givenName = user.profile.givenName
+            //let familyName = user.profile.familyName
             let email = user.profile.email
-            let userImageURL = user.profile.imageURL(withDimension: 200)
+            //let userImageURL = user.profile.imageURL(withDimension: 200)
+            
+            self.defaults.set(email, forKey: "emailUserGL")
+            self.defaults.set(fullName, forKey: "nameUserGL")
+            self.defaults.set(idToken, forKey: "SessionSosmes")
             
             // [START_EXCLUDE]
             NotificationCenter.default.post(
                 name: Notification.Name(rawValue: "ToggleAuthUINotification"),
                 object: nil,
-                userInfo: ["statusText": "Signed in user:\n\(String(describing: name))"])
+                userInfo: ["statusText": "Signed in user:\n\(String(describing: fullName))"])
             
             let mainStoryBoard: UIStoryboard = UIStoryboard(name:"Main", bundle:nil)
             let protectedPage = mainStoryBoard.instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
@@ -185,6 +193,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         else {
             print("\(error.localizedDescription)")
+            // [START_EXCLUDE silent]
+            NotificationCenter.default.post(
+                name: Notification.Name(rawValue: "ToggleAuthUINotification"), object: nil, userInfo: nil)
+            // [END_EXCLUDE]
         }
     }
     
@@ -207,6 +219,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         application.registerForRemoteNotifications()
+        
+        FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
         
         // Cek Session
@@ -228,7 +242,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         // Google Sign
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
-        print(FirebaseApp.app()?.options.clientID as Any)
         GIDSignIn.sharedInstance().delegate = self
         
         return true

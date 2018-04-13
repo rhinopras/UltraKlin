@@ -66,7 +66,7 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
         
         paramString  = "name=" + name + "&phone=" + phone + "&email=" + email + "&password=" + pass + "&password_confirmation=" + repeats + "&role=customer"
         
-        if (name == "" || phone == "" || email == "" || pass == "" || repeats == "" || pass != repeats) {
+        if (name == "" || phone == "" || email == "" || pass == "" || repeats == "" || pass.count < 6 || pass != repeats) {
             if name == "" {
                 textRegisName.placeholder = "* Name is required!"
                 self.textRegisName.layer.borderColor = UIColor.red.cgColor
@@ -87,6 +87,16 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
             } else {
                 textRegisEmail.placeholder = ""
                 self.textRegisEmail.layer.borderColor = UIColor.lightGray.cgColor
+            }
+            if pass.count < 6 {
+                textRegisPass.placeholder = "* Password is not 6 character"
+                self.textRegisPass.layer.borderColor = UIColor.red.cgColor
+                let alert = UIAlertController (title: "Password", message: "Password minimum 6 character.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                textRegisPass.placeholder = ""
+                self.textRegisPass.layer.borderColor = UIColor.lightGray.cgColor
             }
             if pass == "" {
                 textRegisPass.placeholder = "* Password is required!"

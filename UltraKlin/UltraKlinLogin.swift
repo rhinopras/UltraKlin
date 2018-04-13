@@ -10,11 +10,18 @@ import UIKit
 import Foundation
 import AppsFlyerLib
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
+import FirebaseStorage
+
 import FBSDKLoginKit
 
 class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate {
     
+    var messagesController: MessageController?
+    
     let defaults = UserDefaults.standard
+    
     var rootVC : UIViewController?
     var keyToken = ""
     var skipLogin = ""
@@ -25,6 +32,7 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
     var password  = ""
     var paramString = ""
     
+    // Refresh
     let messageFrame = UIView()
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     var refreshControl = UIRefreshControl()
@@ -60,6 +68,7 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
         loadingData()
         let fbLoginManager = FBSDKLoginManager()
         fbLoginManager.logIn(withReadPermissions: ["public_profile", "email"], from: self) { (result, error) in
+            
             if let error = error {
                 print("Failed to login: \(error.localizedDescription)")
                 self.view.isUserInteractionEnabled = true
@@ -97,19 +106,17 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                 }
                 
                 if let currentUser = Auth.auth().currentUser {
-                    self.defaults.set(currentUser.email, forKey: "emailUser")
-                    self.defaults.set(currentUser.displayName, forKey: "nameUser")
-                    self.defaults.set(currentUser.phoneNumber, forKey: "phoneUser")
-                    self.defaults.set(currentUser.email, forKey: "SessionSosmes")
+                    self.defaults.set(currentUser.email, forKey: "emailUserFB")
+                    self.defaults.set(currentUser.displayName, forKey: "nameUserFB")
+                    self.defaults.set(currentUser.phoneNumber, forKey: "phoneUserFB")
+                    self.defaults.set(currentUser.refreshToken, forKey: "SessionSosmes")
                     print(currentUser.email! + " " + currentUser.displayName!)
                 }
                 
                 if self.skipLogin == "Login" {
                     self.skipLogin = ""
                     self.navigationController?.popViewController(animated: true)
-                    
                 } else {
-                    
                     // Present the main view
                     self.rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
                     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -126,9 +133,18 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
         
     }
     
+    lazy var profileImageView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.image = UIImage.init(named: "user")
+        imgView.translatesAutoresizingMaskIntoConstraints = false
+        imgView.contentMode = .scaleAspectFit
+        //imgView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(handelSelectProfileImageView)))
+        imgView.isUserInteractionEnabled = true
+        return imgView
+    }()
+    
     @IBAction func buttonLoginClick(_ sender: Any) {
         view.endEditing(true)
-        
         let auth = (UserDefaults.standard.string(forKey: "SavedApiKey"))
         print(auth as Any)
         
@@ -136,18 +152,17 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
         self.password    = textLoginPassword.text!
         paramString      = "email=" + email + "&password=" + password
         
-        if (email == "" || password == "") {
+        if (email == "" || password.count < 6 || password == "") {
             if email == ""{
                 textLoginUsername.placeholder = "* Email is required!"
-            } else {
-                textLoginUsername.text = ""
             }
             if password == "" {
                 textLoginPassword.placeholder = "* Password is required!"
-            } else {
-                textLoginPassword.text = ""
+            } else if ((password.count < 6)) {
+                let alert = UIAlertController (title: "Password", message: "Password minimum 6 character.", preferredStyle: .alert)
+                alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
-            
         } else {
             self.loadingData()
             print(paramString)
@@ -177,12 +192,16 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                     let name    = json["name"] as? String
                     
                     DispatchQueue.main.async {
+                        // Login Chatting
+                        self.handelLogIn()
                         
                         let email    = self.textLoginUsername.text!
                         let apiKey = keyJson
                         self.keyToken = keyJson!
                         self.defaults.set(apiKey, forKey: "SavedApiKey")
-                        self.defaults.set(name, forKey: "name")
+                        self.defaults.set(name, forKey: "userName")
+                        self.defaults.set(self.textLoginUsername.text, forKey: "userEmail")
+                        self.defaults.set(self.textLoginPassword.text, forKey: "userPass")
                         self.defaults.synchronize()
                         
                         AppsFlyerTracker.shared().trackEvent(AFEventLogin, withValues: [
@@ -200,11 +219,26 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                             appDelegate.window?.rootViewController = self.rootVC
                         }
                         
-                        self.textLoginPassword.text = ""
                         self.view.isUserInteractionEnabled = true
                         self.messageFrame.removeFromSuperview()
                         self.activityIndicator.stopAnimating()
                         self.refreshControl.endRefreshing()
+                    }
+                    
+                } else if (json["response"] as? String) != nil {
+                    
+                    let jsonResponse = json["response"] as? String
+                    
+                    DispatchQueue.main.async {
+                        
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                        
+                        let alert = UIAlertController (title: "Information", message: jsonResponse, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
                     }
                     
                 } else {
@@ -216,24 +250,19 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                         self.activityIndicator.stopAnimating()
                         self.refreshControl.endRefreshing()
                         
-                        let alert = UIAlertController (title: "Information", message: "Login Failed.", preferredStyle: .alert)
+                        let alert = UIAlertController (title: "Information", message: "Login invalid, please cek username and password", preferredStyle: .alert)
                         alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
                         self.present(alert, animated: true, completion: nil)
-                        
                     }
-                    
                 }
-                
             }
             task.resume()
         }
-        
     }
     
     func sign(inWillDispatch signIn: GIDSignIn!, error: Error!) {
         refreshControl.endRefreshing()
         activityIndicator.removeFromSuperview()
-        
     }
     
     // Present a view that prompts the user to sign in with Google
@@ -267,7 +296,6 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(skipLogin)
         
         // Google Sign In
         GIDSignIn.sharedInstance().uiDelegate = self
@@ -358,5 +386,6 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
         self.textLoginPassword.layer.cornerRadius = CGFloat(Float(5.0))
         // Button Login Sosmed
         buttonLoginFBAct.layer.cornerRadius = 8
+        buttonGoogleAct.layer.cornerRadius = 8
     }
 }

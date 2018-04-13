@@ -26,6 +26,13 @@ class UltraKlinAccountView: UIViewController {
             
             let defaults = UserDefaults.standard
             
+            // Sign Out Chat
+            do {
+                try Auth.auth().signOut()
+            } catch let logoutError {
+                print("Chatting sign out : \(logoutError)")
+            }
+            
             // Google Sign Out
             GIDSignIn.sharedInstance().signOut()
             

@@ -146,8 +146,6 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
         labelTotalPerPiece.text = String(dTotalPiece!)
         labelTotalPerKilos.text = String(dTotalKilos!)
         labelTotalFix.text = String(dTotalAll!)
-        
-        
     }
     
     func booking_Laundry_Ready() {
@@ -226,7 +224,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
                     valitem.removeAll()
                 }
                 let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))
-                paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry Pieces & Kilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&estimateWeight=" + labelHowManyKilos.text! +  "&listKiloan=" + labelHowManyCloth.text! + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
+                paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry PiecesKilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&estimateWeight=" + labelHowManyKilos.text! +  "&listKiloan=" + labelHowManyCloth.text! + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
             } else {
                 AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
                     "Laundry Pieces" : "Laundry Pieces"
