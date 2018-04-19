@@ -50,6 +50,7 @@
 		5FB0F73220458171007CE83C /* UltraKlinLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0F73120458171007CE83C /* UltraKlinLogin.swift */; };
 		5FB6DA89206AB44F00E25B1B /* AppRatingLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5FB6DA87206AB44F00E25B1B /* AppRatingLocalizable.strings */; };
 		5FC37C962047BD680086E500 /* UltraKlinTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */; };
+		5FEC70832080A53F00C63F05 /* UltraKlinDetailOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEC70822080A53F00C63F05 /* UltraKlinDetailOrder.swift */; };
 		5FEF535A2074FAF100E926D7 /* LocationPicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53412074FA3400E926D7 /* LocationPicker.framework */; };
 		5FEF535B2074FAF100E926D7 /* LocationPicker.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53412074FA3400E926D7 /* LocationPicker.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5FEF535E2074FAF600E926D7 /* AppRating.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FEF53492074FA3E00E926D7 /* AppRating.framework */; };
@@ -213,6 +214,7 @@
 		5FB0F73120458171007CE83C /* UltraKlinLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLogin.swift; sourceTree = "<group>"; };
 		5FB6DA88206AB44F00E25B1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "AppRating-master/Localization/en.lproj/AppRatingLocalizable.strings"; sourceTree = "<group>"; };
 		5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinTabBarView.swift; sourceTree = "<group>"; };
+		5FEC70822080A53F00C63F05 /* UltraKlinDetailOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinDetailOrder.swift; sourceTree = "<group>"; };
 		5FEF533C2074FA3400E926D7 /* LocationPicker.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = LocationPicker.xcodeproj; sourceTree = "<group>"; };
 		5FEF53422074FA3E00E926D7 /* AppRating.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AppRating.xcodeproj; path = "AppRating-master/AppRating.xcodeproj"; sourceTree = "<group>"; };
 		5FEF534E2074FA4C00E926D7 /* SirenExample.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SirenExample.xcodeproj; path = SirenExample/SirenExample.xcodeproj; sourceTree = "<group>"; };
@@ -368,11 +370,12 @@
 				5F0C90902043AAD500FDF94E /* UltraKlinCleaningDetail.swift */,
 				5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */,
 				5F54A4052060E78F007BEEDC /* UltraKlinLaundryDetail.swift */,
+				5FEC70822080A53F00C63F05 /* UltraKlinDetailOrder.swift */,
 				5FAFCB03203EE1930009F97B /* Main.storyboard */,
+				5FAFCB0B203EE1930009F97B /* LaunchScreen.storyboard */,
 				5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */,
 				5F24C2AD205FBC7B00CD5067 /* Reachability.swift */,
 				5F24C2AB205F9E6300CD5067 /* Config.swift */,
-				5FAFCB0B203EE1930009F97B /* LaunchScreen.storyboard */,
 				5F9998DB2052378600AC37FD /* GoogleService-Info.plist */,
 				5FAFCB0E203EE1930009F97B /* Info.plist */,
 				5FAFCB06203EE1930009F97B /* UltraKlin.xcdatamodeld */,
@@ -693,6 +696,7 @@
 				5F0C90912043AAD500FDF94E /* UltraKlinCleaningDetail.swift in Sources */,
 				5FFAFE64207BBB6E00AEC913 /* FSPageControl.swift in Sources */,
 				5FAFCB17203EED090009F97B /* UltraKlinHistoryView.swift in Sources */,
+				5FEC70832080A53F00C63F05 /* UltraKlinDetailOrder.swift in Sources */,
 				5FAC0F29207E89E200901541 /* LoginController.swift in Sources */,
 				5F24C2AC205F9E6300CD5067 /* Config.swift in Sources */,
 				5FAFCB15203EECC80009F97B /* UltraKlinHomeView.swift in Sources */,

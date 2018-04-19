@@ -64,7 +64,7 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
         self.pass    = textRegisPass.text!
         self.repeats = textRegisPassConfirm.text!
         
-        paramString  = "name=" + name + "&phone=" + phone + "&email=" + email + "&password=" + pass + "&password_confirmation=" + repeats + "&role=customer"
+        paramString  = "&name=" + name + "&phone=" + phone + "&email=" + email + "&password=" + pass + "&password_confirmation=" + repeats + "&role=customer"
         
         if (name == "" || phone == "" || email == "" || pass == "" || repeats == "" || pass.count < 6 || pass != repeats) {
             if name == "" {
@@ -134,6 +134,7 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
         let request = NSMutableURLRequest(url:url  as URL)
         
         request.httpMethod = "POST"
+        
         request.httpBody = paramString.data(using: String.Encoding.utf8)
         
         let task = session.dataTask(with: request as URLRequest) {
@@ -144,25 +145,54 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
                 return
             }
             
-            print("******* response register = \(String(describing: response))")
+            let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [String:AnyObject]
             
-            let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
-            
-            if (json["success"] as? String) != nil {
+            if let jerror = json["error"] as? [String:Array<String>] {
                 
-                let keyJson  = json["uk_token"] as? String
-                let name     = json["name"] as? String
+                let phoneError = jerror["phone"]
+                let emailError = jerror["email"]
                 
                 DispatchQueue.main.async() {
                     
-                    let email     = self.textRegisEmail.text!
-                    let apiKey = keyJson
-                    self.defaults.set(apiKey, forKey: "SavedApiKey")
-                    self.defaults.set(name, forKey: "name")
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                    if phoneError != nil {
+                        let alert = UIAlertController(title: "Information", message: "\n \(phoneError![0])", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    } else if emailError != nil {
+                        let alert = UIAlertController(title: "Information", message: "\n \(emailError![0])", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    } else {
+                        let alert = UIAlertController(title: "Information", message: "\n \(emailError![0]) \n \(phoneError![0])", preferredStyle: .alert)
+                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                }
+                
+            } else {
+                
+                let typeToken = json["token_type"] as? String
+                let expToken = json["expires_in"] as? String
+                let accToken = json["access_token"] as? String
+                let freshToken = json["refresh_token"] as? String
+                
+                DispatchQueue.main.async() {
+                    
+                    self.defaults.set(accToken, forKey: "SavedApiKey")
+                    self.defaults.set(freshToken, forKey: "RefreshApiKey")
+                    self.defaults.set(expToken, forKey: "ExpApiKey")
+                    self.defaults.set(typeToken, forKey: "TypeApiKey")
+                    
+                    self.defaults.set(self.textRegisEmail.text!, forKey: "userEmail")
+                    self.defaults.set(self.textRegisPass.text!, forKey: "userPass")
                     self.defaults.synchronize()
                     
                     AppsFlyerTracker.shared().trackEvent(AFEventParamRegistrationMethod, withValues: [
-                        AFEventParamRegistrationMethod : email,
+                        AFEventParamRegistrationMethod : self.textRegisEmail.text!,
                         ]);
                     
                     if self.skipRegis == "Regis" {
@@ -178,20 +208,6 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
                     self.messageFrame.removeFromSuperview()
                     self.activityIndicator.stopAnimating()
                     self.refreshControl.endRefreshing()
-                }
-                
-            } else {
-                
-                DispatchQueue.main.async() {
-                    
-                    self.view.isUserInteractionEnabled = true
-                    self.messageFrame.removeFromSuperview()
-                    self.activityIndicator.stopAnimating()
-                    self.refreshControl.endRefreshing()
-                    
-                    let alert = UIAlertController (title: "Information", message: "\n" + (json["response"] as? String)!, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
                 }
                 
             }

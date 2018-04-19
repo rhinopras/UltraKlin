@@ -18,7 +18,10 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
     
     let defaults = UserDefaults.standard
     
-    var listChoose = [MyChoose]()
+    var listChoose : [MyChoose] = []
+    var kilosChoose : [MyKilos] = []
+    var cleanChoose : [package_cleaning] = []
+    
     var paramOrderDetail : String?
     var nameType = ""
     var itemParam = [AnyObject]()
@@ -28,7 +31,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
     var manyKilosCloth : String?
     
     // Payment
-    var dPromoCode : String?
+    var dTotalCleanLD : Int = 0
     var dTotalPiece : Int?
     var dTotalKilos : Int?
     var dTotalAll : Int?
@@ -51,7 +54,6 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var labelFragrance: UILabel!
     // Per Kilos
     @IBOutlet weak var labelHowManyKilos: UILabel!
-    @IBOutlet weak var labelHowManyCloth: UILabel!
     // Tabel Per Piece
     @IBOutlet weak var tableListPieceItem: UITableView!
     // Additional Information
@@ -59,56 +61,12 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var labelTimePickup: UILabel!
     @IBOutlet weak var labelDateDeliver: UILabel!
     @IBOutlet weak var labelTimeDeliver: UILabel!
-    // Location
-    @IBOutlet weak var labelLocationSelected: UILabel!
     // Detail Payment
-    @IBOutlet weak var labelPromoCode: UILabel!
     @IBOutlet weak var labelTotalPerPiece: UILabel!
     @IBOutlet weak var labelTotalPerKilos: UILabel!
-    @IBOutlet weak var labelTotalFix: UILabel!
     
     @IBAction func buttonBookLaundry(_ sender: Any) {
-        if defaults.object(forKey: "SavedApiKey") == nil && defaults.object(forKey: "SessionSosmes") == nil {
-            // User not yet login ======================
-            let alert = UIAlertController(title: "Login", message: "You must login first.", preferredStyle: .alert)
-            
-            let okAction = UIAlertAction(title: "Login", style: .default) {
-                (action) -> Void in
-                // Login
-                let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin
-                myVC.skipLogin = "Login"
-                myVC.hiddenActLogin = true
-                self.navigationController?.pushViewController(myVC, animated: true)
-            }
-            let cancelAction = UIAlertAction(title: "Register", style: .default) {
-                UIAlertAction in
-                // Register
-                let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinRegistration") as! UltraKlinRegistration
-                myVC.skipRegis = "Regis"
-                myVC.hiddenActRegis = true
-                self.navigationController?.pushViewController(myVC, animated: true)
-            }
-            alert.addAction(cancelAction)
-            alert.addAction(okAction)
-            self.present(alert, animated: true, completion: nil)
-        } else {
-            let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
-            
-            let okAction = UIAlertAction(title: "Order", style: .default) {
-                (action) -> Void in
-                // READY FOR BOOKING ==========
-                self.loadingData()
-                self.paramOrderLaundry()
-                self.booking_Laundry_Ready()
-            }
-            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
-                UIAlertAction in
-                NSLog("Cancel Pressed")
-            }
-            alert.addAction(cancelAction)
-            alert.addAction(okAction)
-            self.present(alert, animated: true, completion: nil)
-        }
+        self.performSegue(withIdentifier: "segueDetailOrderLaundry", sender: self)
     }
     
     override func viewDidLoad() {
@@ -121,7 +79,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
         
         if listChoose.count > 2 {
             for _ in 2..<listChoose.count{
-                constraintListPiece.constant += 44
+                constraintListPiece.constant += 31
             }
         }
         
@@ -133,25 +91,35 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
         labelFragrance.text = (UserDefaults.standard.string(forKey: "fragrance"))
         // Per Kilos
         labelHowManyKilos.text = manyKilos
-        labelHowManyCloth.text = manyKilosCloth
         // Additional Information
         labelDatePickup.text = (UserDefaults.standard.string(forKey: "date_pickup"))
         labelTimePickup.text = (UserDefaults.standard.string(forKey: "time_pickup"))
         labelDateDeliver.text = (UserDefaults.standard.string(forKey: "date_deliver"))
         labelTimeDeliver.text = (UserDefaults.standard.string(forKey: "time_deliver"))
-        // Location
-        labelLocationSelected.text = (UserDefaults.standard.string(forKey: "address"))
         // Payment
-        labelPromoCode.text = dPromoCode
         labelTotalPerPiece.text = String(dTotalPiece!)
         labelTotalPerKilos.text = String(dTotalKilos!)
-        labelTotalFix.text = String(dTotalAll!)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print(segue.identifier as Any)
+        if segue.identifier == "segueDetailOrderLaundry" {
+            let detail = segue.destination as! UltraKlinDetailOrder
+            // Total Price
+            detail.totalKilos = dTotalKilos!
+            detail.totalPiece = dTotalPiece!
+            detail.totalClean = dTotalCleanLD
+            // Array
+            detail.paramTempKilos = kilosChoose
+            detail.paramTempPiece = listChoose
+            detail.paramTempClean = cleanChoose
+        }
     }
     
     func booking_Laundry_Ready() {
         var rootVC : UIViewController?
         
-        let url = NSURL(string: Config().URL_Laundry_Order)!
+        let url = NSURL(string: Config().URL_Order)!
         let session = URLSession.shared
         
         let request = NSMutableURLRequest(url: url as URL)
@@ -217,14 +185,13 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
                 for i in 0..<listChoose.count{
                     var valitem = ""
                     let kutip = "\""
-                    valitem = "{" + kutip + "satuan_name" + kutip + ":" + kutip + "\(self.listChoose[i].satuan_name)" + kutip + "," + kutip + "satuan_value" + kutip + ":" + "\(self.listChoose[i].satuan_value)" + "," + kutip + "satuan_price" + kutip + ":" + "\(self.listChoose[i].satuan_price)" + "}"
-                    print(i+1)
+                    valitem = "{" + kutip + "id" + kutip + ":" + kutip + "\(self.listChoose[i].id)" + kutip + "," + kutip + "quantity" + kutip + ":" + "\(self.listChoose[i].qty)" + "}"
                     itemParam.append(valitem as AnyObject)
                     print(itemParam)
                     valitem.removeAll()
                 }
                 let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))
-                paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry PiecesKilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&estimateWeight=" + labelHowManyKilos.text! +  "&listKiloan=" + labelHowManyCloth.text! + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
+                paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry PiecesKilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&estimateWeight=" + labelHowManyKilos.text! +  "&listKiloan=" + labelHowManyKilos.text! + "&promo=&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
             } else {
                 AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
                     "Laundry Pieces" : "Laundry Pieces"
@@ -234,14 +201,13 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
                 for i in 0..<listChoose.count{
                     var valitem = ""
                     let kutip = "\""
-                    valitem = "{" + kutip + "satuan_name" + kutip + ":" + kutip + "\(self.listChoose[i].satuan_name)" + kutip + "," + kutip + "satuan_value" + kutip + ":" + "\(self.listChoose[i].satuan_value)" + "," + kutip + "satuan_price" + kutip + ":" + "\(self.listChoose[i].satuan_price)" + "}"
-                    print(i+1)
+                    valitem = "{" + kutip + "id" + kutip + ":" + kutip + "\(self.listChoose[i].id)" + kutip + "," + kutip + "quantity" + kutip + ":" + "\(self.listChoose[i].qty)" + "}"
                     itemParam.append(valitem as AnyObject)
                     print(itemParam)
                     valitem.removeAll()
                 }
                 let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))
-                paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry Pieces" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
+                paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry Pieces" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&listSatuan=\(itemParam)" + "&promo=&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
                 
             }
         } else {
@@ -250,7 +216,7 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
                 ]);
             // Parameter ON KILOS =========================================
             let apiKey = (UserDefaults.standard.string(forKey: "SavedApiKey"))
-            paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry Kilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=" + labelLocationSelected.text! + "&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&estimateWeight=" + labelHowManyKilos.text! + "&listKiloan=" + labelHowManyCloth.text! + "&promo=" + labelPromoCode.text! + "&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
+            paramOrderDetail = "&apiKey=" + apiKey! + "&name=Laundry Kilos" + "&date_pickup=" + labelDatePickup.text! + "&time_pickup=" + labelTimePickup.text! + "&address=&services=" + labelService.text! + "&fragrance=" + labelFragrance.text! + "&estimateWeight=" + labelHowManyKilos.text! + "&listKiloan=" + labelHowManyKilos.text! + "&promo=&os=IOS" + "&version=" + String(Bundle.main.releaseVersionNumber!)
         }
     }
     
@@ -283,8 +249,8 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemDetailLaundry", for: indexPath) as! UltraKlinLaundryDetailTableCell
-        cell.labelNameItem.text = listChoose[indexPath.row].satuan_name + " " + String(listChoose[indexPath.row].satuan_price)
-        cell.labelValueItem.text = String(listChoose[indexPath.row].satuan_value)
+        cell.labelNameItem.text = listChoose[indexPath.row].name + " " + String(listChoose[indexPath.row].price)
+        cell.labelValueItem.text = String(listChoose[indexPath.row].qty)
         return cell
     }
     

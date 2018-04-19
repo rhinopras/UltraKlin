@@ -13,6 +13,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
+import DeviceCheck
 
 class CustomUITextField: UITextField {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
@@ -48,7 +49,6 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
     var loadImage = "Load"
     var imageList : [UIImage] = []
     var list : Int = 0
-    var index = 0
     let animationDuration: TimeInterval = 0.25
     var switchingInterval: TimeInterval = 3
     
@@ -62,20 +62,20 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
     @IBOutlet weak var labelCleaning: UILabel!
     
     @IBAction func itemNavChat(_ sender: Any) {
-        loadingData()
-        let chartPartnerId = "xjtgdM5yfCTEKYt4iPF1WieaJW23"
-        let ref = Database.database().reference().child("users").child(chartPartnerId)
-        ref.observeSingleEvent(of: .value, with: { (snapshot) in
-            guard let dictionary = snapshot.value as? [String: AnyObject] else {
-                return
-            }
-            let user = Person()
-            user.id = chartPartnerId
-            user.name = dictionary["name"] as? String
-            user.email = dictionary["email"] as? String
-            user.profileImageUrl = dictionary["profileImageUrl"] as? String
-            self.showChatControllerForUser(user: user)
-        }, withCancel: nil)
+//        loadingData()
+//        let chartPartnerId = "xjtgdM5yfCTEKYt4iPF1WieaJW23"
+//        let ref = Database.database().reference().child("users").child(chartPartnerId)
+//        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+//            guard let dictionary = snapshot.value as? [String: AnyObject] else {
+//                return
+//            }
+//            let user = Person()
+//            user.id = chartPartnerId
+//            user.name = dictionary["name"] as? String
+//            user.email = dictionary["email"] as? String
+//            user.profileImageUrl = dictionary["profileImageUrl"] as? String
+//            self.showChatControllerForUser(user: user)
+//        }, withCancel: nil)
     }
     
     func showChatControllerForUser(user: Person) {
@@ -109,6 +109,7 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
     
     func pagerView(_ pagerView: FSPagerView, cellForItemAt index: Int) -> FSPagerViewCell {
         let cell = pagerView.dequeueReusableCell(withReuseIdentifier: "cell", at: index)
+        //cell.imageView?.image = UIImage(named: self.urlImages[index])
         cell.imageView?.image = self.imageList[index]
         cell.imageView?.contentMode = .scaleToFill
         //cell.imageView?.clipsToBounds = true
@@ -285,16 +286,21 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
                             let itemName = (listImageAdd as AnyObject)["name"] as! String
                             let itemFile = (listImageAdd as AnyObject)["file"] as! String
                             
-                            self.urlImages.append(itemFile)
+                            self.urlImages.append("\(Config().URL_Banner_show)\(Int(self.view.frame.width))/\(itemFile)")
                             self.nameImages.append(itemName)
                             self.imageList.append(#imageLiteral(resourceName: "ImageLoading"))
                         }
-                        self.pagerView.automaticSlidingInterval = 7.0
+                        
+                        for i in 0..<self.urlImages.count{
+                            self.downloadImage(url: URL(string: self.urlImages[i])!)
+                        }
+                        
+                        self.pagerView.automaticSlidingInterval = 5.0
                         self.pagerView.isInfinite = self.pagerView.isInfinite
                         self.pageControl.numberOfPages = self.urlImages.count
                         
                         //self.controlSlide.numberOfPages = self.urlImages.count
-                        self.animateImageView()
+                        //self.animateImageView()
                     }
                 }
             }
@@ -327,8 +333,7 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
         //imageSlide.layer.add(transition, forKey: kCATransition)
         if list != imageList.count {
             print("Begin of code")
-            if let url = URL(string: Config().URL_Banner_show + "\(Int(view.frame.width))/" + urlImages[index]) {
-                //imageSlide.contentMode = .scaleToFill
+            if let url = URL(string: Config().URL_Banner_show + "\(Int(view.frame.width))/" + urlImages[0]) {
                 downloadImage(url: url)
             }
             list += 1
@@ -340,7 +345,7 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
 //        controlSlide.currentPage = index
         
         CATransaction.commit()
-        index = index < imageList.count - 1 ? index + 1 : 0
+        //index = index < imageList.count - 1 ? index + 1 : 0
     }
     
 //    @objc func swipedTouch(gesture : UIGestureRecognizer) {

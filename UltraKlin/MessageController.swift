@@ -236,7 +236,6 @@ class MessageController: UITableViewController {
         
         let user = Person()
         user.id = chartPartnerId
-        //user.setValuesForKeys(dictionary)
         user.name = dictionary["name"] as? String
         user.email = dictionary["email"] as? String
         user.profileImageUrl = dictionary["profileImageUrl"] as? String

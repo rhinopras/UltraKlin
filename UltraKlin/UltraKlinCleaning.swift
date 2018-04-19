@@ -7,47 +7,8 @@
 //
 
 import UIKit
-import LocationPicker
 import CoreLocation
-import MapKit
 import Foundation
-
-extension UIButton {
-    func pulsate() {
-        let pulse = CASpringAnimation(keyPath: "transform.scale")
-        pulse.duration = 0.3
-        pulse.fromValue = 0.95
-        pulse.toValue = 1.0
-        pulse.autoreverses = true
-        pulse.repeatCount = 1
-        pulse.initialVelocity = 0.35
-        pulse.damping = 0.5
-        layer.add(pulse, forKey: "pulse")
-    }
-    func flash() {
-        let flash = CABasicAnimation(keyPath: "opacity")
-        flash.duration = 0.5
-        flash.fromValue = 1
-        flash.toValue = 0.1
-        flash.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        flash.autoreverses = true
-        flash.repeatCount = 3
-        layer.add(flash, forKey: nil)
-    }
-    func shake() {
-        let shake = CABasicAnimation(keyPath: "position")
-        shake.duration = 0.1
-        shake.repeatCount = 2
-        shake.autoreverses = true
-        let fromPoint = CGPoint(x: center.x - 5, y: center.y)
-        let fromValue = NSValue(cgPoint: fromPoint)
-        let toPoint = CGPoint(x: center.x + 5, y: center.y)
-        let toValue = NSValue(cgPoint: toPoint)
-        shake.fromValue = fromValue
-        shake.toValue = toValue
-        layer.add(shake, forKey: "position")
-    }
-}
 
 extension UIView {
     // Border Bottom
@@ -59,7 +20,19 @@ extension UIView {
     }
 }
 
+struct package_cleaning {
+    var id : Int?
+    var name : String?
+    var price : String?
+    var qty : Int?
+}
+
 class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
+    
+    // Package Cleaning
+    var cleaning_dimanis : [package_cleaning] = []
+    var kilos_dinamis : [MyKilos] = []
+    var piece_dinamis : [MyChoose] = []
     
     // Time Picker
     var timePickerView = UIPickerView()
@@ -92,12 +65,17 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     var totalJam       : Float = 0
     var jam            = ""
     var address        = ""
-    var total          : Int = 0
+    
+    // Total Price
+    var total       : Int = 0
+    var totalPieceC : Int = 0
+    var totalKilosC : Int = 0
+    
     var amountBed      = ""
     var amountBath     = ""
     var amountOther    = ""
     var promo          = ""
-    var paramString    = ""
+    var paramString = [String]()
     var totalFix       : Int = 0
     var estPrice       : Int = 0
     
@@ -137,7 +115,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var textTypePlace: CustomUITextField!
     @IBOutlet weak var textMyDate: CustomUITextField!
     @IBOutlet weak var textMyTime: CustomUITextField!
-    @IBOutlet weak var textPromoCode: CustomUITextField!
     
     // Scroll View
     @IBOutlet weak var scrollViewCleaning: UIScrollView!
@@ -145,12 +122,9 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     // View
     @IBOutlet weak var viewRoomType: UIView!
     @IBOutlet weak var viewAditional: UIView!
-    @IBOutlet weak var viewDestinational: UIView!
-    @IBOutlet weak var viewPromoCode: UIView!
     @IBOutlet weak var viewNextButtom: UIView!
     
     // Button
-    @IBOutlet weak var buttonPromoCode: UIButton!
     @IBOutlet weak var buttonNextAnimation: UIButton!
     
     // Segment
@@ -176,10 +150,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func buttonPromoCode(_ sender: Any) {
-        promoCleaningButton()
-    }
-    
     @IBAction func buttonPlusAddCSO(_ sender: Any) {
         if (total < 100000) {
             self.view.isUserInteractionEnabled = true
@@ -196,7 +166,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                 resultAddCSO = self.firstNumber + 1
             }
             labelAddCSO.text = "\(resultAddCSO)"
-            total = (totalBath + totalBed + totalOther) * resultAddCSO
+            total = (Int(cleaning_dimanis[0].price!)! + Int(cleaning_dimanis[1].price!)! + Int(cleaning_dimanis[2].price!)!) * resultAddCSO
             estPrice = total
             labelEstimatedPrices.text = String(estPrice)
         }
@@ -220,14 +190,14 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         isTypingNumber = false
         firstNumber    = Int(labelTypeBathroom.text!)!
         if Int(labelTypeBathroom.text!)! >= 0 {
-            resultBath = self.firstNumber + 1
+            cleaning_dimanis[0].qty = self.firstNumber + 1
         }
-        labelTypeBathroom.text = "\(resultBath)"
-        totalBath = resultBath * hargaBath
+        labelTypeBathroom.text! = String(cleaning_dimanis[0].qty!)
+        totalBath = cleaning_dimanis[0].qty! * Int(cleaning_dimanis[0].price!)!
         total = (totalBath + totalBed + totalOther) * resultAddCSO
         estPrice = total
         labelEstimatedPrices.text = String(estPrice)
-        totalJam = Float(resultBed + resultBath + resultOther) * 0.5
+        totalJam = Float(cleaning_dimanis[0].qty! + cleaning_dimanis[1].qty! + cleaning_dimanis[2].qty!) * 0.5
         labelEstimatedTime.text = "\(Float(totalJam))"+" "+"Hours"
     }
     
@@ -237,14 +207,14 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         if Int(labelTypeBathroom.text!)! == 0 {
             
         } else {
-            resultBath = self.firstNumber - 1
+            cleaning_dimanis[0].qty = self.firstNumber - 1
         }
-        labelTypeBathroom.text = "\(resultBath)"
-        totalBath = resultBath * hargaBath
+        labelTypeBathroom.text! = String(cleaning_dimanis[0].qty!)
+        totalBath = cleaning_dimanis[0].qty! * Int(cleaning_dimanis[0].price!)!
         total = (totalBath + totalBed + totalOther) * resultAddCSO
         estPrice = total
         labelEstimatedPrices.text = String(estPrice)
-        totalJam = Float(resultBed + resultBath + resultOther) * 0.5
+        totalJam = Float(cleaning_dimanis[0].qty! + cleaning_dimanis[1].qty! + cleaning_dimanis[2].qty!) * 0.5
         labelEstimatedTime.text = "\(Float(totalJam))"+" "+"Hours"
     }
     
@@ -252,14 +222,14 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         isTypingNumber = false
         firstNumber    = Int(labelTypeBedroom.text!)!
         if Int(labelTypeBedroom.text!)! >= 0 {
-            resultBed = self.firstNumber + 1
+            cleaning_dimanis[1].qty = self.firstNumber + 1
         }
-        labelTypeBedroom.text = "\(resultBed)"
-        totalBed = resultBed * hargaBed
+        labelTypeBedroom.text! = String(cleaning_dimanis[1].qty!)
+        totalBed = cleaning_dimanis[1].qty! * Int(cleaning_dimanis[1].price!)!
         total = (totalBath + totalBed + totalOther) * resultAddCSO
         estPrice = total
         labelEstimatedPrices.text = String(estPrice)
-        totalJam = Float(resultBed + resultBath + resultOther) * 0.5
+        totalJam = Float(cleaning_dimanis[0].qty! + cleaning_dimanis[1].qty! + cleaning_dimanis[2].qty!) * 0.5
         labelEstimatedTime.text = "\(Float(totalJam))"+" "+"Hours"
     }
     
@@ -269,14 +239,14 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         if Int(labelTypeBedroom.text!)! == 0 {
             
         } else {
-            resultBed = self.firstNumber - 1
+            cleaning_dimanis[1].qty = self.firstNumber - 1
         }
-        labelTypeBedroom.text = "\(resultBed)"
-        totalBed = resultBed * hargaBed
+        labelTypeBedroom.text! = String(cleaning_dimanis[1].qty!)
+        totalBed = cleaning_dimanis[1].qty! * Int(cleaning_dimanis[1].price!)!
         total = (totalBath + totalBed + totalOther) * resultAddCSO
         estPrice = total
         labelEstimatedPrices.text = String(estPrice)
-        totalJam = Float(resultBed + resultBath + resultOther) * 0.5
+        totalJam = Float(cleaning_dimanis[0].qty! + cleaning_dimanis[1].qty! + cleaning_dimanis[2].qty!) * 0.5
         labelEstimatedTime.text = "\(Float(totalJam))"+" "+"Hours"
     }
     
@@ -284,14 +254,14 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         isTypingNumber = false
         firstNumber    = Int(labelTypeOtherroom.text!)!
         if Int(labelTypeOtherroom.text!)! >= 0 {
-            resultOther = self.firstNumber + 1
+            cleaning_dimanis[2].qty = self.firstNumber + 1
         }
-        labelTypeOtherroom.text = "\(resultOther)"
-        totalOther = resultOther * hargaOther
+        labelTypeOtherroom.text! = String(cleaning_dimanis[2].qty!)
+        totalOther = cleaning_dimanis[2].qty! * Int(cleaning_dimanis[2].price!)!
         total = (totalBath + totalBed + totalOther) * resultAddCSO
         estPrice = total
         labelEstimatedPrices.text = String(estPrice)
-        totalJam = Float(resultBed + resultBath + resultOther) * 0.5
+        totalJam = Float(cleaning_dimanis[0].qty! + cleaning_dimanis[1].qty! + cleaning_dimanis[2].qty!) * 0.5
         labelEstimatedTime.text = "\(Float(totalJam))"+" "+"Hours"
     }
     
@@ -301,29 +271,27 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         if Int(labelTypeOtherroom.text!)! == 0 {
             
         } else {
-            resultOther = self.firstNumber - 1
+            cleaning_dimanis[2].qty = self.firstNumber - 1
         }
-        labelTypeOtherroom.text = "\(resultOther)"
-        totalOther = resultOther * hargaOther
+        labelTypeOtherroom.text! = String(cleaning_dimanis[2].qty!)
+        totalOther = cleaning_dimanis[2].qty! * Int(cleaning_dimanis[2].price!)!
         total = (totalBath + totalBed + totalOther) * resultAddCSO
         estPrice = total
         labelEstimatedPrices.text = String(estPrice)
-        totalJam = Float(resultBed + resultBath + resultOther) * 0.5
+        totalJam = Float(cleaning_dimanis[0].qty! + cleaning_dimanis[1].qty! + cleaning_dimanis[2].qty!) * 0.5
         labelEstimatedTime.text = "\(Float(totalJam))"+" "+"Hours"
     }
     
     @IBAction func buttonCleaningNext(_ sender: Any) {
+        
+        let defaults = UserDefaults.standard
+        
         self.jam         = String(totalJam)
         self.amountBath  = String(resultBath)
         self.amountBed   = String(resultBed)
         self.amountOther = String(resultOther)
         let pDate        = self.textMyDate.text
         let pTime        = self.textMyTime.text
-        promo            = textPromoCode.text!
-        
-        let defaults = UserDefaults.standard
-        
-        totalFix = total
         
         if (pDate == "" || pTime == "") {
             let alert = UIAlertController (title: "Date and Time", message: "Date and Time are required", preferredStyle: .alert)
@@ -410,143 +378,108 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                 alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
                 self.present(alert, animated: true, completion: nil)
                 
-            } else if labelPickerPlaces.text == "No location selected" {
-                
-                let alert = UIAlertController (title: "Deliver Place", message: "Please select your location.", preferredStyle: .alert)
-                alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
-                
             } else {
-                if textPromoCode.text == "" {
-                    self.performSegue(withIdentifier: "informationComplate", sender: self)
-                } else {
-                    loadingData()
-                    print("******* ada promo")
-                    
-                    paramString = "&total=" + String(total) + "&amount_bath=" + labelTypeBathroom.text! + "&amount_bed=" + labelTypeBedroom.text! + "&amount_other=" + labelTypeOtherroom.text! + "&date=" + textMyDate.text! + "&time=" + textMyTime.text! + "&promo=" + textPromoCode.text! + "&name=Cleaning Service"
-                    
-                    let url = NSURL(string: Config().URL_Cleaning_Promo)!
-                    let session = URLSession.shared
-                    
-                    let request = NSMutableURLRequest(url: url as URL)
-                    
-                    request.httpMethod = "POST"
-                    request.httpBody = paramString.data(using: String.Encoding.utf8)
-                    print(paramString)
-                    
-                    let task = session.dataTask(with: request as URLRequest) {
-                        data, response, error in
-                        
-                        let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
-                        
-                        if let dataJson = json["error"] as? String {
-                            
-                            print("******* response checking = \(dataJson)")
-                            let alert = UIAlertController (title: "Information", message: dataJson, preferredStyle: .alert)
-                            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                            self.present(alert, animated: true, completion: nil)
-                            
-                            DispatchQueue.main.async() {
-                                self.view.isUserInteractionEnabled = true
-                                self.messageFrame.removeFromSuperview()
-                                self.activityIndicator.stopAnimating()
-                                self.refreshControl.endRefreshing()
-                            }
-                            
-                        } else {
-                            
-                            let code      = json["promo"] as! String
-                            let totalInt     = json["Total Payment"] as! Int
-                            
-                            DispatchQueue.main.async() {
-                                
-                                self.promo = code
-                                self.totalFix = totalInt
-                                self.estPrice = self.totalFix
-                                self.labelEstimatedPrices.text = String(self.estPrice)
-                                defaults.set(self.totalFix, forKey: "total")
-                                
-                                self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
-                                self.textPromoCode.textColor = UIColor.white
-                                
-                                self.view.isUserInteractionEnabled = true
-                                self.messageFrame.removeFromSuperview()
-                                self.activityIndicator.stopAnimating()
-                                self.refreshControl.endRefreshing()
-                                
-                                self.performSegue(withIdentifier: "informationComplate", sender: self)
-                            }
-                        }
-                        print("******* response = \(data!)")
-                    }
-                    task.resume()
-                }
+                defaults.set(amountBath, forKey: "clean_amount_bath")
+                defaults.set(amountBed, forKey: "clean_amount_bed")
+                defaults.set(amountOther, forKey: "clean_amount_other")
+                defaults.set(pDate!, forKey: "clean_Date")
+                defaults.set(pTime!, forKey: "clean_Time")
+                defaults.set(selectPlaces, forKey: "clean_building")
+                defaults.set(chooceCSO, forKey: "clean_gender")
+                defaults.set(chooceHavePet, forKey: "clean_pet")
+                defaults.set(jam, forKey: "clean_estTime")
+                defaults.set(resultAddCSO, forKey: "clean_qtyCSO")
+                
+                self.performSegue(withIdentifier: "informationComplate", sender: self)
             }
         }
         
-        defaults.set(amountBath, forKey: "amount_bath")
-        defaults.set(amountBed, forKey: "amount_bed")
-        defaults.set(amountOther, forKey: "amount_other")
-        defaults.set(pDate!, forKey: "date")
-        defaults.set(pTime!, forKey: "time")
-        defaults.set(promo, forKey: "code")
-        defaults.set(address, forKey: "address")
-        defaults.set(selectPlaces, forKey: "building")
-        defaults.set(chooceCSO, forKey: "gender")
-        defaults.set(chooceHavePet, forKey: "pet")
-        defaults.set(jam, forKey: "estimated")
-        defaults.set(total, forKey: "estimatedPrice")
-        defaults.set(resultAddCSO, forKey: "qtyCSO")
-        defaults.set(totalFix, forKey: "total")
-        defaults.synchronize()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("Kilos : \(totalKilosC) Piece : \(totalPieceC)")
+        dataDinamisRequestCleaning()
         buttonNextAnimation.isEnabled = true
-        self.textPromoCode.delegate = self
         self.viewLayoutCleaningStyle()
         self.pickerViewPlaces()
         self.createDatePicker()
         self.createTimePicker()
-        self.location = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         labelRoomType.addBottomBorderWithColor(color: UIColor.lightGray, width: 1)
         labelAditional.addBottomBorderWithColor(color: UIColor.lightGray, width: 1)
-        labelDestination.addBottomBorderWithColor(color: UIColor.lightGray, width: 1)
-        labelPromoCode.addBottomBorderWithColor(color: UIColor.lightGray, width: 1)
-    }
-    
-    var location: Location? {
-        didSet {
-            labelPickerPlaces.text = location.flatMap({ $0.title }) ?? "No location selected"
-            address = String(labelPickerPlaces.text!)
-        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print(segue.identifier as Any)
-        if segue.identifier == "LocationPickerCleaning" {
-            let locationPicker = segue.destination as! LocationPickerViewController
-            locationPicker.location = location
-            locationPicker.showCurrentLocationButton = true
-            locationPicker.useCurrentLocationAsHint = true
-            locationPicker.selectCurrentLocationInitially = true
-            locationPicker.completion = { self.location = $0 }
+        if segue.identifier == "informationComplate" {
+            let detail = segue.destination as! UltraKlinCleaningDetail
+            // Total Price
+            detail.totalClean = total
+            detail.totalKilosDC = totalKilosC
+            detail.totalPieceDC = totalPieceC
+            
+            detail.dataArrayClean = cleaning_dimanis
+            detail.dataArrayKilos = kilos_dinamis
+            detail.dataArrayPiece = piece_dinamis
+        }
+    }
+    
+    func dataDinamisRequestCleaning() {
+        // ======================= Date Reguler and Price Per Kilos =======================
+        if Reachability.isConnectedToNetwork() {
+            print("Internet Connection Available!")
+            let url = URL(string: Config().URL_Package_Cleaning)!
+            let session = URLSession.shared
+            
+            let request = NSMutableURLRequest(url: url)
+            
+            request.httpMethod = "GET"
+            
+            let task = session.dataTask(with: request as URLRequest) {
+                data, response, error in
+                
+                if error != nil {
+                    print("error\(String(describing: error))")
+                    return
+                }
+                do {
+                    if let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? Array<Any> {
+                        
+                        DispatchQueue.main.async {
+                            
+                            for addData in json {
+                                
+                                let id = (addData as AnyObject)["id"] as! Int
+                                let name = (addData as AnyObject)["name"] as! String
+                                let price = (addData as AnyObject)["price"] as! String
+                                
+                                self.cleaning_dimanis.append(package_cleaning(id: id, name: name, price: price, qty: 0))
+                            }
+                        }
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                    }
+                }
+            }
+            task.resume()
+        } else {
+            self.view.isUserInteractionEnabled = true
+            self.messageFrame.removeFromSuperview()
+            self.activityIndicator.stopAnimating()
+            self.refreshControl.endRefreshing()
+            print("Internet Connection not Available!")
         }
     }
     
     func promoCleaningButton() {
         let defaults = UserDefaults.standard
-        if textPromoCode.text == "" {
-            print("******* non promo")
-            let alert = UIAlertController (title: "Promo Code", message: "Please insert code promo.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        } else if(total < 100000) {
+        if(total < 100000) {
             let alert = UIAlertController (title: "Information", message: "Minimum order Rp 100.000", preferredStyle: .alert)
             alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -558,15 +491,15 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
             loadingData()
             print("******* ada promo")
                 
-            paramString = "&total=" + String(total) + "&amount_bath=" + labelTypeBathroom.text! + "&amount_bed=" + labelTypeBedroom.text! + "&amount_other=" + labelTypeOtherroom.text! + "&date=" + textMyDate.text! + "&time=" + textMyTime.text! + "&promo=" + textPromoCode.text! + "&name=Cleaning Service"
+            //paramString = "&total=" + String(total) + "&amount_bath=" + labelTypeBathroom.text! + "&amount_bed=" + labelTypeBedroom.text! + "&amount_other=" + labelTypeOtherroom.text! + "&date=" + textMyDate.text! + "&time=" + textMyTime.text! + "&promo=" + textPromoCode.text! + "&name=Cleaning Service"
                 
-            let url = NSURL(string: Config().URL_Cleaning_Promo)!
+            let url = NSURL(string: Config().URL_Promo)!
             let session = URLSession.shared
                 
             let request = NSMutableURLRequest(url: url as URL)
                 
             request.httpMethod = "POST"
-            request.httpBody = paramString.data(using: String.Encoding.utf8)
+            //request.httpBody = paramString.data(using: String.Encoding.utf8)
             print(paramString)
                 
             let task = session.dataTask(with: request as URLRequest) {
@@ -600,10 +533,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                         self.estPrice = self.totalFix
                         self.labelEstimatedPrices.text = String(self.estPrice)
                         defaults.set(self.totalFix, forKey: "total")
-                        
-                        self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
-                        self.textPromoCode.textColor = UIColor.white
-                        self.textPromoCode.isUserInteractionEnabled = false
                         
                         self.view.isUserInteractionEnabled = true
                         self.messageFrame.removeFromSuperview()
@@ -771,26 +700,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         viewAditional.layer.shadowOpacity = 1.0
         viewAditional.layer.shadowRadius = 5.0
         viewAditional.layer.masksToBounds = false
-        // Style Delivery to places
-        viewDestinational.backgroundColor = UIColor.white
-        viewDestinational.layer.cornerRadius = 10
-        viewDestinational.layer.borderWidth = 0
-        viewDestinational.layer.borderColor = UIColor.lightGray.cgColor
-        viewDestinational.layer.shadowColor = UIColor.lightGray.cgColor
-        viewDestinational.layer.shadowOffset = CGSize(width: 0, height: 0)
-        viewDestinational.layer.shadowOpacity = 1.0
-        viewDestinational.layer.shadowRadius = 5.0
-        viewDestinational.layer.masksToBounds = false
-        // Style Promo Code
-        viewPromoCode.backgroundColor = UIColor.white
-        viewPromoCode.layer.cornerRadius = 10
-        viewPromoCode.layer.borderWidth = 0
-        viewPromoCode.layer.borderColor = UIColor.lightGray.cgColor
-        viewPromoCode.layer.shadowColor = UIColor.lightGray.cgColor
-        viewPromoCode.layer.shadowOffset = CGSize(width: 0, height: 0)
-        viewPromoCode.layer.shadowOpacity = 1.0
-        viewPromoCode.layer.shadowRadius = 5.0
-        viewPromoCode.layer.masksToBounds = false
         // Style View Button Next
         viewNextButtom.layer.borderWidth = 1
         viewNextButtom.layer.borderColor = UIColor.lightGray.cgColor
@@ -798,38 +707,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
         viewNextButtom.layer.shadowOffset = CGSize(width: 0, height: -2)
         viewNextButtom.layer.shadowOpacity = 1.0
         viewNextButtom.layer.shadowRadius = 3
-        // Style TextField Promo
-        textPromoCode.layer.borderColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
-        textPromoCode.layer.borderWidth = CGFloat(Float(1.5))
-        textPromoCode.layer.cornerRadius = CGFloat(Float(5.0))
-    }
-    
-    func animateTextField(TextField: UITextField, up: Bool, withOffset offset:CGFloat) {
-        let movementDistance : Int = -Int(offset)
-        let movementDuration : Double = 0.25
-        let movement : Int = (up ? movementDistance : -movementDistance)
-        UIView.beginAnimations("animateTextField", context: nil)
-        UIView.setAnimationBeginsFromCurrentState(true)
-        UIView.setAnimationDuration(movementDuration)
-        self.view.frame = self.view.frame.offsetBy(dx: 0, dy: CGFloat(movement))
-        UIView.commitAnimations()
-    }
-
-    func textFieldDidBeginEditing(_ TextField: UITextField) {
-        self.animateTextField(TextField: TextField, up: true,
-                              withOffset: TextField.frame.origin.y / 0.37)
-    }
-
-    func textFieldDidEndEditing(_ TextField: UITextField) {
-        self.animateTextField(TextField: TextField, up: false,
-                              withOffset: TextField.frame.origin.y / 0.37)
-    }
-
-    func textFieldShouldReturn(_ TextField: UITextField) -> Bool {
-        if TextField == self.textPromoCode {
-            self.textPromoCode.resignFirstResponder()
-        }
-        return true
     }
 }
 

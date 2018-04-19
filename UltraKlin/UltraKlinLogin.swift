@@ -145,8 +145,6 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
     
     @IBAction func buttonLoginClick(_ sender: Any) {
         view.endEditing(true)
-        let auth = (UserDefaults.standard.string(forKey: "SavedApiKey"))
-        print(auth as Any)
         
         self.email       = textLoginUsername.text!
         self.password    = textLoginPassword.text!
@@ -165,13 +163,15 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
             }
         } else {
             self.loadingData()
-            print(paramString)
+            
             let url = NSURL(string: Config().URL_Login)!
             let session = URLSession.shared
             
             let request = NSMutableURLRequest(url:url as URL)
             
             request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
             request.httpBody = paramString.data(using: String.Encoding.utf8)
             
             let task = session.dataTask(with: request as URLRequest) {
@@ -182,30 +182,46 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                     return
                 }
                 
-                print("******* response register = \(String(describing: response))")
-                
                 let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
                 
-                if (json["success"] as? String) != nil {
+                if (json["error"] as? String) != nil {
                     
-                    let keyJson = json["uk_token"] as? String
-                    let name    = json["name"] as? String
+                    let jsonError = json["message"] as? String
+                    
+                    DispatchQueue.main.async {
+                        
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                        
+                        let alert = UIAlertController (title: "Information", message: jsonError, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
+                    
+                } else {
+                    
+                    let typeToken = json["token_type"] as? String
+                    let expToken = json["expires_in"] as? String
+                    let accToken = json["access_token"] as? String
+                    let freshToken = json["refresh_token"] as? String
                     
                     DispatchQueue.main.async {
                         // Login Chatting
-                        self.handelLogIn()
+                        //self.handelLogIn()
                         
-                        let email    = self.textLoginUsername.text!
-                        let apiKey = keyJson
-                        self.keyToken = keyJson!
-                        self.defaults.set(apiKey, forKey: "SavedApiKey")
-                        self.defaults.set(name, forKey: "userName")
+                        self.defaults.set(accToken, forKey: "SavedApiKey")
+                        self.defaults.set(freshToken, forKey: "RefreshApiKey")
+                        self.defaults.set(expToken, forKey: "ExpApiKey")
+                        self.defaults.set(typeToken, forKey: "TypeApiKey")
+                        
                         self.defaults.set(self.textLoginUsername.text, forKey: "userEmail")
                         self.defaults.set(self.textLoginPassword.text, forKey: "userPass")
                         self.defaults.synchronize()
                         
                         AppsFlyerTracker.shared().trackEvent(AFEventLogin, withValues: [
-                            AFEventLogin : email,
+                            AFEventLogin : self.textLoginUsername.text!,
                             ]);
                         
                         if self.skipLogin == "Login" {
@@ -223,36 +239,6 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                         self.messageFrame.removeFromSuperview()
                         self.activityIndicator.stopAnimating()
                         self.refreshControl.endRefreshing()
-                    }
-                    
-                } else if (json["response"] as? String) != nil {
-                    
-                    let jsonResponse = json["response"] as? String
-                    
-                    DispatchQueue.main.async {
-                        
-                        self.view.isUserInteractionEnabled = true
-                        self.messageFrame.removeFromSuperview()
-                        self.activityIndicator.stopAnimating()
-                        self.refreshControl.endRefreshing()
-                        
-                        let alert = UIAlertController (title: "Information", message: jsonResponse, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
-                    }
-                    
-                } else {
-                    
-                    DispatchQueue.main.async {
-                        
-                        self.view.isUserInteractionEnabled = true
-                        self.messageFrame.removeFromSuperview()
-                        self.activityIndicator.stopAnimating()
-                        self.refreshControl.endRefreshing()
-                        
-                        let alert = UIAlertController (title: "Information", message: "Login invalid, please cek username and password", preferredStyle: .alert)
-                        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                        self.present(alert, animated: true, completion: nil)
                     }
                 }
             }

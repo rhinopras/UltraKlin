@@ -25,11 +25,19 @@ class UltraKlinTableHistoryOrder : UITableViewCell {
     @IBOutlet weak var labelDate: UILabel!
 }
 
-class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     
     let auth = (UserDefaults.standard.string(forKey: "SavedApiKey"))
     
     var historyOrder : [MyHistory] = []
+    //var current_page : Int = 0
+    //var last_page : Int = 0
+    
+    var isDataLoading:Bool=false
+    var pageNo:Int=0
+    var limit:Int=0
+    var offset:Int=0 //pageNo*limit
+    var didEndReached:Bool=false
     
     // Refresh
     let messageFrame = UIView()
@@ -40,7 +48,7 @@ class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        dataRequestHistory()
+        
         tableHistoryOrderCustomers.delegate = self
         tableHistoryOrderCustomers.dataSource = self
         
@@ -53,11 +61,36 @@ class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        dataRequestHistory()
+        checkingSession()
         tableHistoryOrderCustomers.reloadData()
     }
     
-    internal func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        isDataLoading = false
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    }
+    //Pagination
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if ((tableHistoryOrderCustomers.contentOffset.y + tableHistoryOrderCustomers.frame.size.height) >= tableHistoryOrderCustomers.contentSize.height)
+        {
+            if pageNo == limit {
+                pageNo = 1
+                isDataLoading = true
+                dataRequestHistoryPage()
+            } else {
+                if !isDataLoading{
+                    isDataLoading = true
+                    self.pageNo=self.pageNo+1
+                    self.offset=self.limit * self.pageNo
+                    dataRequestHistoryPage()
+                }
+            }
+        }
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
     
@@ -71,21 +104,47 @@ class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDa
         cell.labelProduk.text = historyOrder[indexPath.row].produk
         cell.labelStatus.text = historyOrder[indexPath.row].status
         cell.labelDate.text = historyOrder[indexPath.row].date
-        cell.labelPrices.text = historyOrder[indexPath.row].total_price
+        cell.labelPrices.text = "Rp. " + historyOrder[indexPath.row].total_price
         return cell
     }
     
-    func dataRequestHistory() {
+    func checkingSession() {
+        let defaults = UserDefaults.standard
+        if defaults.object(forKey: "SavedApiKey") == nil {
+            // User not yet login ======================
+            let alert = UIAlertController(title: "Login", message: "You must login first.", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "Login", style: .default) {
+                (action) -> Void in
+                // Login
+                let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin
+                myVC.skipLogin = "Login"
+                myVC.hiddenActLogin = true
+                self.navigationController?.pushViewController(myVC, animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .default) {
+                UIAlertAction in
+            }
+            alert.addAction(cancelAction)
+            alert.addAction(okAction)
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            dataRequestHistory()
+        }
+    }
+    
+    func dataRequestHistoryPage() {
         loadingData()
         // ======================== Dinamis List Item Laundry =========================
         if Reachability.isConnectedToNetwork() {
             print("Internet Connection Available!")
-            let url = URL(string: Config().URL_History_Order + auth!)!
+            let url = URL(string: Config().URL_History + "?page=\(pageNo)")!
             let session = URLSession.shared
             
             let request = NSMutableURLRequest(url: url)
             
             request.httpMethod = "GET"
+            request.setValue("Bearer \(auth!)", forHTTPHeaderField: "Authorization")
             request.setValue("application/json", forHTTPHeaderField: "Accept")
             
             let task = session.dataTask(with: request as URLRequest) {
@@ -122,15 +181,97 @@ class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDa
                                 
                                 for listItemLaundry in jsonItemHistory {
                                     
-                                    let produk = (listItemLaundry as AnyObject)["produk"] as! String
+                                    let package_id = (listItemLaundry as AnyObject)["package_id"] as! String
+                                    let produk = (listItemLaundry as AnyObject)["code"] as! String
                                     let status = (listItemLaundry as AnyObject)["status"] as! String
                                     let date = (listItemLaundry as AnyObject)["date"] as! String
-                                    let total_price = (listItemLaundry as AnyObject)["total_price"] as! String
+                                    let total_price = (listItemLaundry as AnyObject)["total_price"] as! Int
                                     
-                                    if produk == "CLEANING" {
-                                        self.historyOrder.append(MyHistory(imageHistory:#imageLiteral(resourceName: "Cleaning"),produk: produk, status: status, date: date, total_price: total_price))
+                                    if package_id == "1" {
+                                        self.historyOrder.append(MyHistory(imageHistory:#imageLiteral(resourceName: "historyC"),produk: produk, status: status, date: date, total_price: String(total_price)))
                                     } else {
-                                        self.historyOrder.append(MyHistory(imageHistory:#imageLiteral(resourceName: "Laundry"),produk: produk, status: status, date: date, total_price: total_price))
+                                        self.historyOrder.append(MyHistory(imageHistory:#imageLiteral(resourceName: "historyL"),produk: produk, status: status, date: date, total_price: String(total_price)))
+                                    }
+                                }
+                                self.tableHistoryOrderCustomers.reloadData()
+                                // Stop Refresh ===============================
+                                self.view.isUserInteractionEnabled = true
+                                self.messageFrame.removeFromSuperview()
+                                self.activityIndicator.stopAnimating()
+                                self.refreshControl.endRefreshing()
+                            }
+                        }
+                    }
+                }
+            }
+            task.resume()
+        }
+        else {
+            print("Internet Connection not Available!")
+        }
+    }
+    
+    func dataRequestHistory() {
+        loadingData()
+        // ======================== Dinamis List Item Laundry =========================
+        if Reachability.isConnectedToNetwork() {
+            print("Internet Connection Available!")
+            let url = URL(string: Config().URL_History)!
+            let session = URLSession.shared
+            
+            let request = NSMutableURLRequest(url: url)
+            
+            request.httpMethod = "GET"
+            request.setValue("Bearer \(auth!)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            let task = session.dataTask(with: request as URLRequest) {
+                data, response, error in
+                
+                if error != nil {
+                    print("error\(String(describing: error))")
+                    return
+                }
+                
+                do {
+                    
+                    if let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [String:Any] {
+                        
+                        if let dataJsonE = json["error"] as? String {
+                            let alert = UIAlertController (title: "Information", message: dataJsonE + "\n Please Logout and Login again.", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                            self.present(alert, animated: true, completion: nil)
+                            DispatchQueue.main.async {
+                                // Stop Refresh =================
+                                self.view.isUserInteractionEnabled = true
+                                self.messageFrame.removeFromSuperview()
+                                self.activityIndicator.stopAnimating()
+                                self.refreshControl.endRefreshing()
+                            }
+                            
+                        } else {
+                            
+                            self.pageNo = json["current_page"] as! Int
+                            self.limit = json["last_page"] as! Int
+                            self.offset = json["per_page"] as! Int
+                            let jsonItemHistory = json["data"] as! NSArray
+                            
+                            DispatchQueue.main.async {
+                                
+                                self.historyOrder.removeAll()
+                                
+                                for listItemLaundry in jsonItemHistory {
+                                    
+                                    let package_id = (listItemLaundry as AnyObject)["package_id"] as! String
+                                    let produk = (listItemLaundry as AnyObject)["code"] as! String
+                                    let status = (listItemLaundry as AnyObject)["status"] as! String
+                                    let date = (listItemLaundry as AnyObject)["date"] as! String
+                                    let total_price = (listItemLaundry as AnyObject)["total_price"] as! Int
+                                    
+                                    if package_id == "1" {
+                                        self.historyOrder.append(MyHistory(imageHistory:#imageLiteral(resourceName: "historyC"),produk: produk, status: status, date: date, total_price: String(total_price)))
+                                    } else {
+                                        self.historyOrder.append(MyHistory(imageHistory:#imageLiteral(resourceName: "historyL"),produk: produk, status: status, date: date, total_price: String(total_price)))
                                     }
                                 }
                                 self.tableHistoryOrderCustomers.reloadData()
