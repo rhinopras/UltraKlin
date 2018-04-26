@@ -41,14 +41,10 @@ class UltraKlinAccountView: UIViewController, UITableViewDataSource, UITableView
     
     func logoutAct() {
         
-        var rootVC : UIViewController?
-        
         let alert = UIAlertController(title: "Confirmation", message: "Logout from this app ?", preferredStyle: .alert)
         
         let okAction = UIAlertAction(title: "OK", style: .default) {
             (action) -> Void in
-            
-            let defaults = UserDefaults.standard
             
             // Sign Out Chat
             do {
@@ -65,13 +61,15 @@ class UltraKlinAccountView: UIViewController, UITableViewDataSource, UITableView
             let loginManager = FBSDKLoginManager()
             loginManager.logOut()
             FBSDKAccessToken.setCurrent(nil)
-            defaults.removeObject(forKey: "emailUser")
-            defaults.removeObject(forKey: "nameUser")
-            defaults.removeObject(forKey: "SessionSosmes")
+            UserDefaults.standard.removeObject(forKey: "emailUser")
+            UserDefaults.standard.removeObject(forKey: "nameUser")
+            UserDefaults.standard.removeObject(forKey: "SessionSosmes")
             
             // Account Sigout
-            defaults.removeObject(forKey: "SavedApiKey")
-            defaults.removeObject(forKey: "name")
+            UserDefaults.standard.removeObject(forKey: "SavedApiToken")
+            UserDefaults.standard.removeObject(forKey: "name")
+            
+            var rootVC : UIViewController?
             rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window?.rootViewController = rootVC
@@ -101,12 +99,11 @@ class UltraKlinAccountView: UIViewController, UITableViewDataSource, UITableView
     }
     
     func checkingSession() {
-        let defaults = UserDefaults.standard
-        if defaults.object(forKey: "SavedApiKey") == nil {
+        if UserDefaults.standard.object(forKey: "SavedApiToken") == nil {
             // User not yet login ======================
             let alert = UIAlertController(title: "Login", message: "You must login first.", preferredStyle: .alert)
             
-            let okAction = UIAlertAction(title: "Login", style: .default) {
+            let loginAction = UIAlertAction(title: "Login", style: .default) {
                 (action) -> Void in
                 // Login
                 let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin
@@ -114,66 +111,108 @@ class UltraKlinAccountView: UIViewController, UITableViewDataSource, UITableView
                 myVC.hiddenActLogin = true
                 self.navigationController?.pushViewController(myVC, animated: true)
             }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .default) {
+            let regisAction = UIAlertAction(title: "Register", style: .default) {
+                (action) -> Void in
+                // Login
+                let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinRegistration") as! UltraKlinRegistration
+                myVC.skipRegis = "Regis"
+                myVC.hiddenActRegis = true
+                self.navigationController?.pushViewController(myVC, animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "Not now", style: .cancel) {
                 UIAlertAction in
             }
+            alert.addAction(loginAction)
+            alert.addAction(regisAction)
             alert.addAction(cancelAction)
-            alert.addAction(okAction)
             self.present(alert, animated: true, completion: nil)
         } else {
             loadingData()
-            
             loadProfile()
         }
     }
     
     func loadProfile() {
-        let auth = UserDefaults.standard.string(forKey: "SavedApiKey")
-        
-        let url = NSURL(string: Config().URL_Profile)!
-        let session = URLSession.shared
-        let request = NSMutableURLRequest(url: url as URL)
-        
-        request.httpMethod = "GET"
-        request.setValue("Bearer \(auth!)", forHTTPHeaderField: "Authorization")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        
-        let task = session.dataTask(with: request as URLRequest) {
-            data, response, error in
+        if Reachability.isConnectedToNetwork() {
+            print("Internet Connection Available!")
+            let auth = UserDefaults.standard.string(forKey: "SavedApiToken")
             
-            let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
+            let url = NSURL(string: Config().URL_Profile)!
             
-            if error != nil {
-                print("error\(error!)")
-                return
-            }
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = TimeInterval(15)
+            config.timeoutIntervalForResource = TimeInterval(15)
             
-            if let dataJsonE = json["error"] as? String {
-                let alert = UIAlertController (title: "Information", message: dataJsonE, preferredStyle: .alert)
-                alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
-                self.present(alert, animated: true, completion: nil)
+            let session = URLSession(configuration: config)
+            //let session = URLSession.shared
+            
+            let request = NSMutableURLRequest(url: url as URL)
+            
+            request.httpMethod = "GET"
+            request.setValue("Bearer \(auth!)", forHTTPHeaderField: "Authorization")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            
+            let task = session.dataTask(with: request as URLRequest) {
+                data, response, error in
                 
-            } else {
+                let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
                 
-                let name = json["name"] as? String
-                let phone = json["phone"] as? String
-                let email = json["email"] as? String
+                if error != nil {
+                    print("error :\(String(describing: error?.localizedDescription))")
+                    let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                    }
+                    return
+                }
                 
-                DispatchQueue.main.async {
+                if let dataJsonE = json["error"] as? String {
+                    let alert = UIAlertController (title: "Information", message: dataJsonE, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                    }
                     
-                    self.dataProfile.removeAll()
-                    self.dataProfile.append(profile(name: name, phone: phone, email: email, logout: "Logout"))
+                } else {
                     
-                    self.tableProfileView.reloadData()
+                    let name = json["name"] as? String
+                    let phone = json["phone"] as? String
+                    let email = json["email"] as? String
                     
-                    self.view.isUserInteractionEnabled = true
-                    self.messageFrame.removeFromSuperview()
-                    self.activityIndicator.stopAnimating()
-                    self.refreshControl.endRefreshing()
+                    DispatchQueue.main.async {
+                        
+                        self.dataProfile.removeAll()
+                        self.dataProfile.append(profile(name: name, phone: phone, email: email, logout: "Logout"))
+                        
+                        self.tableProfileView.reloadData()
+                        
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                    }
                 }
             }
+            task.resume()
+        } else {
+            print("Internet Connection not Available!")
+            let alert = UIAlertController (title: "No Internet Connection", message: "Make sure your device is connected to the internet.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.view.isUserInteractionEnabled = true
+            self.messageFrame.removeFromSuperview()
+            self.activityIndicator.stopAnimating()
+            self.refreshControl.endRefreshing()
         }
-        task.resume()
     }
     
     // MARK:- UITableViewDataSource
@@ -221,7 +260,7 @@ class UltraKlinAccountView: UIViewController, UITableViewDataSource, UITableView
             cell.labelProfileLoad.text = dataProfile[indexPath.row].logout
             cell.labelProfileLoad.textAlignment = .center
             cell.labelProfileLoad.textColor = UIColor.white
-            cell.backgroundColor = #colorLiteral(red: 1, green: 0.231372549, blue: 0.1882352941, alpha: 1)
+            cell.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
             return cell
         default:
             break

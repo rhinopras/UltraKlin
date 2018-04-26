@@ -9,4 +9,5 @@ pod 'Firebase/Storage'
 pod 'Firebase/Database'
 pod 'Firebase/Core'
 pod 'Firebase/Messaging'
+pod 'Firebase/Crash'
 end

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 import Foundation
 import AppsFlyerLib
 import FBSDKLoginKit
@@ -14,7 +15,6 @@ import FBSDKLoginKit
 class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
     
     var rootVC : UIViewController?
-    let defaults = UserDefaults.standard
     
     var skipRegis = ""
     var hiddenActRegis = false
@@ -129,7 +129,13 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
         self.loadingData()
         print(paramString)
         let url = NSURL(string: Config().URL_Register)!
-        let session = URLSession.shared
+        
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = TimeInterval(15)
+        config.timeoutIntervalForResource = TimeInterval(15)
+        
+        let session = URLSession(configuration: config)
+        //let session = URLSession.shared
         
         let request = NSMutableURLRequest(url:url  as URL)
         
@@ -141,7 +147,16 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
             data, response, error in
             
             if error != nil{
-                print("error\(error!)")
+                print("Error: \(String(describing: error?.localizedDescription))")
+                let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                }
                 return
             }
             
@@ -175,21 +190,20 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
                 
             } else {
                 
-                let typeToken = json["token_type"] as? String
-                let expToken = json["expires_in"] as? String
                 let accToken = json["access_token"] as? String
                 let freshToken = json["refresh_token"] as? String
+                let typeToken = json["token_type"] as? String
+                let expToken = json["expires_in"] as? String
                 
                 DispatchQueue.main.async() {
                     
-                    self.defaults.set(accToken, forKey: "SavedApiKey")
-                    self.defaults.set(freshToken, forKey: "RefreshApiKey")
-                    self.defaults.set(expToken, forKey: "ExpApiKey")
-                    self.defaults.set(typeToken, forKey: "TypeApiKey")
+                    UserDefaults.standard.set(accToken, forKey: "SavedApiToken")
+                    UserDefaults.standard.set(freshToken, forKey: "RefreshApiKey")
+                    UserDefaults.standard.set(expToken, forKey: "ExpApiKey")
+                    UserDefaults.standard.set(typeToken, forKey: "TypeApiKey")
                     
-                    self.defaults.set(self.textRegisEmail.text!, forKey: "userEmail")
-                    self.defaults.set(self.textRegisPass.text!, forKey: "userPass")
-                    self.defaults.synchronize()
+                    UserDefaults.standard.set(self.textRegisEmail.text!, forKey: "userEmail")
+                    UserDefaults.standard.set(self.textRegisPass.text!, forKey: "userPass")
                     
                     AppsFlyerTracker.shared().trackEvent(AFEventParamRegistrationMethod, withValues: [
                         AFEventParamRegistrationMethod : self.textRegisEmail.text!,
@@ -218,18 +232,13 @@ class UltraKlinRegistration: UIViewController, UITextFieldDelegate {
     
     static func updateRootVC() {
         var rootVC : UIViewController?
-        let defaults = UserDefaults.standard
-        defaults.synchronize()
         
-        print("sesi cek",defaults.object(forKey: "SavedApiKey") as Any)
-        print("sesi Sosmed cek",defaults.object(forKey: "SessionSosmes") as Any)
-        
-        if defaults.object(forKey: "SavedApiKey") != nil {
+        if UserDefaults.standard.object(forKey: "SavedApiToken") != nil {
             // Check Session Account
             rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.window?.rootViewController = rootVC
-        } else if defaults.object(forKey: "SessionSosmes") != nil {
+        } else if UserDefaults.standard.object(forKey: "SessionSosmes") != nil {
             // Check Session Sosmed
             rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
             let appDelegate = UIApplication.shared.delegate as! AppDelegate

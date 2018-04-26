@@ -6,6 +6,7 @@
 //  Copyright © 2018 PT Lintas Insan Nur Inspira. All rights reserved.
 //
 
+import Firebase
 import Foundation
 import LocationPicker
 import AppsFlyerLib
@@ -23,8 +24,6 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     var paramTempKilos : [MyKilos] = []
     var paramTempPiece : [MyChoose] = []
     
-    var createParamClean = [AnyObject]()
-    
     var paramOrder : String?
     var paramPromo : String?
     var address : String?
@@ -35,36 +34,70 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     var refreshControl = UIRefreshControl()
     
     // Cleaning
-    let clean_amountBath  = (UserDefaults.standard.string(forKey: "clean_amount_bath"))
-    let clean_amountBed   = (UserDefaults.standard.string(forKey: "clean_amount_bed"))
-    let clean_amountOther = (UserDefaults.standard.string(forKey: "clean_amount_other"))
-    let clean_Date        = (UserDefaults.standard.string(forKey: "clean_Date"))
-    let clean_Time        = (UserDefaults.standard.string(forKey: "clean_Time"))
-    let clean_building    = (UserDefaults.standard.string(forKey: "clean_building"))
-    let clean_gender      = (UserDefaults.standard.string(forKey: "clean_gender"))
-    let clean_qtycso      = (UserDefaults.standard.string(forKey: "clean_qtyCSO"))
-    let clean_pet         = (UserDefaults.standard.string(forKey: "clean_pet"))
-    let clean_estTime     = (UserDefaults.standard.string(forKey: "clean_estTime"))
+    var clean_Date        = ""
+    var clean_Time        = ""
+    var clean_building    = ""
+    var clean_gender      = ""
+    var clean_qtycso      = ""
+    var clean_pet         = ""
+    var clean_estTime     = ""
     
     // Laundry
-    let service   = (UserDefaults.standard.string(forKey: "services"))
-    let fragrence = (UserDefaults.standard.string(forKey: "fragrance"))
-    let datePick  = (UserDefaults.standard.string(forKey: "date_pickup"))
-    let timePick  = (UserDefaults.standard.string(forKey: "time_pickup"))
-    let dateDelv  = (UserDefaults.standard.string(forKey: "date_deliver"))
-    let timeDelv  = (UserDefaults.standard.string(forKey: "time_deliver"))
+    var service   = ""
+    var fragrence = ""
+    var datePick  = ""
+    var timePick  = ""
+    var dateDelv  = ""
+    var timeDelv  = ""
     
     // Price Total
     var totalClean : Int = 0
     var totalPiece : Int = 0
     var totalKilos : Int = 0
     
-    
     // Detail Order
     @IBOutlet weak var viewDetailOrder: UIView!
     @IBOutlet weak var labelDetailOrder: UILabel!
     @IBOutlet weak var tableDetailOrder: UITableView!
     @IBOutlet weak var constraintsDetailOrder: NSLayoutConstraint!
+    @IBAction func buttonAddMore(_ sender: Any) {
+        if paramTempClean.isEmpty == true {
+            self.performSegue(withIdentifier: "orderAgainCleaning", sender: self)
+        } else if paramTempKilos.isEmpty == true && paramTempPiece.isEmpty == true {
+            self.performSegue(withIdentifier: "orderAgainLaundry", sender: self)
+        } else {
+            if (UserDefaults.standard.string(forKey: "SavedApiToken")) == nil {
+                // User not yet login ======================
+                let alert = UIAlertController(title: "Login", message: "You must login first.", preferredStyle: .alert)
+                
+                let okAction = UIAlertAction(title: "Login", style: .default, handler: {(paramAction: UIAlertAction!) in
+                    // Login
+                    let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin
+                    myVC.skipLogin = "Login"
+                    myVC.hiddenActLogin = true
+                    self.navigationController?.pushViewController(myVC, animated: true)
+                })
+                let cancelAction = UIAlertAction(title: "Register", style: .default, handler: {(paramAction: UIAlertAction!) in
+                    // Register
+                    let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinRegistration") as! UltraKlinRegistration
+                    myVC.skipRegis = "Regis"
+                    myVC.hiddenActRegis = true
+                    self.navigationController?.pushViewController(myVC, animated: true)
+                })
+                alert.addAction(cancelAction)
+                alert.addAction(okAction)
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                let alert = UIAlertController(title: "Your order", message: "List order is complete, please click BOOK for ready to order.", preferredStyle: .alert)
+                let cancelAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.cancel) {
+                    UIAlertAction in
+                    NSLog("Cancel Pressed")
+                }
+                alert.addAction(cancelAction)
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
     
     // Deliver
     @IBOutlet weak var viewDeliverPlace: UIView!
@@ -95,79 +128,41 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBOutlet weak var viewButtonBook: UIView!
     @IBOutlet weak var buttonBook: UIButton!
     @IBAction func buttonBookAct(_ sender: Any) {
-        if (UserDefaults.standard.string(forKey: "SavedApiKey")) == nil && (UserDefaults.standard.string(forKey: "SessionSosmes")) == nil {
+        if (UserDefaults.standard.string(forKey: "SavedApiToken")) == nil {
             // User not yet login ======================
             let alert = UIAlertController(title: "Login", message: "You must login first.", preferredStyle: .alert)
             
-            let okAction = UIAlertAction(title: "Login", style: .default, handler: {(paramAction: UIAlertAction!) in
+            let loginAction = UIAlertAction(title: "Login", style: .default, handler: {(paramAction: UIAlertAction!) in
                 // Login
                 let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinLogin") as! UltraKlinLogin
                 myVC.skipLogin = "Login"
                 myVC.hiddenActLogin = true
                 self.navigationController?.pushViewController(myVC, animated: true)
             })
-            let cancelAction = UIAlertAction(title: "Register", style: .default, handler: {(paramAction: UIAlertAction!) in
+            let regisAction = UIAlertAction(title: "Register", style: .default, handler: {(paramAction: UIAlertAction!) in
                 // Register
                 let myVC = self.storyboard?.instantiateViewController(withIdentifier: "ultraKlinRegistration") as! UltraKlinRegistration
                 myVC.skipRegis = "Regis"
                 myVC.hiddenActRegis = true
                 self.navigationController?.pushViewController(myVC, animated: true)
             })
+            alert.addAction(regisAction)
+            alert.addAction(loginAction)
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
+            let okAction = UIAlertAction(title: "Order", style: .default) {
+                (action) -> Void in
+                // READY FOR BOOKING ==========
+                self.corectionView()
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
+                UIAlertAction in
+                NSLog("Cancel Pressed")
+            }
             alert.addAction(cancelAction)
             alert.addAction(okAction)
             self.present(alert, animated: true, completion: nil)
-        } else {
-            if self.paramTempClean.isEmpty == true {
-                let alert = UIAlertController(title: "UltraKlin", message: "\n Do you want else an order ?", preferredStyle: .alert)
-                
-                let cancelAction = UIAlertAction(title: "Order Cleaning", style: .cancel) {
-                    (action) -> Void in
-                    // Segue Laundry
-                    self.performSegue(withIdentifier: "orderAgainCleaning", sender: self)
-                }
-                
-                let okAction = UIAlertAction(title: "Order now", style: .default) {
-                    (action) -> Void in
-                    // READY FOR BOOKING ==========
-                    self.corectionView()
-                }
-                
-                alert.addAction(cancelAction)
-                alert.addAction(okAction)
-                self.present(alert, animated: true, completion: nil)
-            } else if self.paramTempPiece.isEmpty == true && self.paramTempKilos.isEmpty == true {
-                let alert = UIAlertController(title: "UltraKlin", message: "\n Do you want else an order ?", preferredStyle: .alert)
-                
-                let cancelAction = UIAlertAction(title: "Order Laundry", style: .cancel) {
-                    (action) -> Void in
-                    // Segue Laundry
-                    self.performSegue(withIdentifier: "orderAgainLaundry", sender: self)
-                }
-                
-                let okAction = UIAlertAction(title: "Order now", style: .default) {
-                    (action) -> Void in
-                    // READY FOR BOOKING ==========
-                    self.corectionView()
-                }
-                
-                alert.addAction(cancelAction)
-                alert.addAction(okAction)
-                self.present(alert, animated: true, completion: nil)
-            } else {
-                let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "Order", style: .default) {
-                    (action) -> Void in
-                    // READY FOR BOOKING ==========
-                    self.corectionView()
-                }
-                let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.destructive) {
-                    UIAlertAction in
-                    NSLog("Cancel Pressed")
-                }
-                alert.addAction(cancelAction)
-                alert.addAction(okAction)
-                self.present(alert, animated: true, completion: nil)
-            }
         }
     }
     
@@ -178,30 +173,55 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let loadedDetailClean = UserDefaults.standard.array(forKey: "clean_Detail") as? [[String: Any]]
+        if loadedDetailClean != nil {
+            for item in loadedDetailClean! {
+                clean_qtycso    = (item["clean_qtyCSO"] as? String)!
+                clean_building  = (item["clean_building"] as? String)!
+                clean_gender    = (item["clean_gender"] as? String)!
+                clean_estTime   = (item["clean_estTime"] as? String)!
+                clean_pet       = (item["clean_pet"] as? String)!
+                clean_Date      = (item["clean_date"] as? String)!
+                clean_Time      = (item["clean_time"] as? String)!
+            }
+        }
+        
+        let loadedDetailLaundry = UserDefaults.standard.array(forKey: "laundry_Detail") as? [[String: Any]]
+        if loadedDetailLaundry != nil {
+            for item in loadedDetailLaundry! {
+                service   = (item["services"] as? String)!
+                fragrence = (item["fragrance"] as? String)!
+                datePick  = (item["date_pickup"] as? String)!
+                timePick  = (item["time_pickup"] as? String)!
+                dateDelv  = (item["date_deliver"] as? String)!
+                timeDelv  = (item["time_deliver"] as? String)!
+            }
+        }
+        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UltraKlinDetailOrder.dimisKeyboard))
         view.addGestureRecognizer(tap)
         
         var hasil : Int = 0
-        print("Cleaning : \(String(totalClean)) Piece : \(String(totalPiece)) Kilos : \(String(totalKilos))")
         if paramTempClean.isEmpty == false {
             if paramTempKilos.isEmpty == false {
                 if paramTempPiece.isEmpty == false {
-                    if paramTempPiece.count > 1 {
-                        for _ in 1..<paramTempPiece.count{
-                            constraintsDetailOrder.constant += 31
-                        }
+                    constraintsDetailOrder.constant += 61
+                    for _ in 0..<paramTempPiece.count{
+                        constraintsDetailOrder.constant += 31
                     }
                     hasil = totalClean + totalPiece + totalKilos
                     labelTotalPrice.text! = String(hasil)
                 } else {
+                    for _ in 0..<paramTempKilos.count{
+                        constraintsDetailOrder.constant += 31
+                    }
                     hasil = totalClean + totalKilos
                     labelTotalPrice.text! = String(hasil)
                 }
             } else if paramTempPiece.isEmpty == false {
-                if paramTempPiece.count > 2 {
-                    for _ in 2..<paramTempPiece.count{
-                        constraintsDetailOrder.constant += 31
-                    }
+                constraintsDetailOrder.constant += 92
+                for _ in 2..<paramTempPiece.count{
+                    constraintsDetailOrder.constant += 31
                 }
                 hasil = totalClean + totalPiece
                 labelTotalPrice.text! = String(hasil)
@@ -212,8 +232,8 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
         } else {
             if paramTempKilos.isEmpty == false {
                 if paramTempPiece.isEmpty == false {
-                    if paramTempPiece.count > 4 {
-                        for _ in 4..<paramTempPiece.count{
+                    if paramTempPiece.count > 1 {
+                        for _ in 1..<paramTempPiece.count{
                             constraintsDetailOrder.constant += 31
                         }
                     }
@@ -224,8 +244,8 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
                     labelTotalPrice.text! = String(hasil)
                 }
             } else {
-                if paramTempPiece.count > 5 {
-                    for _ in 5..<paramTempPiece.count{
+                if paramTempPiece.count > 2 {
+                    for _ in 2..<paramTempPiece.count{
                         constraintsDetailOrder.constant += 31
                     }
                 }
@@ -281,11 +301,20 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
             itemTempP.append(addQtyPieces as AnyObject)
         }
         
-        let tempParamC = "{" + kutip + "package" + kutip + ":" + kutip + "cleaning-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(clean_Date!)" + " " + "\(clean_Time!)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "building_type" + kutip + ":" + kutip + "\(clean_building!)" + kutip + "," + kutip + "cso_gender" + kutip + ":" + kutip + "\(clean_gender!)" + kutip + "," + kutip + "total_cso" + kutip + ":" + kutip + "\(clean_qtycso!)" + kutip + "," + kutip + "pets" + kutip + ":" + kutip + "\(clean_pet!)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempC)}"
+        var tempParamC = ""
+        if paramTempClean.isEmpty == false {
+            tempParamC = "{" + kutip + "package" + kutip + ":" + kutip + "cleaning-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(clean_Date)" + " " + "\(clean_Time)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "building_type" + kutip + ":" + kutip + "\(clean_building)" + kutip + "," + kutip + "cso_gender" + kutip + ":" + kutip + "\(clean_gender)" + kutip + "," + kutip + "total_cso" + kutip + ":" + kutip + "\(clean_qtycso)" + kutip + "," + kutip + "pets" + kutip + ":" + kutip + "\(clean_pet)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempC)}"
+        }
         
-        let tempParamP = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-pieces-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick!)" + " " + "\(timePick!)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence!)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv!)" + " " + "\(timeDelv!)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempP)}"
+        var tempParamP = ""
+        if paramTempPiece.isEmpty == false {
+            tempParamP = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-pieces-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick)" + " " + "\(timePick)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv)" + " " + "\(timeDelv)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempP)}"
+        }
         
-        let tempParamK = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-kilos-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick!)" + " " + "\(timePick!)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence!)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv!)" + " " + "\(timeDelv!)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempK)}"
+        var tempParamK = ""
+        if paramTempKilos.isEmpty == false {
+            tempParamK = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-kilos-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick)" + " " + "\(timePick)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv)" + " " + "\(timeDelv)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempK)}"
+        }
         
         print(tempParamC)
         print(tempParamK)
@@ -351,11 +380,20 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
             itemTempP.append(addQtyPieces as AnyObject)
         }
         
-        let tempParamC = "{" + kutip + "package" + kutip + ":" + kutip + "cleaning-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(clean_Date!)" + " " + "\(clean_Time!)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "building_type" + kutip + ":" + kutip + "\(clean_building!)" + kutip + "," + kutip + "cso_gender" + kutip + ":" + kutip + "\(clean_gender!)" + kutip + "," + kutip + "total_cso" + kutip + ":" + kutip + "\(clean_qtycso!)" + kutip + "," + kutip + "pets" + kutip + ":" + kutip + "\(clean_pet!)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempC)}"
+        var tempParamC = ""
+        if paramTempClean.isEmpty == false {
+            tempParamC = "{" + kutip + "package" + kutip + ":" + kutip + "cleaning-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(clean_Date)" + " " + "\(clean_Time)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "building_type" + kutip + ":" + kutip + "\(clean_building)" + kutip + "," + kutip + "cso_gender" + kutip + ":" + kutip + "\(clean_gender)" + kutip + "," + kutip + "total_cso" + kutip + ":" + kutip + "\(clean_qtycso)" + kutip + "," + kutip + "pets" + kutip + ":" + kutip + "\(clean_pet)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempC)}"
+        }
         
-        let tempParamP = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-pieces-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick!)" + " " + "\(timePick!)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence!)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv!)" + " " + "\(timeDelv!)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempP)}"
+        var tempParamP = ""
+        if paramTempPiece.isEmpty == false {
+            tempParamP = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-pieces-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick)" + " " + "\(timePick)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv)" + " " + "\(timeDelv)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempP)}"
+        }
         
-        let tempParamK = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-kilos-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick!)" + " " + "\(timePick!)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence!)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv!)" + " " + "\(timeDelv!)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempK)}"
+        var tempParamK = ""
+        if paramTempKilos.isEmpty == false {
+            tempParamK = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-kilos-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick)" + " " + "\(timePick)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv)" + " " + "\(timeDelv)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempK)}"
+        }
         
         print(tempParamC)
         print(tempParamK)
@@ -409,10 +447,16 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     
     func booking_Ready() {
         
-        let auth = UserDefaults.standard.string(forKey: "SavedApiKey")
+        let auth = UserDefaults.standard.string(forKey: "SavedApiToken")
         
         let url = NSURL(string: Config().URL_Order)!
-        let session = URLSession.shared
+        
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = TimeInterval(15)
+        config.timeoutIntervalForResource = TimeInterval(15)
+        
+        let session = URLSession(configuration: config)
+        //let session = URLSession.shared
         
         let request = NSMutableURLRequest(url: url as URL)
         
@@ -431,7 +475,17 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
             let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
             
             if error != nil {
-                print("error\(error!)")
+                print("Order error : \(String(describing: error?.localizedDescription))")
+                let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                }
+                FirebaseCrashMessage("Order error : \(error!)")
                 return
             }
             
@@ -460,6 +514,12 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
                     self.activityIndicator.stopAnimating()
                     self.refreshControl.endRefreshing()
                     
+                    // Cleaning
+                    UserDefaults.standard.removeObject(forKey: "clean_Detail")
+                    
+                    // Laundry
+                    UserDefaults.standard.removeObject(forKey: "laundry_Detail")
+                    
                     let alert = UIAlertController (title: "THANK YOU", message: "\n Your order has been processed \n Our Customer Service will get in touch with you.", preferredStyle: .alert)
                     let okAction = UIAlertAction(title: "OK", style: .default)
                     {
@@ -484,7 +544,13 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     func promo_Ready() {
         
         let url = NSURL(string: Config().URL_Promo)!
-        let session = URLSession.shared
+        
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = TimeInterval(15)
+        config.timeoutIntervalForResource = TimeInterval(15)
+        
+        let session = URLSession(configuration: config)
+        //let session = URLSession.shared
         
         let request = NSMutableURLRequest(url: url as URL)
         
@@ -498,7 +564,8 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
             let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
             
             if error != nil {
-                print("error\(error!)")
+                print("Promo error : \(error!)")
+                FirebaseCrashMessage("Promo error : \(error!)")
                 return
             }
             

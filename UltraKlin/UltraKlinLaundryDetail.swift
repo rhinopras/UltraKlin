@@ -16,8 +16,6 @@ class UltraKlinLaundryDetailTableCell : UITableViewCell {
 
 class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    let defaults = UserDefaults.standard
-    
     var listChoose : [MyChoose] = []
     var kilosChoose : [MyKilos] = []
     var cleanChoose : [package_cleaning] = []
@@ -83,19 +81,22 @@ class UltraKlinLaundryDetail: UIViewController, UITableViewDelegate, UITableView
             }
         }
         
-        // Service We Provide
-        labelPerPiece.text = (UserDefaults.standard.string(forKey: "piece_YesNo"))
-        labelPerKilos.text = (UserDefaults.standard.string(forKey: "kilos_YesNo"))
-        labelPackage.text = (UserDefaults.standard.string(forKey: "package_YesNo"))
-        labelService.text = (UserDefaults.standard.string(forKey: "services"))
-        labelFragrance.text = (UserDefaults.standard.string(forKey: "fragrance"))
+        let loadedDetailLaundry = UserDefaults.standard.array(forKey: "laundry_Detail") as? [[String: Any]]
+        for item in loadedDetailLaundry! {
+            // Service We Provide
+            labelPerPiece.text = item["piece_YesNo"] as? String
+            labelPerKilos.text = item["kilos_YesNo"] as? String
+            labelPackage.text = item["package_YesNo"] as? String
+            labelService.text = item["services"] as? String
+            labelFragrance.text = item["fragrance"] as? String
+            // Additional Information
+            labelDatePickup.text = item["date_pickup"] as? String
+            labelTimePickup.text = item["time_pickup"] as? String
+            labelDateDeliver.text = item["date_deliver"] as? String
+            labelTimeDeliver.text = item["time_deliver"] as? String
+        }
         // Per Kilos
         labelHowManyKilos.text = manyKilos
-        // Additional Information
-        labelDatePickup.text = (UserDefaults.standard.string(forKey: "date_pickup"))
-        labelTimePickup.text = (UserDefaults.standard.string(forKey: "time_pickup"))
-        labelDateDeliver.text = (UserDefaults.standard.string(forKey: "date_deliver"))
-        labelTimeDeliver.text = (UserDefaults.standard.string(forKey: "time_deliver"))
         // Payment
         labelTotalPerPiece.text = String(dTotalPiece!)
         labelTotalPerKilos.text = String(dTotalKilos!)

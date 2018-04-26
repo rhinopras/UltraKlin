@@ -20,8 +20,6 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
     
     var messagesController: MessageController?
     
-    let defaults = UserDefaults.standard
-    
     var rootVC : UIViewController?
     var keyToken = ""
     var skipLogin = ""
@@ -31,6 +29,7 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
     var email   = ""
     var password  = ""
     var paramString = ""
+    var paramReset = ""
     
     // Refresh
     let messageFrame = UIView()
@@ -48,6 +47,42 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
     
     @IBOutlet weak var constainUsernameLogin: NSLayoutConstraint!
     @IBOutlet weak var constainPassLogin: NSLayoutConstraint!
+    
+    @IBAction func buttonResetPass(_ sender: Any) {
+        view.endEditing(true)
+        //1. Create the alert controller.
+        let alert = UIAlertController(title: "Forgot Password", message: "Please check your email for recived link from UltraKlin.", preferredStyle: .alert)
+        
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextField { (textField) in
+            textField.placeholder = "Email"
+            textField.keyboardType = .emailAddress
+            textField.returnKeyType = .send
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel) {
+            UIAlertAction in
+            NSLog("Cancel Pressed")
+        }
+        alert.addAction(cancelAction)
+        
+        // 3. Grab the value from the text field, and print it when the user clicks OK.
+        alert.addAction(UIAlertAction(title: "Send", style: .default, handler: { [weak alert] (_) in
+            let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+            print("Text field: \(String(describing: textField?.text))")
+            self.loadingData()
+            self.paramReset = "&email=" + (textField?.text)!
+            self.resetPassword()
+        }))
+        
+        // 4. Present the alert.
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func buttonHelp(_ sender: Any) {
+        let alert = UIAlertController (title: "Help!", message: "1. Click Forgot Password?\n 2. Enter you email, so click Send.\n 3. UltraKlin will be sending email reset password.\n 4. Open Email, so click reset password.\n 5. Enter a new password, so click Reset.\n 6. Congratulation! password have been change. \n \n Note : Check inbox or spam and then click reset password from UltraKlin.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
     
     @IBAction func buttonGoogleSignIn(_ sender: Any) {
         loadingData()
@@ -106,10 +141,10 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                 }
                 
                 if let currentUser = Auth.auth().currentUser {
-                    self.defaults.set(currentUser.email, forKey: "emailUserFB")
-                    self.defaults.set(currentUser.displayName, forKey: "nameUserFB")
-                    self.defaults.set(currentUser.phoneNumber, forKey: "phoneUserFB")
-                    self.defaults.set(currentUser.refreshToken, forKey: "SessionSosmes")
+                    UserDefaults.standard.set(currentUser.email, forKey: "emailUserFB")
+                    UserDefaults.standard.set(currentUser.displayName, forKey: "nameUserFB")
+                    UserDefaults.standard.set(currentUser.phoneNumber, forKey: "phoneUserFB")
+                    UserDefaults.standard.set(currentUser.refreshToken, forKey: "SessionSosmes")
                     print(currentUser.email! + " " + currentUser.displayName!)
                 }
                 
@@ -165,7 +200,13 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
             self.loadingData()
             
             let url = NSURL(string: Config().URL_Login)!
-            let session = URLSession.shared
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = TimeInterval(15)
+            config.timeoutIntervalForResource = TimeInterval(15)
+            
+            let session = URLSession(configuration: config)
+            //let session = URLSession.shared
             
             let request = NSMutableURLRequest(url:url as URL)
             
@@ -178,7 +219,16 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                 data, response, error in
                 
                 if error != nil {
-                    print("error\(String(describing: error))")
+                    print("error\(String(describing: error?.localizedDescription))")
+                    let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                    }
                     return
                 }
                 
@@ -202,23 +252,22 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
                     
                 } else {
                     
-                    let typeToken = json["token_type"] as? String
-                    let expToken = json["expires_in"] as? String
                     let accToken = json["access_token"] as? String
                     let freshToken = json["refresh_token"] as? String
+                    let typeToken = json["token_type"] as? String
+                    let expToken = json["expires_in"] as? String
                     
                     DispatchQueue.main.async {
                         // Login Chatting
                         //self.handelLogIn()
                         
-                        self.defaults.set(accToken, forKey: "SavedApiKey")
-                        self.defaults.set(freshToken, forKey: "RefreshApiKey")
-                        self.defaults.set(expToken, forKey: "ExpApiKey")
-                        self.defaults.set(typeToken, forKey: "TypeApiKey")
+                        UserDefaults.standard.set(accToken, forKey: "SavedApiToken")
+                        UserDefaults.standard.set(freshToken, forKey: "RefreshApiKey")
+                        UserDefaults.standard.set(expToken, forKey: "ExpApiKey")
+                        UserDefaults.standard.set(typeToken, forKey: "TypeApiKey")
                         
-                        self.defaults.set(self.textLoginUsername.text, forKey: "userEmail")
-                        self.defaults.set(self.textLoginPassword.text, forKey: "userPass")
-                        self.defaults.synchronize()
+                        UserDefaults.standard.set(self.textLoginUsername.text, forKey: "userEmail")
+                        UserDefaults.standard.set(self.textLoginPassword.text, forKey: "userPass")
                         
                         AppsFlyerTracker.shared().trackEvent(AFEventLogin, withValues: [
                             AFEventLogin : self.textLoginUsername.text!,
@@ -246,6 +295,78 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
         }
     }
     
+    func resetPassword() {
+        
+        let url = NSURL(string: Config().URL_Pass_Reset)!
+        
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = TimeInterval(15)
+        config.timeoutIntervalForResource = TimeInterval(15)
+        
+        let session = URLSession(configuration: config)
+        //let session = URLSession.shared
+        
+        let request = NSMutableURLRequest(url:url as URL)
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        request.httpBody = paramReset.data(using: String.Encoding.utf8)
+        
+        let task = session.dataTask(with: request as URLRequest) {
+            data, response, error in
+            
+            if error != nil {
+                print("error: \(String(describing: error?.localizedDescription))")
+                let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                }
+                return
+            }
+            
+            let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
+            
+            if let jerror = json["error"] as? NSDictionary {
+                let jemail = jerror["email"] as? Array<Any>
+                DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                    
+                    let alert = UIAlertController (title: "Information", message: jemail?[0] as? String, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            } else if let jsuccess = json["success"] as? String {
+                DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                    
+                    let alert = UIAlertController (title: "Information", message: jsuccess, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                }
+            }
+        }
+        task.resume()
+    }
+
     func sign(inWillDispatch signIn: GIDSignIn!, error: Error!) {
         refreshControl.endRefreshing()
         activityIndicator.removeFromSuperview()

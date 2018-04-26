@@ -22,10 +22,11 @@ public class Config {
     // URL_API
     static let URL_API_V2_api:String = "http://alpha.ultraklin.com/api/"
     
-    
 //====================================================================================
     
     public let URL_Login:String =  Config.URL_API_V2_api + "login"
+    
+    public let URL_Pass_Reset:String =  Config.URL_API_V2_api + "password/email"
     
     public let URL_Register:String =  Config.URL_API_V2_api + "register"
     

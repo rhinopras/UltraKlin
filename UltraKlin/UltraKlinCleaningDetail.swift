@@ -12,7 +12,6 @@ import AppsFlyerLib
 
 class UltraKlinCleaningDetail: UIViewController {
     
-    let defaults = UserDefaults.standard
     var paramOrder = ""
     
     // Total Price
@@ -29,13 +28,13 @@ class UltraKlinCleaningDetail: UIViewController {
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
     var refreshControl = UIRefreshControl()
     
-    let pDate       = (UserDefaults.standard.string(forKey: "clean_Date"))
-    let pTime       = (UserDefaults.standard.string(forKey: "clean_Time"))
-    let building    = (UserDefaults.standard.string(forKey: "clean_building"))
-    let gender      = (UserDefaults.standard.string(forKey: "clean_gender"))
-    let qtycso      = (UserDefaults.standard.string(forKey: "clean_qtyCSO"))
-    let pet         = (UserDefaults.standard.string(forKey: "clean_pet"))
-    let jam         = (UserDefaults.standard.string(forKey: "clean_estTime"))
+//    let pDate       = (UserDefaults.standard.string(forKey: "clean_Date"))
+//    let pTime       = (UserDefaults.standard.string(forKey: "clean_Time"))
+//    let building    = (UserDefaults.standard.string(forKey: "clean_building"))
+//    let gender      = (UserDefaults.standard.string(forKey: "clean_gender"))
+//    let qtycso      = (UserDefaults.standard.string(forKey: "clean_qtyCSO"))
+//    let pet         = (UserDefaults.standard.string(forKey: "clean_pet"))
+//    let jam         = (UserDefaults.standard.string(forKey: "clean_estTime"))
     
     @IBOutlet weak var labelBookBedroom: UILabel!
     @IBOutlet weak var labelBookBathroom: UILabel!
@@ -73,15 +72,9 @@ class UltraKlinCleaningDetail: UIViewController {
     }
     
     func actionBookCleaning() {
-        let defaults = UserDefaults.standard
-        
-        print("sesi cek",defaults.object(forKey: "SavedApiKey") as Any)
-        print("sesi Sosmed cek",defaults.object(forKey: "SessionSosmes") as Any)
-        
-        if defaults.object(forKey: "SavedApiKey") == nil && defaults.object(forKey: "SessionSosmes") == nil {
+        if UserDefaults.standard.object(forKey: "SavedApiToken") == nil {
             // User not yet login ======================
             let alert = UIAlertController(title: "Login", message: "You must login first.", preferredStyle: .alert)
-            
             let okAction = UIAlertAction(title: "Login", style: .default) {
                 (action) -> Void in
                 // Login
@@ -102,9 +95,7 @@ class UltraKlinCleaningDetail: UIViewController {
             alert.addAction(okAction)
             self.present(alert, animated: true, completion: nil)
         } else {
-            
             let alert = UIAlertController(title: "Ready to order", message: "Is your order complete ?", preferredStyle: .alert)
-            
             let okAction = UIAlertAction(title: "Order", style: .default) {
                 (action) -> Void in
                 // READY FOR BOOKING ==========
@@ -153,11 +144,8 @@ class UltraKlinCleaningDetail: UIViewController {
                     self.refreshControl.endRefreshing()
                     self.buttonBookCleaning.isEnabled = true
                 }
-            } else if ((json["success"] as? String) != nil) {
                 
-                AppsFlyerTracker.shared().trackEvent(AFEventPurchase, withValues: [
-                    "Cleaning Service" : "Cleaning Service"
-                    ]);
+            } else if ((json["success"] as? String) != nil) {
                 
                 let alert = UIAlertController (title: "THANK YOU", message: "\n Your order has been processed \n Our Customer Service will get in touch with you.", preferredStyle: .alert)
                 let okAction = UIAlertAction(title: "OK", style: .default)
@@ -204,20 +192,23 @@ class UltraKlinCleaningDetail: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let loadedDetail = UserDefaults.standard.array(forKey: "clean_Detail") as? [[String: Any]]
+        for item in loadedDetail! {
+            labelQtyCSO.text         = item["clean_qtyCSO"] as? String
+            labelBookBuilding.text   = item["clean_building"] as? String
+            labelBookCSOGender.text  = item["clean_gender"] as? String
+            labelBookEstTime.text    = item["clean_estTime"] as? String
+            labelBookPet.text        = item["clean_pet"] as? String
+            labelBookTime.text       = item["clean_time"] as? String
+            labelBookDate.text       = item["clean_date"] as? String
+        }
         buttonBookCleaning.isEnabled = true
         self.viewLayoutCleaningDetailStyle()
-        
         labelBookEstPrice.text   = String(totalClean)
-        labelBookBuilding.text   = building
-        labelBookCSOGender.text  = gender
-        labelBookEstTime.text    = jam! + " " + "Hours"
-        labelBookPet.text        = pet
         labelBookBathroom.text   = String(dataArrayClean[0].qty!)
         labelBookBedroom.text    = String(dataArrayClean[1].qty!)
         labelBookOtherroom.text  = String(dataArrayClean[2].qty!)
-        labelQtyCSO.text         = qtycso
-        labelBookTime.text       = pTime
-        labelBookDate.text       = pDate
     }
     
     override func viewDidAppear(_ animated: Bool) {

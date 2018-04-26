@@ -20,6 +20,16 @@ extension UIView {
     }
 }
 
+struct MyDetailClean {
+    var clean_Date : String?
+    var clean_Time : String?
+    var clean_building : String?
+    var clean_gender : String?
+    var clean_pet : String?
+    var clean_estTime : String?
+    var clean_qtyCSO : Int?
+}
+
 struct package_cleaning {
     var id : Int?
     var name : String?
@@ -31,12 +41,14 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     
     // Package Cleaning
     var cleaning_dimanis : [package_cleaning] = []
+    var clean_detail : [[String: Any]] = []
+    var array_clean_detail : [String: Any] = [:]
     var kilos_dinamis : [MyKilos] = []
     var piece_dinamis : [MyChoose] = []
     
     // Time Picker
     var timePickerView = UIPickerView()
-    var timeVal : [String] = ["08:00","08:30","09:00","09:30","10:00","10.30","11:00","11:30",
+    var timeVal : [String] = ["08:00","08:30","09:00","09:30","10:00","10:30","11:00","11:30",
                               "12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30",
                               "16:00","16:30","17:00","17:30","18:00","18:30","19:00"]
     
@@ -166,7 +178,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                 resultAddCSO = self.firstNumber + 1
             }
             labelAddCSO.text = "\(resultAddCSO)"
-            total = (Int(cleaning_dimanis[0].price!)! + Int(cleaning_dimanis[1].price!)! + Int(cleaning_dimanis[2].price!)!) * resultAddCSO
+            total = (totalBath + totalBed + totalOther) * resultAddCSO
             estPrice = total
             labelEstimatedPrices.text = String(estPrice)
         }
@@ -284,8 +296,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     
     @IBAction func buttonCleaningNext(_ sender: Any) {
         
-        let defaults = UserDefaults.standard
-        
         self.jam         = String(totalJam)
         self.amountBath  = String(resultBath)
         self.amountBed   = String(resultBed)
@@ -379,26 +389,21 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                 self.present(alert, animated: true, completion: nil)
                 
             } else {
-                defaults.set(amountBath, forKey: "clean_amount_bath")
-                defaults.set(amountBed, forKey: "clean_amount_bed")
-                defaults.set(amountOther, forKey: "clean_amount_other")
-                defaults.set(pDate!, forKey: "clean_Date")
-                defaults.set(pTime!, forKey: "clean_Time")
-                defaults.set(selectPlaces, forKey: "clean_building")
-                defaults.set(chooceCSO, forKey: "clean_gender")
-                defaults.set(chooceHavePet, forKey: "clean_pet")
-                defaults.set(jam, forKey: "clean_estTime")
-                defaults.set(resultAddCSO, forKey: "clean_qtyCSO")
+                clean_detail.removeAll()
+                clean_detail.append(["name": "Cleaning", "clean_date": pDate!, "clean_time": pTime!, "clean_building": selectPlaces, "clean_gender": chooceCSO, "clean_pet": chooceHavePet, "clean_estTime": jam, "clean_qtyCSO": String(resultAddCSO), "totalPrice": total])
+                UserDefaults.standard.setValue(clean_detail, forKey: "clean_Detail")
+                
+                array_clean_detail.removeAll()
+                array_clean_detail = ["package": "cleaning-regular", "date": "\(pDate!) \(pTime!)", "location": "", "note": "", "detail": ["building_type": selectPlaces, "cso_gender": chooceCSO, "pets": chooceHavePet, "total_cso": resultAddCSO]]
+                UserDefaults.standard.setValue(array_clean_detail, forKey: "array_clean_Detail")
                 
                 self.performSegue(withIdentifier: "informationComplate", sender: self)
             }
         }
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Kilos : \(totalKilosC) Piece : \(totalPieceC)")
         dataDinamisRequestCleaning()
         buttonNextAnimation.isEnabled = true
         self.viewLayoutCleaningStyle()
@@ -429,11 +434,18 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     }
     
     func dataDinamisRequestCleaning() {
+        loadingData()
         // ======================= Date Reguler and Price Per Kilos =======================
         if Reachability.isConnectedToNetwork() {
             print("Internet Connection Available!")
             let url = URL(string: Config().URL_Package_Cleaning)!
-            let session = URLSession.shared
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = TimeInterval(15)
+            config.timeoutIntervalForResource = TimeInterval(15)
+            
+            let session = URLSession(configuration: config)
+            //let session = URLSession.shared
             
             let request = NSMutableURLRequest(url: url)
             
@@ -443,7 +455,16 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                 data, response, error in
                 
                 if error != nil {
-                    print("error\(String(describing: error))")
+                    print("error : \(String(describing: error))")
+                    let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                    }
                     return
                 }
                 do {
@@ -459,11 +480,11 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                                 
                                 self.cleaning_dimanis.append(package_cleaning(id: id, name: name, price: price, qty: 0))
                             }
+                            self.view.isUserInteractionEnabled = true
+                            self.messageFrame.removeFromSuperview()
+                            self.activityIndicator.stopAnimating()
+                            self.refreshControl.endRefreshing()
                         }
-                        self.view.isUserInteractionEnabled = true
-                        self.messageFrame.removeFromSuperview()
-                        self.activityIndicator.stopAnimating()
-                        self.refreshControl.endRefreshing()
                     }
                 }
             }

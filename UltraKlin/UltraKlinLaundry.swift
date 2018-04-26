@@ -92,6 +92,8 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     // Cleaning
     var dataClean : [package_cleaning] = []
     
+    var laundry_detail : [[String:Any]] = []
+    
     // Location
     var address = ""
     
@@ -422,7 +424,6 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     }
     
     func OrderKilos() {
-        let defaults = UserDefaults.standard
         
         var perKilos = "No"
         var perPiece = "No"
@@ -438,18 +439,10 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
             package = "Yes"
         }
         
-        // Service We Provide
-        defaults.set(perKilos, forKey: "kilos_YesNo")
-        defaults.set(perPiece, forKey: "piece_YesNo")
-        defaults.set(package, forKey: "package_YesNo")
-        defaults.set(textServiceWePro.text, forKey: "services")
-        defaults.set(textFragranceWePro.text, forKey: "fragrance")
-        // Date Time
-        defaults.set(textDatePickup.text, forKey: "date_pickup")
-        defaults.set(textTimePickup.text, forKey: "time_pickup")
-        defaults.set(textDateDeliver.text, forKey: "date_deliver")
-        defaults.set(textTimeDeliver.text, forKey: "time_deliver")
-        defaults.synchronize()
+        laundry_detail.removeAll()
+        laundry_detail.append(["kilos_YesNo": perKilos, "piece_YesNo": perPiece, "package_YesNo": package,  "services": textServiceWePro.text!, "fragrance": textFragranceWePro.text!, "date_pickup": textDatePickup.text!, "time_pickup": textTimePickup.text!, "date_deliver": textDateDeliver.text!, "time_deliver": textTimeDeliver.text!,"totalPrice": totalAll])
+        
+        UserDefaults.standard.setValue(laundry_detail, forKey: "laundry_Detail")
     }
     
     @IBAction func buttonAddItem(_ sender: Any) {
@@ -534,10 +527,6 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("Kilos : \(dataKilos)")
-        print("Cleaning : \(dataClean)")
-        print("Piece : \(itemChoose)")
-
         // Item Laundry Piece
         self.dataRequestListItemPicker()
         // Price Laundry Kilos
@@ -580,7 +569,14 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
             //paramPromo = "&name=Laundry Kilos" + "&estimateWeight=" + labelBags.text! + "&promo=" + textPromoCode.text!
             
             let url = NSURL(string: Config().URL_Promo)!
-            let session = URLSession.shared
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = TimeInterval(15)
+            config.timeoutIntervalForResource = TimeInterval(15)
+            
+            let session = URLSession(configuration: config)
+            
+            //let session = URLSession.shared
             
             let request = NSMutableURLRequest(url: url as URL)
             
@@ -594,7 +590,7 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                 let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
                 
                 if error != nil {
-                   print(error!)
+                    print(error!)
                     return
                 }
                 
@@ -871,11 +867,18 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     }
     
     func dataRequestListItemPicker() {
+        loadingData()
 // ======================== Dinamis List Item Laundry =========================
         if Reachability.isConnectedToNetwork() {
             print("Internet Connection Available!")
             let url = URL(string: Config().URL_Laundry_Piece)!
-            let session = URLSession.shared
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = TimeInterval(15)
+            config.timeoutIntervalForResource = TimeInterval(15)
+            
+            let session = URLSession(configuration: config)
+            //let session = URLSession.shared
             
             let request = NSMutableURLRequest(url: url)
             
@@ -885,7 +888,17 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                 data, response, error in
                 
                 if error != nil {
-                    print("error\(String(describing: error))")
+                    print("error : \(String(describing: error))")
+                    let alert = UIAlertController (title: "Information", message:
+                        error?.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                    }
                     return
                 }
                 do {
@@ -922,11 +935,18 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
     }
     
     func dataDinamisRequest() {
+        loadingData()
 // ======================= Date Reguler and Price Per Kilos =======================
         if Reachability.isConnectedToNetwork() {
             print("Internet Connection Available!")
             let url = URL(string: Config().URL_Laundry_Kilos)!
-            let session = URLSession.shared
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = TimeInterval(15)
+            config.timeoutIntervalForResource = TimeInterval(15)
+            
+            let session = URLSession(configuration: config)
+            //let session = URLSession.shared
             
             let request = NSMutableURLRequest(url: url)
             
@@ -936,7 +956,17 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                 data, response, error in
                 
                 if error != nil {
-                    print("error\(String(describing: error))")
+                    print("error : \(String(describing: error?.localizedDescription))")
+                    let alert = UIAlertController (title: "Connection", message:
+                        error?.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                    }
                     return
                 }
                 do {
@@ -951,12 +981,11 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                                 
                                 self.dataKilos.append(MyKilos(id: id, name: name, price: price, qty: 0))
                             }
+                            self.view.isUserInteractionEnabled = true
+                            self.messageFrame.removeFromSuperview()
+                            self.activityIndicator.stopAnimating()
+                            self.refreshControl.endRefreshing()
                         }
-                        
-                        self.view.isUserInteractionEnabled = true
-                        self.messageFrame.removeFromSuperview()
-                        self.activityIndicator.stopAnimating()
-                        self.refreshControl.endRefreshing()
                     }
                 }
             }
