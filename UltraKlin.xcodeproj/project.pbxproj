@@ -15,6 +15,7 @@
 		5F17CB2B207718840074B422 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17CB2A207718840074B422 /* SystemConfiguration.framework */; };
 		5F17CB2D2077188E0074B422 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F17CB2C2077188E0074B422 /* StoreKit.framework */; };
 		5F1DCDE6203FCD1900F486AD /* UltraKlinCleaning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F1DCDE5203FCD1900F486AD /* UltraKlinCleaning.swift */; };
+		5F2208B2209B1ADE00307791 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2208B1209B1ADE00307791 /* CollectionViewCell.swift */; };
 		5F24B6EE2054E8670080DEFC /* UltraKlinLaundry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */; };
 		5F24C2AC205F9E6300CD5067 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24C2AB205F9E6300CD5067 /* Config.swift */; };
 		5F24C2AE205FBC7B00CD5067 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F24C2AD205FBC7B00CD5067 /* Reachability.swift */; };
@@ -29,6 +30,8 @@
 		5F7C46A22064D24F008D2C73 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C46A12064D24F008D2C73 /* AdSupport.framework */; };
 		5F7C46A42064D259008D2C73 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F7C46A32064D258008D2C73 /* iAd.framework */; };
 		5F9998DC2052378600AC37FD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F9998DB2052378600AC37FD /* GoogleService-Info.plist */; };
+		5FA8278A2099A58600E75D77 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FA827892099A58500E75D77 /* UIViewExtension.swift */; };
+		5FAA360A2099681F00521931 /* GoogleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAA36092099681F00521931 /* GoogleViewController.swift */; };
 		5FAC0F29207E89E200901541 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAC0F24207E89E200901541 /* LoginController.swift */; };
 		5FAC0F2A207E89E200901541 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAC0F25207E89E200901541 /* ChatLogController.swift */; };
 		5FAC0F2B207E89E200901541 /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAC0F26207E89E200901541 /* NewMessageController.swift */; };
@@ -48,6 +51,28 @@
 		5FAFCB19203EED810009F97B /* UltraKlinAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FAFCB18203EED810009F97B /* UltraKlinAccountView.swift */; };
 		5FB0F7302045815F007CE83C /* UltraKlinRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0F72F2045815F007CE83C /* UltraKlinRegistration.swift */; };
 		5FB0F73220458171007CE83C /* UltraKlinLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB0F73120458171007CE83C /* UltraKlinLogin.swift */; };
+		5FB356E220970DD500315CFF /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB3569820970DD500315CFF /* Styles.swift */; };
+		5FB356E320970DD500315CFF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5FB3569A20970DD500315CFF /* Localizable.strings */; };
+		5FB356E520970DD500315CFF /* PlacePickerDemoAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5FB356BD20970DD500315CFF /* PlacePickerDemoAssets.xcassets */; };
+		5FB356E620970DD500315CFF /* ShadowLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356C820970DD500315CFF /* ShadowLineView.swift */; };
+		5FB356E720970DD500315CFF /* PickAPlaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FB356CB20970DD500315CFF /* PickAPlaceViewController.xib */; };
+		5FB356E820970DD500315CFF /* PickAPlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356CC20970DD500315CFF /* PickAPlaceViewController.swift */; };
+		5FB356E920970DD500315CFF /* PlaceAttributeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FB356CE20970DD500315CFF /* PlaceAttributeCell.xib */; };
+		5FB356EA20970DD500315CFF /* PlaceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FB356CF20970DD500315CFF /* PlaceDetailViewController.xib */; };
+		5FB356EB20970DD500315CFF /* PlaceAttributeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356D020970DD500315CFF /* PlaceAttributeCell.swift */; };
+		5FB356EC20970DD500315CFF /* PlaceNameHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356D120970DD500315CFF /* PlaceNameHeader.swift */; };
+		5FB356ED20970DD500315CFF /* PlaceDetailTableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356D220970DD500315CFF /* PlaceDetailTableViewDataSource.swift */; };
+		5FB356EE20970DD500315CFF /* PlaceNameHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5FB356D320970DD500315CFF /* PlaceNameHeader.xib */; };
+		5FB356EF20970DD500315CFF /* PlaceDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356D420970DD500315CFF /* PlaceDetailViewController.swift */; };
+		5FB356F020970DD500315CFF /* BackgroundMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356D620970DD500315CFF /* BackgroundMapViewController.swift */; };
+		5FB356F120970DD500315CFF /* InsetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356D720970DD500315CFF /* InsetViewController.swift */; };
+		5FB356F220970DD500315CFF /* SplitPaneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356D820970DD500315CFF /* SplitPaneViewController.swift */; };
+		5FB356F320970DD500315CFF /* BaseContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356D920970DD500315CFF /* BaseContainerViewController.swift */; };
+		5FB356F420970DD500315CFF /* NotificationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356DB20970DD500315CFF /* NotificationObserver.swift */; };
+		5FB356F520970DD500315CFF /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356DC20970DD500315CFF /* CGRect+Extensions.swift */; };
+		5FB356F620970DD500315CFF /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356DD20970DD500315CFF /* ShadowView.swift */; };
+		5FB356F820970DD500315CFF /* SDKDemoAPIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356DF20970DD500315CFF /* SDKDemoAPIKey.swift */; };
+		5FB356F920970DD500315CFF /* RoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FB356E020970DD500315CFF /* RoundedButton.swift */; };
 		5FB6DA89206AB44F00E25B1B /* AppRatingLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5FB6DA87206AB44F00E25B1B /* AppRatingLocalizable.strings */; };
 		5FC37C962047BD680086E500 /* UltraKlinTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */; };
 		5FEC70832080A53F00C63F05 /* UltraKlinDetailOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FEC70822080A53F00C63F05 /* UltraKlinDetailOrder.swift */; };
@@ -65,13 +90,6 @@
 		5FFAFE63207BBB6E00AEC913 /* FSPageViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFAFE5C207BBB6E00AEC913 /* FSPageViewLayout.swift */; };
 		5FFAFE64207BBB6E00AEC913 /* FSPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFAFE5D207BBB6E00AEC913 /* FSPageControl.swift */; };
 		5FFAFE65207BBB6E00AEC913 /* FSPagerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFAFE5E207BBB6E00AEC913 /* FSPagerCollectionView.swift */; };
-		5FFAFE6F207BBBEA00AEC913 /* 3.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FFAFE68207BBBE900AEC913 /* 3.jpg */; };
-		5FFAFE70207BBBEA00AEC913 /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FFAFE69207BBBE900AEC913 /* 1.jpg */; };
-		5FFAFE71207BBBEA00AEC913 /* 7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FFAFE6A207BBBE900AEC913 /* 7.jpg */; };
-		5FFAFE72207BBBEA00AEC913 /* 2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FFAFE6B207BBBEA00AEC913 /* 2.jpg */; };
-		5FFAFE73207BBBEA00AEC913 /* 5.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FFAFE6C207BBBEA00AEC913 /* 5.jpg */; };
-		5FFAFE74207BBBEA00AEC913 /* 6.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FFAFE6D207BBBEA00AEC913 /* 6.jpg */; };
-		5FFAFE75207BBBEA00AEC913 /* 4.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5FFAFE6E207BBBEA00AEC913 /* 4.jpg */; };
 		5FFB5A652074A9E0008BC25E /* AppRating.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5FFB5A642074A9E0008BC25E /* AppRating.bundle */; };
 		AD930BC15515B81C1FC32B44 /* Pods_UltraKlin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C85970E1A313D7EE0DD35094 /* Pods_UltraKlin.framework */; };
 /* End PBXBuildFile section */
@@ -167,7 +185,6 @@
 
 /* Begin PBXFileReference section */
 		5513B6C728863E6BDBA564D4 /* Pods-UltraKlin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltraKlin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin.debug.xcconfig"; sourceTree = "<group>"; };
-		5F0B67FB204CE1DD0008AD25 /* UltraKlin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UltraKlin.entitlements; sourceTree = "<group>"; };
 		5F0B67FD204CE2150008AD25 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		5F0C90902043AAD500FDF94E /* UltraKlinCleaningDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinCleaningDetail.swift; sourceTree = "<group>"; };
 		5F17CB1E207712CC0074B422 /* GoogleSignIn.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleSignIn.framework; sourceTree = "<group>"; };
@@ -177,6 +194,7 @@
 		5F17CB2C2077188E0074B422 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		5F17CB2E20771AC10074B422 /* UltraKlin-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UltraKlin-Bridging-Header.h"; sourceTree = "<group>"; };
 		5F1DCDE5203FCD1900F486AD /* UltraKlinCleaning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinCleaning.swift; sourceTree = "<group>"; };
+		5F2208B1209B1ADE00307791 /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLaundry.swift; sourceTree = "<group>"; };
 		5F24C2AB205F9E6300CD5067 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		5F24C2AD205FBC7B00CD5067 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -191,6 +209,8 @@
 		5F7C46A12064D24F008D2C73 /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		5F7C46A32064D258008D2C73 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		5F9998DB2052378600AC37FD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5FA827892099A58500E75D77 /* UIViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		5FAA36092099681F00521931 /* GoogleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleViewController.swift; sourceTree = "<group>"; };
 		5FAC0F24207E89E200901541 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		5FAC0F25207E89E200901541 /* ChatLogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
 		5FAC0F26207E89E200901541 /* NewMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
@@ -212,6 +232,69 @@
 		5FAFCB18203EED810009F97B /* UltraKlinAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinAccountView.swift; sourceTree = "<group>"; };
 		5FB0F72F2045815F007CE83C /* UltraKlinRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinRegistration.swift; sourceTree = "<group>"; };
 		5FB0F73120458171007CE83C /* UltraKlinLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinLogin.swift; sourceTree = "<group>"; };
+		5FB3569820970DD500315CFF /* Styles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
+		5FB3569B20970DD500315CFF /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB3569C20970DD500315CFF /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB3569D20970DD500315CFF /* en_AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en_AU; path = en_AU.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB3569E20970DD500315CFF /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB3569F20970DD500315CFF /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A020970DD500315CFF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A120970DD500315CFF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A220970DD500315CFF /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A320970DD500315CFF /* es_419 */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es_419; path = es_419.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A420970DD500315CFF /* es_MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es_MX; path = es_MX.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A520970DD500315CFF /* zh_CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh_CN; path = zh_CN.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A620970DD500315CFF /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A720970DD500315CFF /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A820970DD500315CFF /* pt_BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_BR; path = pt_BR.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356A920970DD500315CFF /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356AA20970DD500315CFF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356AB20970DD500315CFF /* sk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sk; path = sk.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356AC20970DD500315CFF /* pt_PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt_PT; path = pt_PT.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356AD20970DD500315CFF /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356AE20970DD500315CFF /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356AF20970DD500315CFF /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356B020970DD500315CFF /* en_IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en_IN; path = en_IN.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356B120970DD500315CFF /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356B420970DD500315CFF /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356B520970DD500315CFF /* zh_HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh_HK; path = zh_HK.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356B620970DD500315CFF /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356B720970DD500315CFF /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356B820970DD500315CFF /* zh_TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = zh_TW; path = zh_TW.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356B920970DD500315CFF /* en_GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en_GB; path = en_GB.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356BA20970DD500315CFF /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356BB20970DD500315CFF /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356BC20970DD500315CFF /* fr_CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr_CA; path = fr_CA.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356BD20970DD500315CFF /* PlacePickerDemoAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PlacePickerDemoAssets.xcassets; sourceTree = "<group>"; };
+		5FB356BE20970DD500315CFF /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356BF20970DD500315CFF /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C020970DD500315CFF /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C120970DD500315CFF /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C220970DD500315CFF /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C320970DD500315CFF /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C420970DD500315CFF /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ro; path = ro.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C520970DD500315CFF /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C620970DD500315CFF /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C720970DD500315CFF /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5FB356C820970DD500315CFF /* ShadowLineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowLineView.swift; sourceTree = "<group>"; };
+		5FB356CB20970DD500315CFF /* PickAPlaceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PickAPlaceViewController.xib; sourceTree = "<group>"; };
+		5FB356CC20970DD500315CFF /* PickAPlaceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickAPlaceViewController.swift; sourceTree = "<group>"; };
+		5FB356CE20970DD500315CFF /* PlaceAttributeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceAttributeCell.xib; sourceTree = "<group>"; };
+		5FB356CF20970DD500315CFF /* PlaceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceDetailViewController.xib; sourceTree = "<group>"; };
+		5FB356D020970DD500315CFF /* PlaceAttributeCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceAttributeCell.swift; sourceTree = "<group>"; };
+		5FB356D120970DD500315CFF /* PlaceNameHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceNameHeader.swift; sourceTree = "<group>"; };
+		5FB356D220970DD500315CFF /* PlaceDetailTableViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceDetailTableViewDataSource.swift; sourceTree = "<group>"; };
+		5FB356D320970DD500315CFF /* PlaceNameHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PlaceNameHeader.xib; sourceTree = "<group>"; };
+		5FB356D420970DD500315CFF /* PlaceDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceDetailViewController.swift; sourceTree = "<group>"; };
+		5FB356D620970DD500315CFF /* BackgroundMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundMapViewController.swift; sourceTree = "<group>"; };
+		5FB356D720970DD500315CFF /* InsetViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsetViewController.swift; sourceTree = "<group>"; };
+		5FB356D820970DD500315CFF /* SplitPaneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplitPaneViewController.swift; sourceTree = "<group>"; };
+		5FB356D920970DD500315CFF /* BaseContainerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseContainerViewController.swift; sourceTree = "<group>"; };
+		5FB356DB20970DD500315CFF /* NotificationObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationObserver.swift; sourceTree = "<group>"; };
+		5FB356DC20970DD500315CFF /* CGRect+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
+		5FB356DD20970DD500315CFF /* ShadowView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
+		5FB356DF20970DD500315CFF /* SDKDemoAPIKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDKDemoAPIKey.swift; sourceTree = "<group>"; };
+		5FB356E020970DD500315CFF /* RoundedButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedButton.swift; sourceTree = "<group>"; };
 		5FB6DA88206AB44F00E25B1B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = "AppRating-master/Localization/en.lproj/AppRatingLocalizable.strings"; sourceTree = "<group>"; };
 		5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinTabBarView.swift; sourceTree = "<group>"; };
 		5FEC70822080A53F00C63F05 /* UltraKlinDetailOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UltraKlinDetailOrder.swift; sourceTree = "<group>"; };
@@ -226,13 +309,6 @@
 		5FFAFE5C207BBB6E00AEC913 /* FSPageViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSPageViewLayout.swift; sourceTree = "<group>"; };
 		5FFAFE5D207BBB6E00AEC913 /* FSPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSPageControl.swift; sourceTree = "<group>"; };
 		5FFAFE5E207BBB6E00AEC913 /* FSPagerCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FSPagerCollectionView.swift; sourceTree = "<group>"; };
-		5FFAFE68207BBBE900AEC913 /* 3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 3.jpg; sourceTree = "<group>"; };
-		5FFAFE69207BBBE900AEC913 /* 1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1.jpg; sourceTree = "<group>"; };
-		5FFAFE6A207BBBE900AEC913 /* 7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 7.jpg; sourceTree = "<group>"; };
-		5FFAFE6B207BBBEA00AEC913 /* 2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 2.jpg; sourceTree = "<group>"; };
-		5FFAFE6C207BBBEA00AEC913 /* 5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 5.jpg; sourceTree = "<group>"; };
-		5FFAFE6D207BBBEA00AEC913 /* 6.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 6.jpg; sourceTree = "<group>"; };
-		5FFAFE6E207BBBEA00AEC913 /* 4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 4.jpg; sourceTree = "<group>"; };
 		5FFB5A642074A9E0008BC25E /* AppRating.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AppRating.bundle; sourceTree = "<group>"; };
 		C85970E1A313D7EE0DD35094 /* Pods_UltraKlin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UltraKlin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2A4A450F551FCCAB58DFFA2 /* Pods-UltraKlin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UltraKlin.release.xcconfig"; path = "Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin.release.xcconfig"; sourceTree = "<group>"; };
@@ -352,13 +428,13 @@
 		5FAFCAFE203EE1930009F97B /* UltraKlin */ = {
 			isa = PBXGroup;
 			children = (
+				5FB3569720970DD500315CFF /* GooglePlacePicker */,
 				5F585970207D186900298724 /* View */,
 				5F585967207D181300298724 /* Helper */,
 				5F585966207D180C00298724 /* Model */,
 				5F58595B207D17B800298724 /* Controller */,
 				5FFAFE67207BBBCB00AEC913 /* Resources */,
 				5FFAFE57207BBB6E00AEC913 /* Sources */,
-				5F0B67FB204CE1DD0008AD25 /* UltraKlin.entitlements */,
 				5FAFCAFF203EE1930009F97B /* AppDelegate.swift */,
 				5FAFCB01203EE1930009F97B /* ViewController.swift */,
 				5FB0F72F2045815F007CE83C /* UltraKlinRegistration.swift */,
@@ -371,6 +447,9 @@
 				5F24B6ED2054E8670080DEFC /* UltraKlinLaundry.swift */,
 				5F54A4052060E78F007BEEDC /* UltraKlinLaundryDetail.swift */,
 				5FEC70822080A53F00C63F05 /* UltraKlinDetailOrder.swift */,
+				5FAA36092099681F00521931 /* GoogleViewController.swift */,
+				5FA827892099A58500E75D77 /* UIViewExtension.swift */,
+				5F2208B1209B1ADE00307791 /* CollectionViewCell.swift */,
 				5FAFCB03203EE1930009F97B /* Main.storyboard */,
 				5FAFCB0B203EE1930009F97B /* LaunchScreen.storyboard */,
 				5FC37C952047BD680086E500 /* UltraKlinTabBarView.swift */,
@@ -382,6 +461,83 @@
 				5F17CB2E20771AC10074B422 /* UltraKlin-Bridging-Header.h */,
 			);
 			path = UltraKlin;
+			sourceTree = "<group>";
+		};
+		5FB3569720970DD500315CFF /* GooglePlacePicker */ = {
+			isa = PBXGroup;
+			children = (
+				5FB3569820970DD500315CFF /* Styles.swift */,
+				5FB3569920970DD500315CFF /* Resources */,
+				5FB356C820970DD500315CFF /* ShadowLineView.swift */,
+				5FB356C920970DD500315CFF /* ViewControllers */,
+				5FB356DA20970DD500315CFF /* Support */,
+				5FB356DD20970DD500315CFF /* ShadowView.swift */,
+				5FB356DF20970DD500315CFF /* SDKDemoAPIKey.swift */,
+				5FB356E020970DD500315CFF /* RoundedButton.swift */,
+			);
+			path = GooglePlacePicker;
+			sourceTree = SOURCE_ROOT;
+		};
+		5FB3569920970DD500315CFF /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5FB3569A20970DD500315CFF /* Localizable.strings */,
+				5FB356BD20970DD500315CFF /* PlacePickerDemoAssets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5FB356C920970DD500315CFF /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5FB356CA20970DD500315CFF /* PickAPlace */,
+				5FB356CD20970DD500315CFF /* PlaceDetail */,
+				5FB356D520970DD500315CFF /* Containers */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		5FB356CA20970DD500315CFF /* PickAPlace */ = {
+			isa = PBXGroup;
+			children = (
+				5FB356CB20970DD500315CFF /* PickAPlaceViewController.xib */,
+				5FB356CC20970DD500315CFF /* PickAPlaceViewController.swift */,
+			);
+			path = PickAPlace;
+			sourceTree = "<group>";
+		};
+		5FB356CD20970DD500315CFF /* PlaceDetail */ = {
+			isa = PBXGroup;
+			children = (
+				5FB356CE20970DD500315CFF /* PlaceAttributeCell.xib */,
+				5FB356CF20970DD500315CFF /* PlaceDetailViewController.xib */,
+				5FB356D020970DD500315CFF /* PlaceAttributeCell.swift */,
+				5FB356D120970DD500315CFF /* PlaceNameHeader.swift */,
+				5FB356D220970DD500315CFF /* PlaceDetailTableViewDataSource.swift */,
+				5FB356D320970DD500315CFF /* PlaceNameHeader.xib */,
+				5FB356D420970DD500315CFF /* PlaceDetailViewController.swift */,
+			);
+			path = PlaceDetail;
+			sourceTree = "<group>";
+		};
+		5FB356D520970DD500315CFF /* Containers */ = {
+			isa = PBXGroup;
+			children = (
+				5FB356D620970DD500315CFF /* BackgroundMapViewController.swift */,
+				5FB356D720970DD500315CFF /* InsetViewController.swift */,
+				5FB356D820970DD500315CFF /* SplitPaneViewController.swift */,
+				5FB356D920970DD500315CFF /* BaseContainerViewController.swift */,
+			);
+			path = Containers;
+			sourceTree = "<group>";
+		};
+		5FB356DA20970DD500315CFF /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				5FB356DB20970DD500315CFF /* NotificationObserver.swift */,
+				5FB356DC20970DD500315CFF /* CGRect+Extensions.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		5FEF533D2074FA3400E926D7 /* Products */ = {
@@ -430,13 +586,6 @@
 			isa = PBXGroup;
 			children = (
 				5FAFCB09203EE1930009F97B /* Assets.xcassets */,
-				5FFAFE69207BBBE900AEC913 /* 1.jpg */,
-				5FFAFE6B207BBBEA00AEC913 /* 2.jpg */,
-				5FFAFE68207BBBE900AEC913 /* 3.jpg */,
-				5FFAFE6E207BBBEA00AEC913 /* 4.jpg */,
-				5FFAFE6C207BBBEA00AEC913 /* 5.jpg */,
-				5FFAFE6D207BBBEA00AEC913 /* 6.jpg */,
-				5FFAFE6A207BBBE900AEC913 /* 7.jpg */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -515,6 +664,47 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				he,
+				en_AU,
+				ar,
+				el,
+				ja,
+				uk,
+				es_419,
+				es_MX,
+				zh_CN,
+				nb,
+				es,
+				pt_BR,
+				da,
+				it,
+				sk,
+				pt_PT,
+				ms,
+				sv,
+				cs,
+				en_IN,
+				ko,
+				hu,
+				zh_HK,
+				tr,
+				pl,
+				zh_TW,
+				en_GB,
+				vi,
+				ru,
+				fr_CA,
+				fr,
+				fi,
+				id,
+				nl,
+				th,
+				pt,
+				ro,
+				hr,
+				hi,
+				ca,
 			);
 			mainGroup = 5FAFCAF3203EE1930009F97B;
 			productRefGroup = 5FAFCAFD203EE1930009F97B /* Products */;
@@ -597,20 +787,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5FFAFE72207BBBEA00AEC913 /* 2.jpg in Resources */,
 				5FFB5A652074A9E0008BC25E /* AppRating.bundle in Resources */,
-				5FFAFE74207BBBEA00AEC913 /* 6.jpg in Resources */,
+				5FB356EE20970DD500315CFF /* PlaceNameHeader.xib in Resources */,
 				5FB6DA89206AB44F00E25B1B /* AppRatingLocalizable.strings in Resources */,
+				5FB356E920970DD500315CFF /* PlaceAttributeCell.xib in Resources */,
+				5FB356EA20970DD500315CFF /* PlaceDetailViewController.xib in Resources */,
 				5FAFCB0D203EE1930009F97B /* LaunchScreen.storyboard in Resources */,
 				5F9998DC2052378600AC37FD /* GoogleService-Info.plist in Resources */,
 				5FAFCB0A203EE1930009F97B /* Assets.xcassets in Resources */,
 				5F17CB27207712CD0074B422 /* GoogleSignIn.bundle in Resources */,
-				5FFAFE75207BBBEA00AEC913 /* 4.jpg in Resources */,
-				5FFAFE70207BBBEA00AEC913 /* 1.jpg in Resources */,
-				5FFAFE71207BBBEA00AEC913 /* 7.jpg in Resources */,
-				5FFAFE73207BBBEA00AEC913 /* 5.jpg in Resources */,
+				5FB356E520970DD500315CFF /* PlacePickerDemoAssets.xcassets in Resources */,
+				5FB356E320970DD500315CFF /* Localizable.strings in Resources */,
 				5FAFCB05203EE1930009F97B /* Main.storyboard in Resources */,
-				5FFAFE6F207BBBEA00AEC913 /* 3.jpg in Resources */,
+				5FB356E720970DD500315CFF /* PickAPlaceViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -667,9 +856,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-UltraKlin/Pods-UltraKlin-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Resources/GooglePlacePicker.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Resources/GooglePlaces.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlacePicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -684,13 +880,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F58596D207D183A00298724 /* Person.swift in Sources */,
+				5FB356F020970DD500315CFF /* BackgroundMapViewController.swift in Sources */,
 				5F24C2AE205FBC7B00CD5067 /* Reachability.swift in Sources */,
+				5FB356F520970DD500315CFF /* CGRect+Extensions.swift in Sources */,
 				5FAFCB08203EE1930009F97B /* UltraKlin.xcdatamodeld in Sources */,
+				5FB356ED20970DD500315CFF /* PlaceDetailTableViewDataSource.swift in Sources */,
 				5FB0F7302045815F007CE83C /* UltraKlinRegistration.swift in Sources */,
 				5F58596C207D183A00298724 /* Message.swift in Sources */,
 				5F24B6EE2054E8670080DEFC /* UltraKlinLaundry.swift in Sources */,
 				5FAFCB19203EED810009F97B /* UltraKlinAccountView.swift in Sources */,
 				5F585974207D188700298724 /* UserCell.swift in Sources */,
+				5FB356F120970DD500315CFF /* InsetViewController.swift in Sources */,
+				5FB356F320970DD500315CFF /* BaseContainerViewController.swift in Sources */,
 				5F585973207D188700298724 /* ChatMessageCell.swift in Sources */,
 				5FFAFE61207BBB6E00AEC913 /* FSPagerViewCell.swift in Sources */,
 				5F0C90912043AAD500FDF94E /* UltraKlinCleaningDetail.swift in Sources */,
@@ -698,24 +899,38 @@
 				5FAFCB17203EED090009F97B /* UltraKlinHistoryView.swift in Sources */,
 				5FEC70832080A53F00C63F05 /* UltraKlinDetailOrder.swift in Sources */,
 				5FAC0F29207E89E200901541 /* LoginController.swift in Sources */,
+				5FB356F620970DD500315CFF /* ShadowView.swift in Sources */,
+				5FB356F920970DD500315CFF /* RoundedButton.swift in Sources */,
+				5FB356EC20970DD500315CFF /* PlaceNameHeader.swift in Sources */,
+				5FB356EF20970DD500315CFF /* PlaceDetailViewController.swift in Sources */,
+				5FB356F820970DD500315CFF /* SDKDemoAPIKey.swift in Sources */,
 				5F24C2AC205F9E6300CD5067 /* Config.swift in Sources */,
 				5FAFCB15203EECC80009F97B /* UltraKlinHomeView.swift in Sources */,
 				5FAFCB02203EE1930009F97B /* ViewController.swift in Sources */,
 				5F54A4062060E78F007BEEDC /* UltraKlinLaundryDetail.swift in Sources */,
 				5FFAFE63207BBB6E00AEC913 /* FSPageViewLayout.swift in Sources */,
+				5FB356F220970DD500315CFF /* SplitPaneViewController.swift in Sources */,
 				5FAFCB00203EE1930009F97B /* AppDelegate.swift in Sources */,
 				5FB0F73220458171007CE83C /* UltraKlinLogin.swift in Sources */,
 				5FC37C962047BD680086E500 /* UltraKlinTabBarView.swift in Sources */,
+				5F2208B2209B1ADE00307791 /* CollectionViewCell.swift in Sources */,
 				5F1DCDE6203FCD1900F486AD /* UltraKlinCleaning.swift in Sources */,
 				5FFAFE60207BBB6E00AEC913 /* FSPageViewTransformer.swift in Sources */,
 				5F585969207D182800298724 /* Extension.swift in Sources */,
 				5FFAFE65207BBB6E00AEC913 /* FSPagerCollectionView.swift in Sources */,
 				5FAC0F2B207E89E200901541 /* NewMessageController.swift in Sources */,
 				5FAC0F2D207E89E200901541 /* MessageController.swift in Sources */,
+				5FB356E620970DD500315CFF /* ShadowLineView.swift in Sources */,
+				5FB356E220970DD500315CFF /* Styles.swift in Sources */,
+				5FA8278A2099A58600E75D77 /* UIViewExtension.swift in Sources */,
 				5FFAFE5F207BBB6E00AEC913 /* FSPagerView.swift in Sources */,
 				5FAC0F2A207E89E200901541 /* ChatLogController.swift in Sources */,
+				5FB356E820970DD500315CFF /* PickAPlaceViewController.swift in Sources */,
+				5FAA360A2099681F00521931 /* GoogleViewController.swift in Sources */,
 				5FFAFE62207BBB6E00AEC913 /* FSPagerViewLayoutAttributes.swift in Sources */,
 				5FAC0F2C207E89E200901541 /* LoginController+Handler.swift in Sources */,
+				5FB356EB20970DD500315CFF /* PlaceAttributeCell.swift in Sources */,
+				5FB356F420970DD500315CFF /* NotificationObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -754,6 +969,55 @@
 				5FAFCB0C203EE1930009F97B /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		5FB3569A20970DD500315CFF /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5FB3569B20970DD500315CFF /* de */,
+				5FB3569C20970DD500315CFF /* he */,
+				5FB3569D20970DD500315CFF /* en_AU */,
+				5FB3569E20970DD500315CFF /* ar */,
+				5FB3569F20970DD500315CFF /* el */,
+				5FB356A020970DD500315CFF /* ja */,
+				5FB356A120970DD500315CFF /* en */,
+				5FB356A220970DD500315CFF /* uk */,
+				5FB356A320970DD500315CFF /* es_419 */,
+				5FB356A420970DD500315CFF /* es_MX */,
+				5FB356A520970DD500315CFF /* zh_CN */,
+				5FB356A620970DD500315CFF /* nb */,
+				5FB356A720970DD500315CFF /* es */,
+				5FB356A820970DD500315CFF /* pt_BR */,
+				5FB356A920970DD500315CFF /* da */,
+				5FB356AA20970DD500315CFF /* it */,
+				5FB356AB20970DD500315CFF /* sk */,
+				5FB356AC20970DD500315CFF /* pt_PT */,
+				5FB356AD20970DD500315CFF /* ms */,
+				5FB356AE20970DD500315CFF /* sv */,
+				5FB356AF20970DD500315CFF /* cs */,
+				5FB356B020970DD500315CFF /* en_IN */,
+				5FB356B120970DD500315CFF /* ko */,
+				5FB356B420970DD500315CFF /* hu */,
+				5FB356B520970DD500315CFF /* zh_HK */,
+				5FB356B620970DD500315CFF /* tr */,
+				5FB356B720970DD500315CFF /* pl */,
+				5FB356B820970DD500315CFF /* zh_TW */,
+				5FB356B920970DD500315CFF /* en_GB */,
+				5FB356BA20970DD500315CFF /* vi */,
+				5FB356BB20970DD500315CFF /* ru */,
+				5FB356BC20970DD500315CFF /* fr_CA */,
+				5FB356BE20970DD500315CFF /* fr */,
+				5FB356BF20970DD500315CFF /* fi */,
+				5FB356C020970DD500315CFF /* id */,
+				5FB356C120970DD500315CFF /* nl */,
+				5FB356C220970DD500315CFF /* th */,
+				5FB356C320970DD500315CFF /* pt */,
+				5FB356C420970DD500315CFF /* ro */,
+				5FB356C520970DD500315CFF /* hr */,
+				5FB356C620970DD500315CFF /* hi */,
+				5FB356C720970DD500315CFF /* ca */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		5FB6DA87206AB44F00E25B1B /* AppRatingLocalizable.strings */ = {

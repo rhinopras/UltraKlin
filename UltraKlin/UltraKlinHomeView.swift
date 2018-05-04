@@ -15,6 +15,11 @@ import FirebaseDatabase
 import FirebaseStorage
 import DeviceCheck
 
+struct serviceMenu {
+    let serviceName: String?
+    let serviceimage: UIImage?
+}
+
 class CustomUITextField: UITextField {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(copy(_:)) || action == #selector(paste(_:)) || action == #selector(cut(_:)) || action == #selector(select(_:)) || action == #selector(selectAll(_:)) {
@@ -48,6 +53,14 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
     var imageList : [UIImage] = []
     var list : Int = 0
     
+    var serviceArray: [serviceMenu] = []
+    fileprivate let sectionInsets = UIEdgeInsets(top: 10.0, left: 10.0, bottom: 10.0, right: 10.0)
+    fileprivate let itemsPerRow: CGFloat = 4
+    var paddingSpace : Int = 0
+    var availableWidth : Int = 0
+    var widthPerItem : Int = 0
+    var heightcell : Int = 0
+    
     // Refresh
     let messageFrame = UIView()
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.whiteLarge)
@@ -57,6 +70,9 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
     @IBOutlet weak var buttonLaundry: UIButton!
     @IBOutlet weak var buttonPest: UIButton!
     @IBOutlet weak var labelCleaning: UILabel!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var constraintCollectionView: NSLayoutConstraint!
+    @IBOutlet weak var constraints: NSLayoutConstraint!
     
     @IBAction func itemNavChat(_ sender: Any) {
 //        loadingData()
@@ -113,14 +129,14 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
     func pagerView(_ pagerView: FSPagerView, cellForItemAt index: Int) -> FSPagerViewCell {
         let cell = pagerView.dequeueReusableCell(withReuseIdentifier: "cell", at: index)
         //cell.imageView?.image = UIImage(contentsOfFile: self.urlImages[index])
+        //cell.imageView?.image = self.imageList[index]
         let fileManager = FileManager.default
         let imagePAth = (self.getDirectoryPath() as NSString).appendingPathComponent(self.urlImages[index])
         if fileManager.fileExists(atPath: imagePAth){
             cell.imageView?.image = UIImage(contentsOfFile: imagePAth)
-        }else{
+        } else {
             print("No Image")
         }
-        //cell.imageView?.image = self.imageList[index]
         cell.imageView?.contentMode = .scaleToFill
         //cell.imageView?.clipsToBounds = true
         //cell.textLabel?.text = index.description+index.description
@@ -130,7 +146,7 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
     func pagerView(_ pagerView: FSPagerView, didSelectItemAt index: Int) {
         pagerView.deselectItem(at: index, animated: true)
         pagerView.scrollToItem(at: index, animated: true)
-        self.pageControl.currentPage = imageList.count
+        self.pageControl.currentPage = urlImages.count
     }
     
     func pagerViewDidScroll(_ pagerView: FSPagerView) {
@@ -173,7 +189,7 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
         URLSession.shared.dataTask(with: url) { data, response, error in
             completion(data, response, error)
             if error != nil {
-                print(error?.localizedDescription as Any)
+                print("\(String(describing: error?.localizedDescription))")
             }
         }.resume()
     }
@@ -184,8 +200,6 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
         getDataFromUrl(url: url) { data, response, error in
             
             guard let data = data, error == nil else {
-                self.imageList.removeFirst()
-                self.imageList.append(#imageLiteral(resourceName: "slideError"))
                 print("Image download error: \(String(describing: error?.localizedDescription))")
                 FirebaseCrashMessage("Image download error: \(String(describing: error?.localizedDescription))")
                 return
@@ -200,8 +214,6 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode > 200 {
                     let errorMsg = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
-                    self.imageList.removeFirst()
-                    self.imageList.append(#imageLiteral(resourceName: "slideError"))
                     print("Image download error: \(errorMsg!)")
                     FirebaseCrashMessage("Image download error: \(errorMsg!)")
                     return
@@ -212,11 +224,7 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
             print("Download Finished")
             
             DispatchQueue.main.async() {
-                
-                self.imageList.removeFirst()
-                self.imageList.append(UIImage(data: data)!)
                 self.saveImageDocumentDirectory(data: UIImage(data: data)!, name: response?.suggestedFilename ?? url.lastPathComponent)
-                
             }
         }
     }
@@ -225,13 +233,14 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
         let fileManager = FileManager.default
         let paths = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(name)
         let image = data
-        print(paths)
         let imageData = UIImagePNGRepresentation(image)
         fileManager.createFile(atPath: paths as String, contents: imageData, attributes: nil)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        serviceViewDinamis()
         
         if urlImages == [] {
             loadBannerFile()
@@ -258,7 +267,7 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
         // ======================== Dinamis Banner =========================
         if Reachability.isConnectedToNetwork() {
             
-            let url = URL(string: Config().URL_Banner_list)!
+            let url = URL(string: Config().URL_Banner_List)!
             
             let config = URLSessionConfiguration.default
             config.timeoutIntervalForRequest = TimeInterval(15)
@@ -275,6 +284,7 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
                 data, response, error in
                 
                 if error != nil {
+                    print("\(String(describing: error?.localizedDescription))")
                     DispatchQueue.main.async {
                         self.view.isUserInteractionEnabled = true
                         self.messageFrame.removeFromSuperview()
@@ -289,21 +299,17 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
                     DispatchQueue.main.async {
                         
                         for listImageAdd in json! {
-
                             let itemName = (listImageAdd as AnyObject)["name"] as! String
                             let itemFile = (listImageAdd as AnyObject)["file"] as! String
-
                             self.urlImages.append(itemFile)
                             self.nameImages.append(itemName)
-                            self.imageList.append(#imageLiteral(resourceName: "ImageLoading"))
                         }
                         for i in 0..<self.urlImages.count{
-                            self.downloadImage(url: URL(string: "\(Config().URL_Banner_show)\(Int(self.view.frame.width))/\(self.urlImages[i])")!)
+                            self.downloadImage(url: URL(string: "\(Config().URL_Banner_Show)\(Int(self.view.frame.width)+400)/\(self.urlImages[i])")!)
                         }
                         self.pagerView.automaticSlidingInterval = 4.0
                         self.pagerView.isInfinite = self.pagerView.isInfinite
                         self.pageControl.numberOfPages = self.urlImages.count
-                        
                     }
                 }
             }
@@ -323,40 +329,36 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        constraints.constant = 0
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    func animateImageView() {
-        CATransaction.begin()
-        //CATransaction.setAnimationDuration(animationDuration)
-        CATransaction.setCompletionBlock {
-            //DispatchQueue.main.asyncAfter(deadline: .now() + self.switchingInterval) {
-                //self.animateImageView()
-            //}
-        }
-        let transition = CATransition()
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromRight
-        //imageSlide.layer.add(transition, forKey: kCATransition)
-        if list != imageList.count {
-            print("Begin of code")
-            if let url = URL(string: Config().URL_Banner_show + "\(Int(view.frame.width))/" + urlImages[0]) {
-                downloadImage(url: url)
-            }
-            list += 1
-            print("The image will continue downloading in the background and it will be loaded when it ends.")
-        } else {
-            //switchingInterval = 0
-        }
+//    func animateImageView() {
+//        CATransaction.begin()
+//        CATransaction.setAnimationDuration(animationDuration)
+//        CATransaction.setCompletionBlock {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + self.switchingInterval) {
+//                self.animateImageView()
+//            }
+//        }
+//        let transition = CATransition()
+//        transition.type = kCATransitionPush
+//        transition.subtype = kCATransitionFromRight
+//        imageSlide.layer.add(transition, forKey: kCATransition)
+//        if list != imageList.count {
+//            print("Begin of code")
+//            if let url = URL(string: Config().URL_Banner_Show + "\(Int(view.frame.width))/" + urlImages[0]) {
+//                downloadImage(url: url)
+//            }
+//            list += 1
+//        } else {
+//            switchingInterval = 0
+//        }
 //        imageSlide.image = imageList[index]
 //        controlSlide.currentPage = index
-        
-        CATransaction.commit()
-        //index = index < imageList.count - 1 ? index + 1 : 0
-    }
+//
+//        CATransaction.commit()
+//        index = index < imageList.count - 1 ? index + 1 : 0
+//    }
     
 //    @objc func swipedTouch(gesture : UIGestureRecognizer) {
 //        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
@@ -453,6 +455,84 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
 //        }
 //    }
     
+    func serviceViewDinamis() {
+        loadingData()
+        // ======================= List Item Cleaning =======================
+        if Reachability.isConnectedToNetwork() {
+            print("Internet Connection Available!")
+            let url = URL(string: Config().URL_Service_List)!
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = TimeInterval(15)
+            config.timeoutIntervalForResource = TimeInterval(15)
+            
+            let session = URLSession(configuration: config)
+            //let session = URLSession.shared
+            
+            let request = NSMutableURLRequest(url: url)
+            
+            request.httpMethod = "GET"
+            
+            let task = session.dataTask(with: request as URLRequest) {
+                data, response, error in
+                
+                if error != nil {
+                    print("error : \(String(describing: error))")
+                    let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.view.isUserInteractionEnabled = true
+                        self.messageFrame.removeFromSuperview()
+                        self.activityIndicator.stopAnimating()
+                        self.refreshControl.endRefreshing()
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                    return
+                }
+                do {
+                    if let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? Array<Any> {
+                        
+                        DispatchQueue.main.async {
+                            
+                            for addData in json {
+                                
+                                let name = (addData as AnyObject)["name"] as! String
+                                let displayName = (addData as AnyObject)["display_name"] as! String
+                                
+                                if name == "cleaning" {
+                                    self.serviceArray.append(serviceMenu(serviceName: displayName, serviceimage: #imageLiteral(resourceName: "historyC")))
+                                } else {
+                                    self.serviceArray.append(serviceMenu(serviceName: displayName, serviceimage: #imageLiteral(resourceName: "historyL")))
+                                }
+                            }
+                            
+                            self.collectionView.reloadData()
+                            
+                            self.paddingSpace = Int(self.sectionInsets.left * (self.itemsPerRow + 1))
+                            self.availableWidth = Int(self.view.frame.width) - self.paddingSpace
+                            self.widthPerItem = Int(self.availableWidth) / Int(self.itemsPerRow)
+                            
+                            self.constraintCollectionView.constant = CGFloat((self.widthPerItem + 50 + Int(self.sectionInsets.top + self.sectionInsets.bottom)))
+                            
+                            self.view.isUserInteractionEnabled = true
+                            self.messageFrame.removeFromSuperview()
+                            self.activityIndicator.stopAnimating()
+                            self.refreshControl.endRefreshing()
+                        }
+                    }
+                }
+            }
+            task.resume()
+        } else {
+            self.view.isUserInteractionEnabled = true
+            self.messageFrame.removeFromSuperview()
+            self.activityIndicator.stopAnimating()
+            self.refreshControl.endRefreshing()
+            print("Internet Connection not Available!")
+        }
+    }
+    
     func loadingData() {
         messageFrame.frame = CGRect(x: 90, y: 150 , width: 50, height: 50)
         messageFrame.layer.cornerRadius = 10
@@ -503,5 +583,72 @@ class UltraKlinHomeView: UIViewController, UIScrollViewDelegate, FSPagerViewData
         buttonPest.layer.shadowOpacity = 1.0
         buttonPest.layer.shadowRadius = 5.0
         buttonPest.layer.masksToBounds = false
+    }
+}
+
+extension UltraKlinHomeView : UICollectionViewDelegate, UICollectionViewDataSource {
+    //1
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    //2
+    func collectionView(_ collectionView: UICollectionView,
+                                 numberOfItemsInSection section: Int) -> Int {
+        return serviceArray.count
+    }
+    
+    //3
+    func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCell", for: indexPath) as! CollectionViewCell
+        cell.serviceImage.image = serviceArray[indexPath.row].serviceimage
+        cell.serviceTitle.text = serviceArray[indexPath.row].serviceName
+        
+        if heightcell == Int(itemsPerRow) {
+            self.constraintCollectionView.constant += CGFloat((self.widthPerItem + 50 + Int(self.sectionInsets.top + self.sectionInsets.bottom)))
+            heightcell = 1
+            print(heightcell)
+        } else {
+            heightcell += 1
+            print(heightcell)
+        }
+        cell.layer.backgroundColor = UIColor.white.cgColor
+        cell.layer.cornerRadius = 5
+        cell.layer.shadowColor = UIColor.lightGray.cgColor
+        cell.layer.shadowOffset = CGSize(width: 0, height: 0)
+        cell.layer.shadowOpacity = 1.0
+        cell.layer.shadowRadius = 5.0
+        cell.layer.masksToBounds = false
+        return cell
+    }
+}
+
+extension UltraKlinHomeView : UICollectionViewDelegateFlowLayout {
+    
+    //1
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        //2
+        //let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
+        //let availableWidth = view.frame.width - paddingSpace
+        //let widthPerItem = availableWidth / itemsPerRow
+        //collectionView.frame.size.height = widthPerItem + 50 + sectionInsets.top + sectionInsets.bottom
+        return CGSize(width: widthPerItem, height: widthPerItem + 50)
+    }
+    
+    //3
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        return sectionInsets
+    }
+    
+    // 4
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return sectionInsets.left
     }
 }

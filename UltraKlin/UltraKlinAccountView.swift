@@ -155,8 +155,6 @@ class UltraKlinAccountView: UIViewController, UITableViewDataSource, UITableView
             let task = session.dataTask(with: request as URLRequest) {
                 data, response, error in
                 
-                let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
-                
                 if error != nil {
                     print("error :\(String(describing: error?.localizedDescription))")
                     let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
@@ -170,6 +168,8 @@ class UltraKlinAccountView: UIViewController, UITableViewDataSource, UITableView
                     }
                     return
                 }
+                
+                let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
                 
                 if let dataJsonE = json["error"] as? String {
                     let alert = UIAlertController (title: "Information", message: dataJsonE, preferredStyle: .alert)
@@ -289,7 +289,7 @@ class UltraKlinAccountView: UIViewController, UITableViewDataSource, UITableView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 35 : 15
+        return section == 0 ? 35 : 20
     }
     
     func loadingData() {

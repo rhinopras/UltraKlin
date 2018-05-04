@@ -555,118 +555,6 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
         labelAdditional.addBottomBorderWithColor(color: UIColor.lightGray, width: 1)
     }
     
-    func promoCondition() {
-        if Int(labelBags.text!) == 0 {
-            let alert = UIAlertController (title: "Per Kilos", message: "Minimum order 1 Bag.", preferredStyle: .alert)
-            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        } else {
-            
-            self.loadingData()
-            
-            print("ada promo")
-            
-            //paramPromo = "&name=Laundry Kilos" + "&estimateWeight=" + labelBags.text! + "&promo=" + textPromoCode.text!
-            
-            let url = NSURL(string: Config().URL_Promo)!
-            
-            let config = URLSessionConfiguration.default
-            config.timeoutIntervalForRequest = TimeInterval(15)
-            config.timeoutIntervalForResource = TimeInterval(15)
-            
-            let session = URLSession(configuration: config)
-            
-            //let session = URLSession.shared
-            
-            let request = NSMutableURLRequest(url: url as URL)
-            
-            request.httpMethod = "POST"
-            request.httpBody = paramPromo.data(using: String.Encoding.utf8)
-            print(paramPromo)
-            
-            let task = session.dataTask(with: request as URLRequest) {
-                data, response, error in
-                
-                let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
-                
-                if error != nil {
-                    print(error!)
-                    return
-                }
-                
-                if let dataJson = json["error"] as? String {
-                    
-                    print("******* response checking = \(dataJson)")
-                    let alert = UIAlertController (title: "Information", message: dataJson, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                        
-                    DispatchQueue.main.async() {
-                        self.view.isUserInteractionEnabled = true
-                        self.messageFrame.removeFromSuperview()
-                        self.activityIndicator.stopAnimating()
-                        self.refreshControl.endRefreshing()
-                    }
-                        
-                } else {
-                    
-                    let subTotal = json["sub Total"] as! Int
-                    let totalPay = json["Total Payment"] as! Int
-                    
-                    DispatchQueue.main.async() {
-                        
-                        if self.switchPerPieceAct.isOn {
-                            if self.switchPerKilosAct.isOn {
-                                self.totalPromo = totalPay
-                                self.totalAll = self.totalPromo + self.totalPiece
-                                self.labelTotal.text = String(self.totalAll)
-                                
-                                self.validPromo = "valid"
-                                //self.textPromoCode.isUserInteractionEnabled = false
-                                //self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
-                                //.textPromoCode.textColor = UIColor.white
-                            } else {
-                                //self.textPromoCode.text = ""
-                                self.totalAll = self.totalPiece
-                                self.labelTotal.text = String(self.totalAll)
-                                //self.textPromoCode.backgroundColor = UIColor.white
-                                //self.textPromoCode.textColor = UIColor.black
-                                //self.textPromoCode.isUserInteractionEnabled = true
-                                let alert = UIAlertController (title: "Information", message: "Choose service Per Kilos", preferredStyle: .alert)
-                                alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                                self.present(alert, animated: true, completion: nil)
-                            }
-                        } else {
-                            if self.switchPerKilosAct.isOn {
-                                self.totalKilos = subTotal
-                                self.totalPromo = totalPay
-                                self.totalAll = self.totalPromo
-                                self.labelTotal.text = String(self.totalAll)
-                                
-                                self.validPromo = "valid"
-//                                self.textPromoCode.isUserInteractionEnabled = false
-//                                self.textPromoCode.backgroundColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
-//                                self.textPromoCode.textColor = UIColor.white
-                            } else {
-                                self.totalAll = 0
-                                self.labelTotal.text = String(self.totalAll)
-                            }
-                        }
-                        
-                        self.view.isUserInteractionEnabled = true
-                        self.messageFrame.removeFromSuperview()
-                        self.activityIndicator.stopAnimating()
-                        self.refreshControl.endRefreshing()
-                    }
-                    
-                }
-                print("******* response = \(data!)")
-            }
-            task.resume()
-        }
-        
-    }
-    
     func pickerViewTimePickup() {
         // Set Time
         timePicker.datePickerMode = .time
@@ -898,6 +786,7 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                         self.messageFrame.removeFromSuperview()
                         self.activityIndicator.stopAnimating()
                         self.refreshControl.endRefreshing()
+                        self.navigationController?.popToRootViewController(animated: true)
                     }
                     return
                 }
@@ -966,6 +855,7 @@ class UltraKlinLaundry: UIViewController, UITableViewDataSource , UITableViewDel
                         self.messageFrame.removeFromSuperview()
                         self.activityIndicator.stopAnimating()
                         self.refreshControl.endRefreshing()
+                        self.navigationController?.popToRootViewController(animated: true)
                     }
                     return
                 }

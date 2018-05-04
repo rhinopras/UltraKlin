@@ -10,4 +10,7 @@ pod 'Firebase/Database'
 pod 'Firebase/Core'
 pod 'Firebase/Messaging'
 pod 'Firebase/Crash'
+pod 'GooglePlaces'
+pod 'GooglePlacePicker'
+pod 'GoogleMaps'
 end

@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "vacuum-cleaner_2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "vacuum-cleaner_2.png",
       "scale" : "2x"
     },
     {

@@ -40,11 +40,13 @@ public class Config {
     
     public let URL_Laundry_Piece:String =  Config.URL_API_V2_api + "packages/laundry-pieces-regular/items/list"
     
-    public let URL_Laundry_Kilos:String =  Config.URL_API_V2_api + "packages/laundry-kilos-regular/items/list"
+    public let URL_Laundry_Kilos:String =  Config.URL_API_V2_api + "packages/laundry-kilos-bag/items/list"
     
-    public let URL_Banner_list:String =  Config.URL_API_V2_api + "images/banners/list"
+    public let URL_Banner_List:String =  Config.URL_API_V2_api + "images/banners/list"
     
-    public let URL_Banner_show:String =  Config.URL_API_V2_api + "images/banners/"
+    public let URL_Banner_Show:String =  Config.URL_API_V2_api + "images/banners/"
     
     public let URL_History:String =  Config.URL_API_V2_api + "orders"
+    
+    public let URL_Service_List:String =  Config.URL_API_V2_api + "services/list"
 }

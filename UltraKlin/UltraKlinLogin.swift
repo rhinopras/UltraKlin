@@ -382,13 +382,13 @@ class UltraKlinLogin: UIViewController, UITextFieldDelegate, GIDSignInUIDelegate
         viewController.dismiss(animated: true, completion: nil)
     }
     
-    func  loadingData() {
+    func loadingData() {
         messageFrame.frame = CGRect(x: 90, y: 150 , width: 50, height: 50)
-        
-        activityIndicator.color = UIColor.white
         messageFrame.layer.cornerRadius = 10
         messageFrame.backgroundColor = UIColor.black
         messageFrame.alpha = 0.7
+        
+        activityIndicator.color = UIColor.white
         activityIndicator.frame = CGRect(x: 90, y: 150, width: 40, height: 40)
         
         messageFrame.addSubview(activityIndicator)

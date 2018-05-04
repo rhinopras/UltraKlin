@@ -42,7 +42,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     // Package Cleaning
     var cleaning_dimanis : [package_cleaning] = []
     var clean_detail : [[String: Any]] = []
-    var array_clean_detail : [String: Any] = [:]
     var kilos_dinamis : [MyKilos] = []
     var piece_dinamis : [MyChoose] = []
     
@@ -393,10 +392,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                 clean_detail.append(["name": "Cleaning", "clean_date": pDate!, "clean_time": pTime!, "clean_building": selectPlaces, "clean_gender": chooceCSO, "clean_pet": chooceHavePet, "clean_estTime": jam, "clean_qtyCSO": String(resultAddCSO), "totalPrice": total])
                 UserDefaults.standard.setValue(clean_detail, forKey: "clean_Detail")
                 
-                array_clean_detail.removeAll()
-                array_clean_detail = ["package": "cleaning-regular", "date": "\(pDate!) \(pTime!)", "location": "", "note": "", "detail": ["building_type": selectPlaces, "cso_gender": chooceCSO, "pets": chooceHavePet, "total_cso": resultAddCSO]]
-                UserDefaults.standard.setValue(array_clean_detail, forKey: "array_clean_Detail")
-                
                 self.performSegue(withIdentifier: "informationComplate", sender: self)
             }
         }
@@ -435,7 +430,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
     
     func dataDinamisRequestCleaning() {
         loadingData()
-        // ======================= Date Reguler and Price Per Kilos =======================
+        // ======================= List Item Cleaning =======================
         if Reachability.isConnectedToNetwork() {
             print("Internet Connection Available!")
             let url = URL(string: Config().URL_Package_Cleaning)!
@@ -464,6 +459,7 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
                         self.messageFrame.removeFromSuperview()
                         self.activityIndicator.stopAnimating()
                         self.refreshControl.endRefreshing()
+                        self.navigationController?.popToRootViewController(animated: true)
                     }
                     return
                 }
@@ -496,76 +492,6 @@ class UltraKlinCleaning: UIViewController, UITextFieldDelegate {
             self.refreshControl.endRefreshing()
             print("Internet Connection not Available!")
         }
-    }
-    
-    func promoCleaningButton() {
-        let defaults = UserDefaults.standard
-        if(total < 100000) {
-            let alert = UIAlertController (title: "Information", message: "Minimum order Rp 100.000", preferredStyle: .alert)
-            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        } else if (textMyDate.text! == "Date" || textMyTime.text! == "Time") {
-            let alert = UIAlertController (title: "Date and Time", message: "Date and Time are required", preferredStyle: .alert)
-            alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        } else {
-            loadingData()
-            print("******* ada promo")
-                
-            //paramString = "&total=" + String(total) + "&amount_bath=" + labelTypeBathroom.text! + "&amount_bed=" + labelTypeBedroom.text! + "&amount_other=" + labelTypeOtherroom.text! + "&date=" + textMyDate.text! + "&time=" + textMyTime.text! + "&promo=" + textPromoCode.text! + "&name=Cleaning Service"
-                
-            let url = NSURL(string: Config().URL_Promo)!
-            let session = URLSession.shared
-                
-            let request = NSMutableURLRequest(url: url as URL)
-                
-            request.httpMethod = "POST"
-            //request.httpBody = paramString.data(using: String.Encoding.utf8)
-            print(paramString)
-                
-            let task = session.dataTask(with: request as URLRequest) {
-                data, response, error in
-                    
-                let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
-                    
-                if let dataJson = json["error"] as? String {
-                        
-                    print("******* response checking = \(dataJson)")
-                    let alert = UIAlertController (title: "Information", message: dataJson, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction (title: "OK", style: UIAlertActionStyle.cancel, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
-                        
-                    DispatchQueue.main.async() {
-                        self.view.isUserInteractionEnabled = true
-                        self.messageFrame.removeFromSuperview()
-                        self.activityIndicator.stopAnimating()
-                        self.refreshControl.endRefreshing()
-                    }
-                        
-                } else {
-                        
-                    let code      = json["promo"] as! String
-                    let totalInt     = json["Total Payment"] as! Int
-                    
-                    DispatchQueue.main.async() {
-                        
-                        self.promo = code
-                        self.totalFix = totalInt
-                        self.estPrice = self.totalFix
-                        self.labelEstimatedPrices.text = String(self.estPrice)
-                        defaults.set(self.totalFix, forKey: "total")
-                        
-                        self.view.isUserInteractionEnabled = true
-                        self.messageFrame.removeFromSuperview()
-                        self.activityIndicator.stopAnimating()
-                        self.refreshControl.endRefreshing()
-                    }
-                }
-                print("******* response = \(data!)")
-            }
-            task.resume()
-        }
-        
     }
     
     func loadingData() {

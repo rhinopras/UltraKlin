@@ -18,6 +18,8 @@ import AppsFlyerLib
 import AppRating
 import Siren
 import FBSDKCoreKit
+import GoogleMaps
+import GooglePlaces
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, GIDSignInDelegate {
@@ -206,8 +208,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UNUserNotificationCenter.current().delegate = self
             let authOption : UNAuthorizationOptions = [.alert, .badge, .sound]
             UNUserNotificationCenter.current().requestAuthorization(
-            options: authOption,
-            completionHandler: {_, _ in })
+            options: authOption, completionHandler: {_, _ in })
         }
             
         // iOS 9 support
@@ -218,8 +219,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         application.registerForRemoteNotifications()
         
+        // Firebase =============================
         FirebaseConfiguration.shared.setLoggerLevel(.min)
         FirebaseApp.configure()
+        
+        // Google Maps ====================================
+        // Provide the Places API with your API key.
+        GMSPlacesClient.provideAPIKey("AIzaSyBX76bmvaRhvZ8mHsP4zE3AfyCN9B-NCXI")
+        // Provide the Maps API with your API key. We need to provide this as well because the Place
+        // Picker displays a Google Map.
+        GMSServices.provideAPIKey("AIzaSyDY1soU4JLC_sl1Trdkvpau5mm5Wu0dl6c")
         
         // Cek Session
         UltraKlinRegistration.updateRootVC()

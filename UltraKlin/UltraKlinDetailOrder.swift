@@ -6,17 +6,24 @@
 //  Copyright © 2018 PT Lintas Insan Nur Inspira. All rights reserved.
 //
 
+import UIKit
 import Firebase
 import Foundation
 import LocationPicker
 import AppsFlyerLib
+import GooglePlacePicker
 
 class UltraKlinDetailOrderTableCell : UITableViewCell {
     @IBOutlet weak var labelNameOrder: UILabel!
     @IBOutlet weak var labelItemOrder: UILabel!
 }
 
-class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
+class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, PlacePickerDelegate {
+    
+    private let noneText = NSLocalizedString("PlaceDetails.MissingValue",
+                                             comment: "The value of a property which is missing")
+    
+    var mapViewController: BackgroundMapViewController?
     
     fileprivate let sectionTitles = ["Cleaning", "Laundry Kilos", "Laundry Piece"]
     
@@ -60,6 +67,7 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBOutlet weak var labelDetailOrder: UILabel!
     @IBOutlet weak var tableDetailOrder: UITableView!
     @IBOutlet weak var constraintsDetailOrder: NSLayoutConstraint!
+    
     @IBAction func buttonAddMore(_ sender: Any) {
         if paramTempClean.isEmpty == true {
             self.performSegue(withIdentifier: "orderAgainCleaning", sender: self)
@@ -104,8 +112,26 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBOutlet weak var labelDeliverPlace: UILabel!
     @IBOutlet weak var labelLocation: UILabel!
     @IBOutlet weak var buttonLocation: UIButton!
+    
     @IBAction func buttonLocationAct(_ sender: Any) {
-        
+        //self.performSegue(withIdentifier: "LocationPicker", sender: self)
+        //self.performSegue(withIdentifier: "googlePlacePicker", sender: self)
+        let myVC = self.storyboard?.instantiateViewController(withIdentifier: "googleView") as! GoogleViewController
+        myVC.delegate = self
+        //present(myVC, animated: true, completion: nil)
+        navigationController?.pushViewController(myVC, animated: true)
+        // Create a place picker. Attempt to display it as a popover if we are on a device which
+        // supports popovers.
+//        let config = GMSPlacePickerConfig(viewport: nil)
+//        let placePicker = GMSPlacePickerViewController(config: config)
+//        placePicker.delegate = self as GMSPlacePickerViewControllerDelegate
+//        placePicker.modalPresentationStyle = .popover
+//        placePicker.popoverPresentationController?.sourceView = buttonLocation
+//        placePicker.popoverPresentationController?.sourceRect = buttonLocation.bounds
+//
+//        // Display the place picker. This will call the delegate methods defined below when the user
+//        // has made a selection.
+//        self.present(placePicker, animated: true, completion: nil)
     }
     
     // Note
@@ -118,6 +144,7 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBOutlet weak var labelPromoCode: UILabel!
     @IBOutlet weak var textPromoCode: UITextField!
     @IBOutlet weak var buttonPromoCode: UIButton!
+    
     @IBAction func buttonPromoCodeAct(_ sender: Any) {
         loadingData()
         createParamPromo()
@@ -127,6 +154,7 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     @IBOutlet weak var labelTotalPrice: UILabel!
     @IBOutlet weak var viewButtonBook: UIView!
     @IBOutlet weak var buttonBook: UIButton!
+    
     @IBAction func buttonBookAct(_ sender: Any) {
         if (UserDefaults.standard.string(forKey: "SavedApiToken")) == nil {
             // User not yet login ======================
@@ -168,6 +196,14 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
     
     @objc func dimisKeyboard() {
         view.endEditing(true)
+    }
+    
+    func placePicker(picker: GoogleViewController, didPickPlace place: String?) {
+        if let selectedPlace = place {
+            labelLocation.text = selectedPlace
+        }
+        navigationController?.popViewController(animated: true)
+        //dismiss(animated: true, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -313,47 +349,43 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
         
         var tempParamK = ""
         if paramTempKilos.isEmpty == false {
-            tempParamK = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-kilos-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick)" + " " + "\(timePick)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv)" + " " + "\(timeDelv)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempK)}"
+            tempParamK = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-kilos-bag" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick)" + " " + "\(timePick)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv)" + " " + "\(timeDelv)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempK)}"
         }
-        
-        print(tempParamC)
-        print(tempParamK)
-        print(tempParamP)
         
         if paramTempClean.isEmpty == false {
             if paramTempKilos.isEmpty == false {
                 if paramTempPiece.isEmpty == false {
                     // Cleaning + Pieces + Kilos
-                    paramPromo = "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamK)" + "&orders[]=" + "\(tempParamP)"
+                    paramPromo = "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamK)" + "&orders[]=" + "\(tempParamP)"
                     promo_Ready()
                 } else {
                     // Cleaning + Kilos
-                    paramPromo = "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamK)"
+                    paramPromo = "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamK)"
                     promo_Ready()
                 }
             } else if paramTempPiece.isEmpty == false {
                 // Cleaning + Pieces
-                paramPromo = "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamP)"
+                paramPromo = "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamP)"
                 promo_Ready()
             } else {
                 // Cleaning
-                paramPromo = "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamC)"
+                paramPromo = "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamC)"
                 promo_Ready()
             }
         } else {
             if paramTempKilos.isEmpty == false {
                 if paramTempPiece.isEmpty == false {
                     // Pieces + Kilos
-                    paramPromo = "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamK)" + "&orders[]=" + "\(tempParamP)"
+                    paramPromo = "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamK)" + "&orders[]=" + "\(tempParamP)"
                     promo_Ready()
                 } else {
                     // Kilos
-                    paramPromo = "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamK)"
+                    paramPromo = "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamK)"
                     promo_Ready()
                 }
             } else {
                 // Pieces
-                paramPromo = "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamP)"
+                paramPromo = "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamP)"
                 promo_Ready()
             }
         }
@@ -392,54 +424,50 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
         
         var tempParamK = ""
         if paramTempKilos.isEmpty == false {
-            tempParamK = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-kilos-regular" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick)" + " " + "\(timePick)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv)" + " " + "\(timeDelv)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempK)}"
+            tempParamK = "{" + kutip + "package" + kutip + ":" + kutip + "laundry-kilos-bag" + kutip + "," + kutip + "date" + kutip + ":" + kutip + "\(datePick)" + " " + "\(timePick)" + kutip + "," + kutip + "location" + kutip + ":" + kutip + labelLocation.text! + kutip + "," + kutip + "note" + kutip + ":" + kutip + textNoteLocation.text! + kutip + "," + kutip + "detail" + kutip + ": {" + kutip + "fragrance" + kutip + ":" + kutip + "\(fragrence)" + kutip + "," + kutip + "delivery_date" + kutip + ":" + kutip + "\(dateDelv)" + " " + "\(timeDelv)" + kutip + "}," + kutip + "items" + kutip + ":\(itemTempK)}"
         }
-        
-        print(tempParamC)
-        print(tempParamK)
-        print(tempParamP)
         
         if paramTempClean.isEmpty == false {
             if paramTempKilos.isEmpty == false {
                 if paramTempPiece.isEmpty == false {
                     // Cleaning + Pieces + Kilos
-                    paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamK)" + "&orders[]=" + "\(tempParamP)"
-                    print(paramOrder!)
+                    paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamK)" + "&orders[]=" + "\(tempParamP)"
+                    //print(paramOrder!)
                     booking_Ready()
                 } else {
                     // Cleaning + Kilos
-                    paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamK)"
-                    print(paramOrder!)
+                    paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamK)"
+                    //print(paramOrder!)
                     booking_Ready()
                 }
             } else if paramTempPiece.isEmpty == false {
                 // Cleaning + Pieces
-                paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamP)"
-                print(paramOrder!)
+                paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamC)" + "&orders[]=" + "\(tempParamP)"
+                //print(paramOrder!)
                 booking_Ready()
             } else {
                 // Cleaning
-                paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamC)"
-                print(paramOrder!)
+                paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamC)"
+                //print(paramOrder!)
                 booking_Ready()
             }
         } else {
             if paramTempKilos.isEmpty == false {
                 if paramTempPiece.isEmpty == false {
                     // Pieces + Kilos
-                    paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamK)" + "&orders[]=" + "\(tempParamP)"
-                    print(paramOrder!)
+                    paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamK)" + "&orders[]=" + "\(tempParamP)"
+                    //print(paramOrder!)
                     booking_Ready()
                 } else {
                     // Kilos
-                    paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamK)"
-                    print(paramOrder!)
+                    paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamK)"
+                    //print(paramOrder!)
                     booking_Ready()
                 }
             } else {
                 // Pieces
-                paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text! + "&orders[]=" + "\(tempParamP)"
-                print(paramOrder!)
+                paramOrder = "&payment=Cash" + "&promo=" + textPromoCode.text!.uppercased() + "&orders[]=" + "\(tempParamP)"
+                //print(paramOrder!)
                 booking_Ready()
             }
         }
@@ -525,11 +553,7 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
                     {
                         (action) -> Void in
                         
-                        let rootVC : UIViewController?
-                        rootVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tabUltraKlin") as! UltraKlinTabBarView
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        appDelegate.window?.rootViewController = rootVC
-                        
+                        self.navigationController?.popToRootViewController(animated: true)
                     }
                     alert.addAction(okAction)
                     self.present(alert, animated: true, completion: nil)
@@ -564,7 +588,16 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
             let json = try!JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! NSDictionary
             
             if error != nil {
-                print("Promo error : \(error!)")
+                print("Promo error : \(String(describing: error?.localizedDescription))")
+                let alert = UIAlertController (title: "Connection", message: error?.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction (title: "OK", style: .cancel, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    self.view.isUserInteractionEnabled = true
+                    self.messageFrame.removeFromSuperview()
+                    self.activityIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                }
                 FirebaseCrashMessage("Promo error : \(error!)")
                 return
             }
@@ -803,5 +836,32 @@ class UltraKlinDetailOrder: UIViewController, UITextFieldDelegate, UITableViewDa
         textPromoCode.layer.borderColor = #colorLiteral(red: 0.007649414241, green: 0.680324614, blue: 0.8433994055, alpha: 1)
         textPromoCode.layer.borderWidth = CGFloat(Float(1.5))
         textPromoCode.layer.cornerRadius = CGFloat(Float(5.0))
+    }
+}
+
+extension UltraKlinDetailOrder: GMSPlacePickerViewControllerDelegate {
+    
+    func placePicker(_ viewController: GMSPlacePickerViewController, didPick place: GMSPlace) {
+        // Create the next view controller we are going to display and present it.
+        let nextScreen = PlaceDetailViewController(place: place)
+        self.splitPaneViewController?.push(viewController: nextScreen, animated: false)
+        self.mapViewController?.coordinate = place.coordinate
+        labelLocation.text = place.formattedAddress
+        
+        // Dismiss the place picker.
+        viewController.dismiss(animated: true, completion: nil)
+    }
+    
+    func placePicker(_ viewController: GMSPlacePickerViewController, didFailWithError error: Error) {
+        // In your own app you should handle this better, but for the demo we are just going to log
+        // a message.
+        NSLog("An error occurred while picking a place: \(error)")
+    }
+    
+    func placePickerDidCancel(_ viewController: GMSPlacePickerViewController) {
+        NSLog("The place picker was canceled by the user")
+        
+        // Dismiss the place picker.
+        viewController.dismiss(animated: true, completion: nil)
     }
 }

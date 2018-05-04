@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "stop_pests.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "stop_pests.png",
       "scale" : "2x"
     },
     {

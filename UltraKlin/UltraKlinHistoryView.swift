@@ -31,6 +31,9 @@ class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDa
     
     var historyOrder : [MyHistory] = []
     
+    let swipeRight = UISwipeGestureRecognizer()
+    let swipeLeft = UISwipeGestureRecognizer()
+    
     var pageNo: Int = 0
     var pagelimit: Int = 0
     
@@ -44,15 +47,6 @@ class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(UltraKlinHistoryView.swipedTouch))
-        swipeRight.direction = UISwipeGestureRecognizerDirection.right
-        tableHistoryOrderCustomers.addGestureRecognizer(swipeRight)
-        
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(UltraKlinHistoryView.swipedTouch))
-        swipeLeft.direction = UISwipeGestureRecognizerDirection.left
-        tableHistoryOrderCustomers.addGestureRecognizer(swipeLeft)
-
         self.navigationController?.navigationBar.layer.shadowColor = UIColor.lightGray.cgColor
         self.navigationController?.navigationBar.layer.shadowOffset = CGSize(width: 0.0, height: 2.0)
         self.navigationController?.navigationBar.layer.shadowRadius = 2.0
@@ -248,7 +242,21 @@ class UltraKlinHistoryView: UIViewController, UITableViewDelegate, UITableViewDa
                                         self.historyOrder.append(MyHistory(imageHistory:#imageLiteral(resourceName: "historyL"),produk: produk, status: status, date: date))
                                     }
                                 }
-                                self.tableHistoryOrderCustomers.separatorStyle = .singleLine
+                                if jsonItemHistory.count == 0 {
+                                    self.tableHistoryOrderCustomers.separatorStyle = .none
+                                } else if self.pagelimit == 1 {
+                                    self.tableHistoryOrderCustomers.separatorStyle = .singleLine
+                                } else {
+                                    let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(UltraKlinHistoryView.swipedTouch))
+                                    swipeRight.direction = UISwipeGestureRecognizerDirection.right
+                                    self.tableHistoryOrderCustomers.addGestureRecognizer(swipeRight)
+                                    
+                                    let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(UltraKlinHistoryView.swipedTouch))
+                                    swipeLeft.direction = UISwipeGestureRecognizerDirection.left
+                                    self.tableHistoryOrderCustomers.addGestureRecognizer(swipeLeft)
+                                    
+                                    self.tableHistoryOrderCustomers.separatorStyle = .singleLine
+                                }
                                 self.pageHistory.numberOfPages = self.pagelimit
                                 self.tableHistoryOrderCustomers.reloadData()
                                 // Stop Refresh ===============================
